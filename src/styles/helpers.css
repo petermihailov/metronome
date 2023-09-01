@@ -1,0 +1,18 @@
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+}
+
+.disableScroll {
+  scrollbar-width: none;
+}
+
+.disableScroll::-webkit-scrollbar {
+  display: none;
+}

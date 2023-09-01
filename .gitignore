@@ -1,0 +1,12 @@
+# IDE
+.idea
+.vscode
+
+# misc
+.DS_Store
+
+# dependencies
+node_modules/
+
+# out
+dist/

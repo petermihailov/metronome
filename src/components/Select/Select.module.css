@@ -1,0 +1,14 @@
+.root {
+  position: relative;
+  overflow: hidden;
+}
+
+.selectNative {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  cursor: pointer;
+  opacity: 0;
+}

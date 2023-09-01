@@ -1,0 +1,10 @@
+# dependency directories
+.npm_cache
+node_modules/
+
+# out
+dist/
+
+# files
+webpack.config.js
+postcss.config.js

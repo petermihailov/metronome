@@ -1,0 +1,31 @@
+.root {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--size-2);
+  padding-block: var(--size-3);
+  padding-inline: var(--size-horizontal-padding);
+  box-shadow: 0 -1px 1px var(--color-border);
+}
+
+.bpm {
+  flex: 1;
+}
+
+.row {
+  display: flex;
+  gap: var(--size-2);
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.other {
+  inline-size: 100%;
+  max-inline-size: 20rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .root {
+    grid-template-columns: 1fr auto;
+  }
+}

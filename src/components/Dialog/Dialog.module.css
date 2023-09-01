@@ -1,0 +1,47 @@
+html:has(.root[open][data-mode='mega']) {
+  overflow: hidden;
+}
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-index-dialog);
+  display: flex;
+  max-inline-size: min(90vw, var(--size-content-3));
+  max-block-size: min(80vh, 100%);
+  margin: auto;
+  padding: 0;
+  color: var(--text-1);
+  border: 1.5px solid;
+  border-radius: var(--radius-3);
+  background: var(--surface-2);
+  box-shadow: var(--shadow-6);
+  overflow: hidden;
+  transition: opacity 0.4s var(--ease-3);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .root {
+    animation: var(--animation-scale-down) forwards;
+    animation-timing-function: var(--ease-squish-3);
+  }
+
+  .root[open] {
+    animation: var(--animation-slide-in-up) forwards;
+  }
+}
+
+.root:not([open]) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.root[data-mode='mega']::backdrop {
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
+}
+
+.root[data-mode='mini']::backdrop {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}

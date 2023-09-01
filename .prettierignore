@@ -1,0 +1,8 @@
+# folders
+dist/
+
+# files
+tsconfig.json
+package-lock.json
+package.json
+CHANGELOG.md

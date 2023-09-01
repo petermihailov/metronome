@@ -1,0 +1,5 @@
+.root h1 {
+  padding: var(--size-3);
+  font-size: var(--font-size-3);
+  text-align: center;
+}
