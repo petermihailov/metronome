@@ -1,0 +1,66 @@
+/* OpenProps documentation: https://open-props.style */
+
+/* animations */
+@import url('open-props/animations.min.css');
+
+/* easing */
+@import url('open-props/easings.min.css');
+
+/* aspects */
+@import url('open-props/aspects.min.css');
+
+/* fonts */
+@import url('open-props/fonts.min.css');
+
+/* sizes */
+@import url('open-props/sizes.min.css');
+@import url('open-props/borders.min.css');
+
+/* shadows */
+@import url('open-props/shadows.min.css');
+
+:where(html) {
+  /* borders */
+  --radius-pill: 1e5px;
+  --radius-round: 50%;
+
+  /* sizes */
+  --size-control: var(--size-7);
+  --size-horizontal-padding: var(--size-1);
+  --size-icon: var(--size-5);
+  --size-note: var(--size-5);
+
+  /* custom spacing */
+  --spacing-bars: var(--size-5);
+  --spacing-bar-bottom: var(--size-5);
+
+  /* z-index */
+  --z-index-drawer: 700;
+  --z-index-dialog: 800;
+  --z-index-dropdown: 900;
+  --z-index-tooltip: 1000;
+
+  /* filters */
+  --backdrop-blur: blur(25px);
+}
+
+:where(html[data-theme='dark']) {
+  --color-accent: #007fff;
+  --color-border: #394146;
+  --color-error: #f03e3e;
+  --color-success: #51cf66;
+  --color-highlight: rgb(0 127 255 / 20%);
+  --color-icon: #e2e6e9;
+  --color-overlay: rgb(0 0 0 / 40%);
+  --color-surface-1: #17171c;
+  --color-surface-2: #454554;
+  --color-surface-3: #73738c;
+  --color-surface-4: #868e96;
+  --color-text: #e2e6e9;
+  --color-thumb-highlight: rgb(255 255 255 / 7.5%);
+  --color-tint: rgb(0 127 255 / 10%);
+  --shadow-color: 220 40% 2%;
+  --shadow-strength: 25%;
+
+  color-scheme: dark;
+}

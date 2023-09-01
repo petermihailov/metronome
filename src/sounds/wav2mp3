@@ -1,0 +1,11 @@
+#!/bin/bash
+dir=$(dirname $0)
+sounds=./public/sounds
+
+rm -rf $sounds && mkdir $sounds
+
+for filename in $dir/wav/*.wav; do
+#  $dir/ffmpeg -i $filename -acodec libopus -b:a 64000 -vbr on $sounds/$(basename $filename .wav).ogg
+  $dir/ffmpeg -i $filename -vn -ar 44100 -ac 2 -b:a 128k $sounds/$(basename $filename .wav).mp3
+
+done

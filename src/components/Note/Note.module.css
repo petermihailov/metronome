@@ -1,0 +1,41 @@
+.root {
+  --fill: 0%;
+  --color: #c63971;
+
+  position: relative;
+  block-size: 60px;
+  border: none;
+  background-color: transparent;
+  background-image: linear-gradient(0deg, var(--color) 50%, transparent 50%);
+  background-position: 0 var(--fill);
+  background-size: 100% 200%;
+  appearance: none;
+  transition: background-position var(--ease-out-3) 0.1s;
+}
+
+.root.sound3 {
+  --fill: 33.333%;
+}
+
+.root.sound2 {
+  --fill: 66.666%;
+}
+
+.root.sound1 {
+  --fill: 100%;
+}
+
+.root.active {
+  --color: #00eaff;
+}
+
+.root.beat::after {
+  position: absolute;
+  inset-block-end: -11px;
+  inset-inline-start: calc(50% - 3px);
+  content: '';
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: var(--radius-round);
+  background-color: var(--color-accent);
+}

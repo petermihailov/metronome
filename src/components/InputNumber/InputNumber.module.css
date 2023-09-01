@@ -1,0 +1,56 @@
+.root {
+  /* empty */
+}
+
+.label {
+  font-weight: var(--font-weight-9);
+  font-size: var(--font-size-3);
+  letter-spacing: -0.8px;
+  text-transform: uppercase;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.input {
+  inline-size: 100%;
+  padding: var(--size-1) var(--size-2);
+  font-weight: bold;
+  font-size: var(--font-size-5);
+  line-height: var(--font-lineheight-00);
+  border: 2px solid #fffa;
+  border-radius: var(--radius-2);
+  background-color: transparent;
+}
+
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.buttons {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  z-index: 1;
+  display: flex;
+  flex-flow: column;
+}
+
+.button {
+  flex: 1;
+  inline-size: 30px;
+  padding: 0;
+  font-weight: bold;
+  font-size: var(--font-size-3);
+  line-height: var(--font-lineheight-00);
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.button:active {
+  background-color: #fff5;
+}

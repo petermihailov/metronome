@@ -1,0 +1,87 @@
+.root {
+  display: grid;
+  grid-template-rows: 1fr;
+  row-gap: var(--size-3);
+  max-block-size: 100%;
+  padding: var(--size-4);
+}
+
+.tempo {
+  display: flex;
+  gap: var(--size-2);
+}
+
+.bpm {
+  flex: 1;
+}
+
+.display {
+  display: grid;
+  gap: var(--size-3);
+  padding: var(--size-4);
+  border-radius: var(--radius-3);
+  background: var(--color-surface-2);
+}
+
+.notes {
+  display: flex;
+  align-items: flex-end;
+}
+
+.note {
+  flex: 1;
+  filter: drop-shadow(1px 1px 4px #0002);
+}
+
+.beat {
+  position: relative;
+  flex: 1;
+  block-size: 40px;
+  margin: 0 0 8px 8px;
+  border: 1px solid red;
+  filter: drop-shadow(-8px 8px black);
+}
+
+.indicator {
+  --color-inidicator: transparent;
+
+  position: relative;
+  block-size: 60px;
+  border-radius: var(--radius-2);
+  background-color: var(--color-inidicator);
+  box-shadow: inset 0 0 50px #000a;
+  overflow: hidden;
+}
+
+.indicator::before {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  content: '';
+  z-index: -1;
+  inline-size: 100%;
+  block-size: 100%;
+  background-color: rgb(0 0 0 / 20%);
+}
+
+.indicator.accent {
+  --color-inidicator: #f00;
+
+  animation: blink both 0.24s cubic-bezier(0, 0.2, 1, 1);
+}
+
+.indicator.regular {
+  --color-inidicator: #0f0;
+
+  animation: blink both 0.24s cubic-bezier(0, 0.2, 1, 1);
+}
+
+@keyframes blink {
+  from {
+    background-color: var(--color-inidicator);
+  }
+
+  to {
+    background-color: transparent;
+  }
+}

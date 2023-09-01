@@ -1,0 +1,115 @@
+.root {
+  display: flex;
+  gap: var(--size-3);
+  align-items: center;
+}
+
+.value {
+  inline-size: 100px;
+}
+
+.range {
+  flex: 1;
+}
+
+.input {
+  --track-height: 0.5ex;
+  --track-fill: 0%;
+  --thumb-size: 3ex;
+  --thumb-offset: -1.25ex;
+  --thumb-highlight-size: 0;
+
+  display: block;
+  inline-size: 100%;
+  background: 0 0;
+  outline-offset: 5px;
+  appearance: none;
+}
+
+.input::-webkit-slider-runnable-track {
+  block-size: var(--track-height);
+  border-radius: 5ex;
+  background:
+    linear-gradient(to right, transparent var(--track-fill), var(--color-border) 0%),
+    linear-gradient(to bottom, var(--color-accent), transparent) fixed;
+  appearance: none;
+}
+
+.input::-moz-range-track {
+  block-size: var(--track-height);
+  border-radius: 5ex;
+  background:
+    linear-gradient(to right, transparent var(--track-fill), var(--color-border) 0%),
+    linear-gradient(to bottom, var(--color-accent), transparent) fixed;
+  appearance: none;
+}
+
+.input::-webkit-slider-thumb {
+  inline-size: var(--thumb-size);
+  block-size: var(--thumb-size);
+  margin-block-start: var(--thumb-offset);
+  border: 3px solid var(--color-surface-2);
+  border-radius: var(--radius-round);
+  background-color: var(--color-accent);
+  box-shadow: 0 0 0 var(--thumb-highlight-size) var(--color-thumb-highlight);
+  cursor: ew-resize;
+  appearance: none;
+  transition: box-shadow 0.1s ease;
+}
+
+.input::-moz-range-thumb {
+  inline-size: var(--thumb-size);
+  block-size: var(--thumb-size);
+  margin-block-start: var(--thumb-offset);
+  border: 3px solid var(--color-surface-2);
+  border-radius: var(--radius-round);
+  background-color: var(--color-accent);
+  box-shadow: 0 0 0 var(--thumb-highlight-size) var(--color-thumb-highlight);
+  cursor: ew-resize;
+  appearance: none;
+  transition: box-shadow 0.1s ease;
+}
+
+.input:is(:hover, .input :active) {
+  --thumb-highlight-size: 10px;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  padding-inline: 2px 4px;
+}
+
+.labels > option {
+  position: relative;
+  flex: none;
+  inline-size: 20px;
+  padding-block-start: 10px;
+  font-size: 12px;
+  letter-spacing: -0.8px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.labels > option::before {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 50%;
+  content: '';
+  inline-size: 2px;
+  block-size: 8px;
+  background-color: var(--color-text);
+}
+
+@media (hover: none) {
+  .input {
+    --thumb-size: 30px;
+    --thumb-offset: -14px;
+  }
+}
+
+@media (max-width: 799px) {
+  .range {
+    display: none;
+  }
+}
