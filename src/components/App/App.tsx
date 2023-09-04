@@ -97,6 +97,12 @@ const App = () => {
       }
 
       if (event.code === 'Space') {
+        const eventTarget = event.target as HTMLInputElement | null;
+
+        if (eventTarget?.tagName === 'INPUT' && eventTarget?.type === 'number') {
+          eventTarget.blur();
+        }
+
         togglePlaying();
       }
 
@@ -197,8 +203,13 @@ const App = () => {
         />
       </div>
 
-      <InputNumber label="beats" value={groove.beatsPerBar} onChange={setBeats} />
-      <InputNumber label="subdivision" value={groove.subdivision} onChange={setSubdivision} />
+      <InputNumber label="beats" min={1} value={groove.beatsPerBar} onChange={setBeats} />
+      <InputNumber
+        label="subdivision"
+        min={1}
+        value={groove.subdivision}
+        onChange={setSubdivision}
+      />
 
       {/*<div>*/}
       {/*  {countDown.minutes}: {countDown.seconds}*/}

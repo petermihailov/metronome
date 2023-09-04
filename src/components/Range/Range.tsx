@@ -47,7 +47,13 @@ const Range = ({
 
   return (
     <div className={clsx(className, classes.root)}>
-      <InputNumber className={classes.value} value={value} onChange={onChange} />
+      <InputNumber
+        className={classes.value}
+        max={max}
+        min={min}
+        value={value}
+        onChange={onChange}
+      />
       {/*<div className={classes.value}>{value}</div>*/}
       <div className={classes.range}>
         <input
