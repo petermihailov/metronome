@@ -25,11 +25,14 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: github-pages
-          path: ./dist
+      - name: Fix permissions
+        run: |
+          chmod -v -R +rX "./dist" | while read line; do
+          echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v2
 
   deploy:
     needs: build
