@@ -7,6 +7,8 @@ import type { Groove, Instrument, Note } from '../types/instrument';
 import type { Action } from '../utils/actions';
 import { createAction } from '../utils/actions';
 
+// `console.log(current(draft.*))` for debug;
+
 /* Actions */
 
 type SwitchInstrumentAction = Action<'SWITCH_INSTRUMENT', number>;
@@ -15,6 +17,7 @@ type SetSubdivisionAction = Action<'SET_SUBDIVISION', number>;
 type SetNoteValueAction = Action<'SET_NOTE_VALUE', number>;
 type SetTempoAction = Action<'SET_TEMPO', number>;
 type SetTitleAction = Action<'SET_TITLE', string>;
+type SetGridBeatAction = Action<'SET_GRID_BEAT'>;
 
 type Actions =
   | SwitchInstrumentAction
@@ -22,7 +25,8 @@ type Actions =
   | SetSubdivisionAction
   | SetNoteValueAction
   | SetTempoAction
-  | SetTitleAction;
+  | SetTitleAction
+  | SetGridBeatAction;
 
 export const switchInstrumentAction = createAction<SwitchInstrumentAction>('SWITCH_INSTRUMENT');
 export const setBeatsPerBarAction = createAction<SetBeatsPerBarAction>('SET_BEATS_PER_BAR');
@@ -30,10 +34,11 @@ export const setSubdivisionAction = createAction<SetSubdivisionAction>('SET_SUBD
 export const setNoteValueAction = createAction<SetNoteValueAction>('SET_NOTE_VALUE');
 export const setTempoAction = createAction<SetTempoAction>('SET_TEMPO');
 export const setTitleAction = createAction<SetTitleAction>('SET_TITLE');
+export const setGridBeatAction = createAction<SetGridBeatAction>('SET_GRID_BEAT');
 
 /* Reducer */
 
-interface State extends Groove {
+export interface State extends Groove {
   title: string;
 }
 
@@ -47,6 +52,8 @@ const defaultState: State = {
 };
 
 const reducer = (state: State, action: Actions): State => {
+  window._STATE_ = state;
+
   switch (action.type) {
     case 'SWITCH_INSTRUMENT': {
       return produce(state, (draft) => {
@@ -114,6 +121,19 @@ const reducer = (state: State, action: Actions): State => {
     case 'SET_TITLE': {
       return produce(state, (draft) => {
         draft.title = action.payload;
+      });
+    }
+
+    case 'SET_GRID_BEAT': {
+      return produce(state, (draft) => {
+        draft.notes.map((note, idx) => {
+          const isBeat = idx % (draft.notes.length / draft.beatsPerBar) === 0;
+
+          note.instrument = isBeat && draft.subdivision !== 1 ? 'fxMetronome2' : 'fxMetronome3';
+          if (idx === 0) note.instrument = 'fxMetronome1';
+
+          return note;
+        });
       });
     }
 

@@ -3,6 +3,7 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { tempoMax, tempoMin } from '../../constants';
 import {
   setBeatsPerBarAction,
+  setGridBeatAction,
   setSubdivisionAction,
   setTempoAction,
   switchInstrumentAction,
@@ -49,12 +50,14 @@ const App = () => {
   const setBeats = (value: number) => {
     if (value > 0) {
       dispatch(setBeatsPerBarAction(value));
+      dispatch(setGridBeatAction());
     }
   };
 
   const setSubdivision = (value: number) => {
     if (value > 0) {
       dispatch(setSubdivisionAction(value));
+      dispatch(setGridBeatAction());
     }
   };
 
@@ -178,10 +181,6 @@ const App = () => {
             <Note
               key={idx}
               active={Boolean(beat && beat.index === idx)}
-              beat={
-                groove.notes.length !== groove.beatsPerBar &&
-                idx % (groove.notes.length / groove.beatsPerBar) === 0
-              }
               className={classes.note}
               note={note}
               onClick={() => switchInstrument(idx)}
