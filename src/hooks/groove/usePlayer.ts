@@ -4,6 +4,13 @@ import { useDrumKit } from './useDrumKit';
 import { Player } from '../../lib/Player';
 import type { Groove, Beat } from '../../types/instrument';
 
+const beatDefault: Beat = {
+  index: 0,
+  note: {
+    instrument: 'fxMetronome1',
+  },
+};
+
 export function usePlayer(groove: Groove) {
   const { tempo, notes } = groove;
 
@@ -13,13 +20,14 @@ export function usePlayer(groove: Groove) {
   const [playing, setPlaying] = useState(false);
   const [subdivision, setSubdivision] = useState<number>(1);
   const [muted, setMuted] = useState(false);
-  const [beat, setBeat] = useState<Beat | null>(null);
+  const [beat, setBeat] = useState<Beat>(beatDefault);
 
   // Sync playing
   useEffect(() => {
     if (playing) {
       player.current.play();
     } else {
+      setBeat(beatDefault);
       player.current.stop();
     }
   }, [playing]);
