@@ -6,6 +6,15 @@
   padding: var(--size-4);
 }
 
+.settings {
+  display: grid;
+  grid-template-rows: 1fr;
+  row-gap: var(--size-3);
+  inline-size: 100%;
+  max-inline-size: 800px;
+  margin: auto;
+}
+
 .tempo {
   display: flex;
   gap: var(--size-2);

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import type { InputHTMLAttributes, ChangeEventHandler } from 'react';
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 import classes from './InputNumber.module.css';
 
@@ -23,26 +23,23 @@ const InputNumber = ({
 }: InputNumberProps) => {
   const [inputValue, setInputValue] = useState(String(value));
 
-  const onChangeHandler: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (event) => {
-      const targetValue = event.target.value;
-      setInputValue(targetValue);
-      onChange?.(Math.min(Math.max(Number(targetValue), min), max));
-    },
-    [max, min, onChange],
-  );
+  const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const targetValue = event.target.value;
+    setInputValue(targetValue);
+    onChange?.(Math.min(Math.max(Number(targetValue), min), max));
+  };
 
-  const onBlurHandler = useCallback(() => {
+  const onBlurHandler = () => {
     setInputValue(String(value));
-  }, [value]);
+  };
 
-  const increase = useCallback(() => {
+  const increase = () => {
     onChange?.((value || 0) + 1);
-  }, [onChange, value]);
+  };
 
-  const decrease = useCallback(() => {
+  const decrease = () => {
     onChange?.((value || 0) - 1);
-  }, [onChange, value]);
+  };
 
   useEffect(() => {
     setInputValue(String(value));

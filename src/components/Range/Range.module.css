@@ -9,6 +9,7 @@
 }
 
 .range {
+  display: none;
   flex: 1;
 }
 
@@ -108,8 +109,8 @@
   }
 }
 
-@media (max-width: 799px) {
+@media (min-width: 750px) {
   .range {
-    display: none;
+    display: block;
   }
 }

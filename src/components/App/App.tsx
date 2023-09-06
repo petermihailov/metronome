@@ -170,45 +170,53 @@ const App = () => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.display}>
-        <div
-          className={classes.notes}
-          style={{
-            gap: `min(var(--size-3), calc(var(--size-3) / ${0.1 * groove.notes.length}))`,
-          }}
-        >
-          {groove.notes.map((note, idx) => (
-            <Note
-              key={idx}
-              active={Boolean(beat && beat.index === idx)}
-              className={classes.note}
-              note={note}
-              onClick={() => switchInstrument(idx)}
-            />
-          ))}
-        </div>
+      <div>
+        <div className={classes.display}>
+          <div
+            className={classes.notes}
+            style={{
+              gap: `min(var(--size-3), calc(var(--size-3) / ${0.1 * groove.notes.length}))`,
+            }}
+          >
+            {groove.notes.map((note, idx) => (
+              <Note
+                key={idx}
+                active={Boolean(beat && beat.index === idx)}
+                className={classes.note}
+                note={note}
+                onClick={() => switchInstrument(idx)}
+              />
+            ))}
+          </div>
 
-        <div ref={refIndicator} className={classes.indicator} />
+          <div ref={refIndicator} className={classes.indicator} />
+        </div>
       </div>
 
-      <div className={classes.tempo}>
-        <ButtonPlay active playing={playing} onClick={togglePlaying} />
-        <Range
-          className={classes.bpm}
-          max={tempoMax}
-          min={tempoMin}
-          value={groove.tempo}
-          onChange={setTempo}
+      <div className={classes.settings}>
+        <div className={classes.tempo}>
+          <ButtonPlay active playing={playing} onClick={togglePlaying} />
+          <Range
+            className={classes.bpm}
+            max={tempoMax}
+            min={tempoMin}
+            value={groove.tempo}
+            onChange={setTempo}
+          />
+        </div>
+
+        <InputNumber label="beats" min={1} value={groove.beatsPerBar} onChange={setBeats} />
+        <InputNumber
+          label="subdivision"
+          min={1}
+          value={groove.subdivision}
+          onChange={setSubdivision}
         />
       </div>
 
-      <InputNumber label="beats" min={1} value={groove.beatsPerBar} onChange={setBeats} />
-      <InputNumber
-        label="subdivision"
-        min={1}
-        value={groove.subdivision}
-        onChange={setSubdivision}
-      />
+      {/*<div>gradually increase the tempo</div>*/}
+      {/*<div>to <InputNumber /></div>*/}
+      {/*<div>every <InputNumber /> bar</div>*/}
 
       {/*<div>*/}
       {/*  {countDown.minutes}: {countDown.seconds}*/}
