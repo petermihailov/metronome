@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/petermihailov/metronome/compare/v1.2.0...v1.2.1) (2023-09-06)
+
+
+### Bug Fixes
+
+* cosmetic ([e92bfbb](https://github.com/petermihailov/metronome/commit/e92bfbb30184be8c8caf6cea8bee3f97a389ea02))
+
+
+
 # [1.2.0](https://github.com/petermihailov/metronome/compare/v1.1.0...v1.2.0) (2023-09-06)
 
 
