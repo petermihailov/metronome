@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/petermihailov/metronome/compare/v1.2.1...v1.3.0) (2023-09-07)
+
+
+### Features
+
+* larger buttons ([ab860eb](https://github.com/petermihailov/metronome/commit/ab860eb9c01483442a0da0b2f9d29fdf2008e1b4))
+
+
+
 ## [1.2.1](https://github.com/petermihailov/metronome/compare/v1.2.0...v1.2.1) (2023-09-06)
 
 
