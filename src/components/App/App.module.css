@@ -1,9 +1,9 @@
 .root {
   display: grid;
   grid-template-rows: 1fr;
-  row-gap: var(--size-3);
+  row-gap: var(--size-6);
   max-block-size: 100%;
-  padding: var(--size-4);
+  padding: var(--size-4) var(--size-2);
 }
 
 .settings {
@@ -27,6 +27,8 @@
 .display {
   display: grid;
   gap: var(--size-3);
+  max-inline-size: 800px;
+  margin: auto;
   padding: var(--size-4);
   border-radius: var(--radius-3);
   background: var(--color-surface-2);

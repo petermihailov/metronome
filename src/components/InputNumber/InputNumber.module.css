@@ -33,19 +33,18 @@
 .buttons {
   position: absolute;
   inset-block: 0;
-  inset-inline-end: 0;
+  inset-inline-end: var(--size-2);
   z-index: 1;
   display: flex;
-  flex-flow: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .button {
   flex: 1;
-  inline-size: 30px;
+  block-size: 100%;
   padding: 0;
-  font-weight: bold;
-  font-size: var(--font-size-3);
-  line-height: var(--font-lineheight-00);
+  padding: 0 var(--size-1);
   border: none;
   background-color: transparent;
   cursor: pointer;

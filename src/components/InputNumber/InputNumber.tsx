@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import type { InputHTMLAttributes, ChangeEventHandler } from 'react';
 import { memo, useEffect, useState } from 'react';
 
+import { Icon } from '../Icon';
+
 import classes from './InputNumber.module.css';
 
 export interface InputNumberProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
@@ -60,10 +62,10 @@ const InputNumber = ({
         />
         <div className={classes.buttons}>
           <button className={classes.button} onClick={increase}>
-            +
+            <Icon name="icon.plus" />
           </button>
           <button className={classes.button} onClick={decrease}>
-            -
+            <Icon name="icon.minus" />
           </button>
         </div>
       </div>
