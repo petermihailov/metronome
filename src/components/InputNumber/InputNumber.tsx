@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type { InputHTMLAttributes, ChangeEventHandler } from 'react';
+import type { InputHTMLAttributes, ChangeEventHandler, KeyboardEventHandler } from 'react';
 import { memo, useEffect, useState } from 'react';
 
 import { Icon } from '../Icon';
@@ -26,9 +26,12 @@ const InputNumber = ({
   const [inputValue, setInputValue] = useState(String(value));
 
   const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const targetValue = event.target.value;
+    const targetValue = event.target.value.replace(/\D/g, '');
     setInputValue(targetValue);
-    onChange?.(Math.min(Math.max(Number(targetValue), min), max));
+
+    if (Number(targetValue) >= min && Number(targetValue) <= max) {
+      onChange?.(Math.min(Math.max(Number(targetValue), min), max));
+    }
   };
 
   const onBlurHandler = () => {
@@ -43,9 +46,67 @@ const InputNumber = ({
     onChange?.((value || 0) - 1);
   };
 
+  const onKeyDownHandler: KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (['ArrowUp', 'ArrowDown'].includes(event.code)) {
+      event.stopPropagation();
+    }
+
+    if (event.code === 'ArrowUp') {
+      increase();
+    }
+
+    if (event.code === 'ArrowDown') {
+      decrease();
+    }
+  };
+
   useEffect(() => {
     setInputValue(String(value));
   }, [value]);
+
+  // useEffect(() => {
+  //   const callback = (event: KeyboardEvent) => {
+  //     const eventTarget = event.target as HTMLInputElement | null;
+  //
+  //     if (eventTarget?.tagName === 'INPUT' && eventTarget?.type === 'number') {
+  //       return;
+  //     }
+  //
+  //     if (event.code === 'Space') {
+  //       const eventTarget = event.target as HTMLInputElement | null;
+  //
+  //       if (eventTarget?.tagName === 'INPUT' && eventTarget?.type === 'number') {
+  //         eventTarget.blur();
+  //       }
+  //
+  //       togglePlaying();
+  //     }
+  //
+  //     if (event.shiftKey) {
+  //       if (event.code === 'ArrowUp') {
+  //         setTempo(tempo + 10);
+  //       }
+  //
+  //       if (event.code === 'ArrowDown') {
+  //         setTempo(tempo - 10);
+  //       }
+  //     } else {
+  //       if (event.code === 'ArrowUp') {
+  //         setTempo(tempo + 1);
+  //       }
+  //
+  //       if (event.code === 'ArrowDown') {
+  //         setTempo(tempo - 1);
+  //       }
+  //     }
+  //   };
+  //   // event = keyup or keydown
+  //   document.addEventListener('keydown', callback);
+  //
+  //   return () => {
+  //     document.removeEventListener('keydown', callback);
+  //   };
+  // }, []);
 
   return (
     <label className={clsx(className, classes.root)}>
@@ -54,10 +115,11 @@ const InputNumber = ({
         <input
           className={classes.input}
           inputMode="decimal"
-          type="number"
+          type="text"
           value={inputValue}
           onBlur={onBlurHandler}
           onChange={onChangeHandler}
+          onKeyDown={onKeyDownHandler}
           {...restProps}
         />
         <div className={classes.buttons}>

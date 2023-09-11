@@ -1,0 +1,88 @@
+.border {
+  inline-size: 100%;
+  max-inline-size: 806px;
+  margin: auto;
+  padding: 5px;
+  border-radius: 20px;
+  background-image: linear-gradient(150deg, #dcdcda, #8e908b);
+}
+
+.borderInner {
+  padding: 3px;
+  border-radius: 18px;
+  background-image: linear-gradient(150deg, #a4a5a0, #fefeff, #d1d1d0);
+}
+
+.display {
+  display: grid;
+  gap: var(--size-3);
+  max-inline-size: 800px;
+  margin: auto;
+  padding: var(--size-4);
+  border-radius: var(--radius-3);
+  background-color: #2c2c2e;
+  box-shadow: inset 0 0 16px #000;
+}
+
+.notes {
+  display: flex;
+  align-items: flex-end;
+}
+
+.note {
+  flex: 1;
+  filter: drop-shadow(1px 1px 4px #0002);
+}
+
+.beat {
+  position: relative;
+  flex: 1;
+  block-size: 40px;
+  margin: 0 0 8px 8px;
+  border: 1px solid red;
+  filter: drop-shadow(-8px 8px black);
+}
+
+.indicator {
+  --color-inidicator: transparent;
+
+  position: relative;
+  block-size: 60px;
+  border-radius: var(--radius-2);
+  background-color: var(--color-inidicator);
+  box-shadow: inset 0 0 50px #000a;
+  overflow: hidden;
+}
+
+.indicator::before {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  content: '';
+  z-index: -1;
+  inline-size: 100%;
+  block-size: 100%;
+  background-color: rgb(0 0 0 / 20%);
+}
+
+.indicator.accent {
+  --color-inidicator: #f00;
+
+  animation: blink both 0.24s cubic-bezier(0, 0.2, 1, 1);
+}
+
+.indicator.regular {
+  --color-inidicator: #0f0;
+
+  animation: blink both 0.24s cubic-bezier(0, 0.2, 1, 1);
+}
+
+@keyframes blink {
+  from {
+    background-color: var(--color-inidicator);
+  }
+
+  to {
+    background-color: transparent;
+  }
+}

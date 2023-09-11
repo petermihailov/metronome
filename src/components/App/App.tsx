@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 
-import { tempoMax, tempoMin } from '../../constants';
 import {
   setBeatsPerBarAction,
   setGridBeatAction,
@@ -10,42 +9,22 @@ import {
   useMetronomeContext,
 } from '../../context/MetronomeContext';
 import env from '../../env';
-import { usePlayer } from '../../hooks';
+import { useButtonsPreventSpacePress, useHotkeys, usePlayer } from '../../hooks';
 import checkBrowser from '../../utils/checkBrowser';
 import { BadBrowser } from '../BadBrowser';
-import { ButtonPlay } from '../ButtonPlay';
-import { InputNumber } from '../InputNumber';
-import { Note } from '../Note';
-import { Range } from '../Range';
+import { Display } from '../Display';
+import { Settings } from '../Settings';
 
 import classes from './App.module.css';
 
 const App = () => {
   const { groove, dispatch } = useMetronomeContext();
+  const { beat, playing, setPlaying } = usePlayer(groove);
 
-  const { beat, playing, setPlaying: setPlayingState } = usePlayer(groove);
-
-  const refIndicator = useRef<HTMLDivElement>(null);
   const refLockWindow = useRef<WakeLockSentinel>();
+  const refTrainingTimeout = useRef<number>();
 
   const [isBadBrowser, setIsBadBrowser] = useState(false);
-  // const { countDown, stop, start, isPlaying } = useCountdown();
-
-  const setPlaying = useCallback(
-    async (isPlaying: boolean) => {
-      if (isPlaying) {
-        refLockWindow.current = await navigator.wakeLock.request('screen');
-        console.log('lock');
-      } else {
-        refLockWindow.current?.release().then(() => {
-          console.log('release');
-        });
-      }
-
-      setPlayingState(isPlaying);
-    },
-    [setPlayingState],
-  );
 
   const setBeats = (value: number) => {
     if (value > 0) {
@@ -65,9 +44,9 @@ const App = () => {
     dispatch(switchInstrumentAction(noteIndex));
   };
 
-  const togglePlaying = useCallback(async () => {
-    setPlaying(!playing);
-  }, [playing, setPlaying]);
+  const togglePlaying = useCallback(() => {
+    setPlaying((prev) => !prev);
+  }, [setPlaying]);
 
   const setTempo = useCallback(
     (tempo: number) => {
@@ -76,85 +55,48 @@ const App = () => {
     [dispatch],
   );
 
-  // useEffect(() => {
-  //   setPlaying(isPlaying);
-  // }, [isPlaying, setPlaying]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- ToDo
+  const startSubdivisionTraining = (start: number, end: number, every: number) => {
+    window.clearTimeout(refTrainingTimeout.current);
+    setSubdivision(start);
 
-  useEffect(() => {
-    const callback = () => {
-      if (document.activeElement?.tagName === 'BUTTON') {
-        (document.activeElement as HTMLButtonElement).blur();
-      }
-    };
+    const steps = 2 * (end - start);
 
-    document.addEventListener('click', callback);
-    return () => document.removeEventListener('click', callback);
-  }, []);
+    for (let i = 1; i <= steps; i++) {
+      const idx = i < steps / 2 ? i : steps - i;
+      const nextValue = idx + start;
 
-  useEffect(() => {
-    const hotkeyCallback = (event: KeyboardEvent) => {
-      const eventTarget = event.target as HTMLInputElement | null;
-
-      if (eventTarget?.tagName === 'INPUT' && eventTarget?.type === 'number') {
-        return;
-      }
-
-      if (event.code === 'Space') {
-        const eventTarget = event.target as HTMLInputElement | null;
-
-        if (eventTarget?.tagName === 'INPUT' && eventTarget?.type === 'number') {
-          eventTarget.blur();
-        }
-
-        togglePlaying();
-      }
-
-      if (event.shiftKey) {
-        if (event.code === 'ArrowUp') {
-          // call your function to do the thing
-          setTempo(groove.tempo + 10);
-        }
-
-        if (event.code === 'ArrowDown') {
-          // call your function to do the thing
-          setTempo(groove.tempo - 10);
-        }
-      } else {
-        if (event.code === 'ArrowUp') {
-          // call your function to do the thing
-          setTempo(groove.tempo + 1);
-        }
-
-        if (event.code === 'ArrowDown') {
-          // call your function to do the thing
-          setTempo(groove.tempo - 1);
-        }
-      }
-    };
-    // event = keyup or keydown
-    document.addEventListener('keydown', hotkeyCallback);
-
-    return () => {
-      document.removeEventListener('keydown', hotkeyCallback);
-    };
-  }, [groove.tempo, setPlaying, setTempo, togglePlaying]);
-
-  useEffect(() => {
-    if (beat) {
-      const partIndex = beat.index % (groove.notes.length / groove.beatsPerBar);
-
-      if (partIndex === 0) {
-        refIndicator.current?.classList.remove(classes.accent, classes.regular);
-        refIndicator.current?.offsetTop;
-
-        if (beat.index === 0) {
-          refIndicator.current?.classList.add(classes.accent);
-        } else {
-          refIndicator.current?.classList.add(classes.regular);
-        }
-      }
+      refTrainingTimeout.current = window.setTimeout(
+        () => {
+          setSubdivision(nextValue);
+        },
+        ((i * every * groove.beatsPerBar * 60) / groove.tempo) * 1000 - 100,
+      );
     }
-  }, [beat, groove.beatsPerBar, groove.noteValue, groove.notes.length]);
+
+    setPlaying(true);
+  };
+
+  // WakeLock
+
+  useEffect(() => {
+    if (playing) {
+      navigator.wakeLock.request('screen').then((res) => (refLockWindow.current = res));
+      console.log('lock');
+    } else {
+      refLockWindow.current?.release().then(() => {
+        console.log('release');
+      });
+    }
+  }, [playing]);
+
+  // HotKeys
+
+  useHotkeys(groove.tempo, setTempo, togglePlaying);
+
+  // Disable buttons focus
+
+  useButtonsPreventSpacePress();
 
   // Initialize
 
@@ -170,72 +112,23 @@ const App = () => {
 
   return (
     <div className={classes.root}>
-      <div>
-        <div className={classes.display}>
-          <div
-            className={classes.notes}
-            style={{
-              gap: `min(var(--size-3), calc(var(--size-3) / ${0.1 * groove.notes.length}))`,
-            }}
-          >
-            {groove.notes.map((note, idx) => (
-              <Note
-                key={idx}
-                active={Boolean(beat && beat.index === idx)}
-                className={classes.note}
-                note={note}
-                onClick={() => switchInstrument(idx)}
-              />
-            ))}
-          </div>
+      <Display
+        beatIndex={beat.index}
+        beatsPerBar={groove.beatsPerBar}
+        notes={groove.notes}
+        onNoteClick={switchInstrument}
+      />
 
-          <div ref={refIndicator} className={classes.indicator} />
-        </div>
-      </div>
-
-      <div className={classes.settings}>
-        <div className={classes.tempo}>
-          <ButtonPlay active playing={playing} onClick={togglePlaying} />
-          <Range
-            className={classes.bpm}
-            max={tempoMax}
-            min={tempoMin}
-            value={groove.tempo}
-            onChange={setTempo}
-          />
-        </div>
-
-        <InputNumber label="beats" min={1} value={groove.beatsPerBar} onChange={setBeats} />
-        <InputNumber
-          label="subdivision"
-          min={1}
-          value={groove.subdivision}
-          onChange={setSubdivision}
-        />
-      </div>
-
-      {/*<div>gradually increase the tempo</div>*/}
-      {/*<div>to <InputNumber /></div>*/}
-      {/*<div>every <InputNumber /> bar</div>*/}
-
-      {/*<div>*/}
-      {/*  {countDown.minutes}: {countDown.seconds}*/}
-      {/*</div>*/}
-      {/*<button onClick={() => start(10)}>timer 3</button>*/}
-      {/*<button> timer 5</button>*/}
-      {/*<button> timer 8</button>*/}
-
-      {/*<Controls*/}
-      {/*  groove={groove}*/}
-      {/*  playing={playing}*/}
-      {/*  onSetTempo={setTempo}*/}
-      {/*  onTogglePlaying={togglePlaying}*/}
-      {/*/>*/}
-
-      {/*<pre>*/}
-      {/*  tempo: {groove.tempo}{'\n'}*/}
-      {/*  notes: {JSON.stringify(groove.notes)}*/}
-      {/*</pre>*/}
+      <Settings
+        beatsPerBar={groove.beatsPerBar}
+        isPlaying={playing}
+        setBeats={setBeats}
+        setSubdivision={setSubdivision}
+        setTempo={setTempo}
+        subdivision={groove.subdivision}
+        tempo={groove.tempo}
+        togglePlaying={togglePlaying}
+      />
     </div>
   );
 };
