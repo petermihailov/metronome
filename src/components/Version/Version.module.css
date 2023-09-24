@@ -1,0 +1,10 @@
+.root {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  padding-inline: var(--size-2);
+  font: var(--font-mono);
+  font-size: var(--font-size-0);
+  opacity: 0.5;
+  pointer-events: none;
+}
