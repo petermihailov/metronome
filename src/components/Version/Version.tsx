@@ -9,7 +9,7 @@ const Version = () => {
 
   useEffect(() => {
     if (!env.DEV) {
-      fetch('/version')
+      fetch('./version')
         .then((res) => res.text())
         .then((v) => setVersion('v' + v.trim()));
     } else {
