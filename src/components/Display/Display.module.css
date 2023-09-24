@@ -1,24 +1,11 @@
-.border {
-  inline-size: 100%;
-  max-inline-size: 806px;
-  margin: auto;
-  padding: 5px;
-  border-radius: 20px;
-  background-image: linear-gradient(150deg, #dcdcda, #8e908b);
-}
-
-.borderInner {
-  padding: 3px;
-  border-radius: 18px;
-  background-image: linear-gradient(150deg, #a4a5a0, #fefeff, #d1d1d0);
-}
-
 .display {
   display: grid;
   gap: var(--size-3);
+  inline-size: 100%;
   max-inline-size: 800px;
   margin: auto;
   padding: var(--size-4);
+  border: 2px solid #fffa;
   border-radius: var(--radius-3);
   background-color: #2c2c2e;
   box-shadow: inset 0 0 16px #000;

@@ -35,6 +35,7 @@ const Range = ({
     const val = Math.min(Number(e.target.value), max);
     if (!Number.isNaN(val)) {
       onChange(Math.max(min, val));
+      e.target.blur();
     }
   };
 
@@ -54,7 +55,6 @@ const Range = ({
         value={value}
         onChange={onChange}
       />
-      {/*<div className={classes.value}>{value}</div>*/}
       <div className={classes.range}>
         <input
           ref={rangeRef}

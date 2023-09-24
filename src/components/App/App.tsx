@@ -9,7 +9,7 @@ import {
   useMetronomeContext,
 } from '../../context/MetronomeContext';
 import env from '../../env';
-import { useButtonsPreventSpacePress, useHotkeys, usePlayer } from '../../hooks';
+import { useButtonsPreventSpacePress, useHotkeys, usePlayer, useWakeLock } from '../../hooks';
 import checkBrowser from '../../utils/checkBrowser';
 import { BadBrowser } from '../BadBrowser';
 import { Display } from '../Display';
@@ -21,7 +21,6 @@ const App = () => {
   const { groove, dispatch } = useMetronomeContext();
   const { beat, playing, setPlaying } = usePlayer(groove);
 
-  const refLockWindow = useRef<WakeLockSentinel>();
   const refTrainingTimeout = useRef<number>();
 
   const [isBadBrowser, setIsBadBrowser] = useState(false);
@@ -79,16 +78,7 @@ const App = () => {
 
   // WakeLock
 
-  useEffect(() => {
-    if (playing) {
-      navigator.wakeLock.request('screen').then((res) => (refLockWindow.current = res));
-      console.log('lock');
-    } else {
-      refLockWindow.current?.release().then(() => {
-        console.log('release');
-      });
-    }
-  }, [playing]);
+  useWakeLock(playing);
 
   // HotKeys
 
@@ -129,6 +119,8 @@ const App = () => {
         tempo={groove.tempo}
         togglePlaying={togglePlaying}
       />
+
+      <div className={classes.version}>{APP_VERSION}</div>
     </div>
   );
 };

@@ -33,29 +33,25 @@ const Display = ({ beatIndex, notes, beatsPerBar, onNoteClick }: DisplayProps) =
   }, [beatIndex, beatsPerBar, notes.length]);
 
   return (
-    <div className={classes.border}>
-      <div className={classes.borderInner}>
-        <div className={classes.display}>
-          <div
-            className={classes.notes}
-            style={{
-              gap: `min(var(--size-3), calc(var(--size-3) / ${0.2 * notes.length}))`,
-            }}
-          >
-            {notes.map((note, idx) => (
-              <Note
-                key={idx}
-                active={Boolean(beatIndex === idx)}
-                className={classes.note}
-                note={note}
-                onClick={() => onNoteClick?.(idx)}
-              />
-            ))}
-          </div>
-
-          <div ref={refIndicator} className={classes.indicator} />
-        </div>
+    <div className={classes.display}>
+      <div
+        className={classes.notes}
+        style={{
+          gap: `min(var(--size-3), calc(var(--size-3) / ${0.2 * notes.length}))`,
+        }}
+      >
+        {notes.map((note, idx) => (
+          <Note
+            key={idx}
+            active={Boolean(beatIndex === idx)}
+            className={classes.note}
+            note={note}
+            onClick={() => onNoteClick?.(idx)}
+          />
+        ))}
       </div>
+
+      <div ref={refIndicator} className={classes.indicator} />
     </div>
   );
 };
