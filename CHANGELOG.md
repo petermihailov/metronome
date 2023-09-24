@@ -1,3 +1,12 @@
+## [1.4.2](https://github.com/petermihailov/metronome/compare/v1.4.1...v1.4.2) (2023-09-24)
+
+
+### Bug Fixes
+
+* version file ([2f09630](https://github.com/petermihailov/metronome/commit/2f09630c7246bf4beec0c56f9f52e8f88ec38317))
+
+
+
 ## [1.4.1](https://github.com/petermihailov/metronome/compare/v1.4.0...v1.4.1) (2023-09-24)
 
 
@@ -31,15 +40,6 @@
 ### Features
 
 * larger buttons ([ab860eb](https://github.com/petermihailov/metronome/commit/ab860eb9c01483442a0da0b2f9d29fdf2008e1b4))
-
-
-
-## [1.2.1](https://github.com/petermihailov/metronome/compare/v1.2.0...v1.2.1) (2023-09-06)
-
-
-### Bug Fixes
-
-* cosmetic ([e92bfbb](https://github.com/petermihailov/metronome/commit/e92bfbb30184be8c8caf6cea8bee3f97a389ea02))
 
 
 
