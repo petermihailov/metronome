@@ -109,9 +109,9 @@ const InputNumber = ({
   // }, []);
 
   return (
-    <label className={clsx(className, classes.root)}>
-      {label && <span className={classes.label}>{label}</span>}
-      <div className={classes.inputWrapper}>
+    <div className={clsx(className, classes.root)}>
+      <label>
+        {label && <span className={classes.label}>{label}</span>}
         <input
           className={classes.input}
           inputMode="decimal"
@@ -122,16 +122,16 @@ const InputNumber = ({
           onKeyDown={onKeyDownHandler}
           {...restProps}
         />
-        <div className={classes.buttons}>
-          <button className={classes.button} onClick={increase}>
-            <Icon name="icon.plus" />
-          </button>
-          <button className={classes.button} onClick={decrease}>
-            <Icon name="icon.minus" />
-          </button>
-        </div>
+      </label>
+      <div className={classes.buttons} onClick={(e) => e.stopPropagation()}>
+        <button className={classes.button} onClick={increase}>
+          <Icon name="icon.plus" />
+        </button>
+        <button className={classes.button} onClick={decrease}>
+          <Icon name="icon.minus" />
+        </button>
       </div>
-    </label>
+    </div>
   );
 };
 

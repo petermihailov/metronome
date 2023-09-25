@@ -1,5 +1,5 @@
 .root {
-  /* empty */
+  position: relative;
 }
 
 .label {
@@ -9,11 +9,8 @@
   text-transform: uppercase;
 }
 
-.inputWrapper {
-  position: relative;
-}
-
 .input {
+  display: block;
   inline-size: 100%;
   padding: var(--size-1) var(--size-2);
   font-weight: bold;
@@ -32,12 +29,14 @@
 
 .buttons {
   position: absolute;
-  inset-block: 0;
-  inset-inline-end: var(--size-2);
+  inset-block-end: 0;
+  inset-inline-end: 0;
   z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  block-size: 50px;
+  padding: 0 var(--size-2);
 }
 
 .button {
