@@ -1,3 +1,12 @@
+## [1.4.5](https://github.com/petermihailov/metronome/compare/v1.4.4...v1.4.5) (2023-09-25)
+
+
+### Bug Fixes
+
+* inputNumber click area ([88e091b](https://github.com/petermihailov/metronome/commit/88e091b3ac14df83eecd669b5436e041da98c848))
+
+
+
 ## [1.4.4](https://github.com/petermihailov/metronome/compare/v1.4.3...v1.4.4) (2023-09-24)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * version file ([3aa3a24](https://github.com/petermihailov/metronome/commit/3aa3a249c1282f1c2ce34cb777fa5ff87698aab3))
-
-
-
-# [1.4.0](https://github.com/petermihailov/metronome/compare/v1.3.1...v1.4.0) (2023-09-24)
-
-
-### Features
-
-* add version ([e155e61](https://github.com/petermihailov/metronome/commit/e155e6147df69d0c60bfa6493b62b57300090247))
 
 
 
