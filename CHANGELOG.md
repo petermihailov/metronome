@@ -1,3 +1,12 @@
+## [1.4.6](https://github.com/petermihailov/metronome/compare/v1.4.5...v1.4.6) (2023-09-25)
+
+
+### Bug Fixes
+
+* deploy ([36d9b7d](https://github.com/petermihailov/metronome/commit/36d9b7db4e7739be30cd58c24108116dc01d80c8))
+
+
+
 ## [1.4.5](https://github.com/petermihailov/metronome/compare/v1.4.4...v1.4.5) (2023-09-25)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * version file ([2f09630](https://github.com/petermihailov/metronome/commit/2f09630c7246bf4beec0c56f9f52e8f88ec38317))
-
-
-
-## [1.4.1](https://github.com/petermihailov/metronome/compare/v1.4.0...v1.4.1) (2023-09-24)
-
-
-### Bug Fixes
-
-* version file ([3aa3a24](https://github.com/petermihailov/metronome/commit/3aa3a249c1282f1c2ce34cb777fa5ff87698aab3))
 
 
 
