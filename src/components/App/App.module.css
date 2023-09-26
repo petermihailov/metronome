@@ -6,20 +6,12 @@
   padding: var(--size-2);
 }
 
-.settings {
-  display: grid;
-  grid-template-rows: 1fr;
-  row-gap: var(--size-3);
+.root > * {
   inline-size: 100%;
   max-inline-size: 800px;
   margin: auto;
 }
 
-.tempo {
-  display: flex;
-  gap: var(--size-2);
-}
-
-.bpm {
-  flex: 1;
+.time {
+  text-align: end;
 }

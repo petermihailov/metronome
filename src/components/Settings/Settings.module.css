@@ -2,14 +2,19 @@
   display: grid;
   grid-template-rows: 1fr;
   row-gap: var(--size-3);
-  inline-size: 100%;
-  max-inline-size: 800px;
-  margin: auto;
 }
 
-.tempo {
+.player {
   display: flex;
   gap: var(--size-2);
+  align-items: center;
+}
+
+.time {
+  padding: var(--size-1) var(--size-2);
+  font-weight: bold;
+  font-size: var(--font-size-6);
+  line-height: var(--font-lineheight-00);
 }
 
 .bpm {

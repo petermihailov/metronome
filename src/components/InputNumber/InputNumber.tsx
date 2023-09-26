@@ -64,50 +64,6 @@ const InputNumber = ({
     setInputValue(String(value));
   }, [value]);
 
-  // useEffect(() => {
-  //   const callback = (event: KeyboardEvent) => {
-  //     const eventTarget = event.target as HTMLInputElement | null;
-  //
-  //     if (eventTarget?.tagName === 'INPUT' && eventTarget?.type === 'number') {
-  //       return;
-  //     }
-  //
-  //     if (event.code === 'Space') {
-  //       const eventTarget = event.target as HTMLInputElement | null;
-  //
-  //       if (eventTarget?.tagName === 'INPUT' && eventTarget?.type === 'number') {
-  //         eventTarget.blur();
-  //       }
-  //
-  //       togglePlaying();
-  //     }
-  //
-  //     if (event.shiftKey) {
-  //       if (event.code === 'ArrowUp') {
-  //         setTempo(tempo + 10);
-  //       }
-  //
-  //       if (event.code === 'ArrowDown') {
-  //         setTempo(tempo - 10);
-  //       }
-  //     } else {
-  //       if (event.code === 'ArrowUp') {
-  //         setTempo(tempo + 1);
-  //       }
-  //
-  //       if (event.code === 'ArrowDown') {
-  //         setTempo(tempo - 1);
-  //       }
-  //     }
-  //   };
-  //   // event = keyup or keydown
-  //   document.addEventListener('keydown', callback);
-  //
-  //   return () => {
-  //     document.removeEventListener('keydown', callback);
-  //   };
-  // }, []);
-
   return (
     <div className={clsx(className, classes.root)}>
       <label>

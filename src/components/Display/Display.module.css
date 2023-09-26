@@ -1,9 +1,6 @@
 .display {
   display: grid;
   gap: var(--size-3);
-  inline-size: 100%;
-  max-inline-size: 800px;
-  margin: auto;
   padding: var(--size-4);
   border: 2px solid #fffa;
   border-radius: var(--radius-3);

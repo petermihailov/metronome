@@ -15,6 +15,7 @@ export interface RangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 'onCh
   min?: number;
   max?: number;
   value: number;
+  label?: string;
   onChange: (value: number) => void;
 }
 
@@ -24,6 +25,7 @@ const Range = ({
   max = 100,
   value,
   onChange,
+  label,
   ...restInputProps
 }: RangeProps) => {
   const decimalRef = useRef<HTMLInputElement>(null);
@@ -48,37 +50,40 @@ const Range = ({
 
   return (
     <div className={clsx(className, classes.root)}>
-      <InputNumber
-        className={classes.value}
-        max={max}
-        min={min}
-        value={value}
-        onChange={onChange}
-      />
-      <div className={classes.range}>
-        <input
-          ref={rangeRef}
-          className={classes.input}
-          list="tickmarks"
+      {label && <span className={classes.label}>{label}</span>}
+      <div className={classes.rangeContainer}>
+        <InputNumber
+          className={classes.value}
           max={max}
           min={min}
-          type="range"
-          value={String(value)}
-          onChange={handleTrackChange}
-          {...restInputProps}
+          value={value}
+          onChange={onChange}
         />
-        <datalist className={classes.labels} id="tickmarks">
-          {Array.from(Array(labelsCount)).map((_, idx) => (
-            <option
-              key={idx}
-              label={String(min + idx * 10)}
-              value={min + idx * 10}
-              onClick={() => {
-                onChange(min + idx * 10);
-              }}
-            />
-          ))}
-        </datalist>
+        <div className={classes.range}>
+          <input
+            ref={rangeRef}
+            className={classes.input}
+            list="tickmarks"
+            max={max}
+            min={min}
+            type="range"
+            value={String(value)}
+            onChange={handleTrackChange}
+            {...restInputProps}
+          />
+          <datalist className={classes.labels} id="tickmarks">
+            {Array.from(Array(labelsCount)).map((_, idx) => (
+              <option
+                key={idx}
+                label={String(min + idx * 10)}
+                value={min + idx * 10}
+                onClick={() => {
+                  onChange(min + idx * 10);
+                }}
+              />
+            ))}
+          </datalist>
+        </div>
       </div>
     </div>
   );

@@ -9,7 +9,13 @@ import {
   useMetronomeContext,
 } from '../../context/MetronomeContext';
 import env from '../../env';
-import { useButtonsPreventSpacePress, useHotkeys, usePlayer, useWakeLock } from '../../hooks';
+import {
+  useButtonsPreventSpacePress,
+  useHotkeys,
+  usePlayer,
+  useTrainingTime,
+  useWakeLock,
+} from '../../hooks';
 import checkBrowser from '../../utils/checkBrowser';
 import { BadBrowser } from '../BadBrowser';
 import { Display } from '../Display';
@@ -76,6 +82,10 @@ const App = () => {
     setPlaying(true);
   };
 
+  // timer
+
+  const timer = useTrainingTime(playing);
+
   // WakeLock
 
   useWakeLock(playing);
@@ -111,6 +121,7 @@ const App = () => {
 
       <Settings
         beatsPerBar={groove.beatsPerBar}
+        currentTime={timer.current}
         isPlaying={playing}
         setBeats={setBeats}
         setSubdivision={setSubdivision}
@@ -119,6 +130,8 @@ const App = () => {
         tempo={groove.tempo}
         togglePlaying={togglePlaying}
       />
+
+      <div className={classes.time}>Total Play Time: {timer.session}</div>
     </div>
   );
 };

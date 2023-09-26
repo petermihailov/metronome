@@ -16,10 +16,12 @@ export interface SettingsProps {
   subdivision: number;
   tempo: number;
   togglePlaying: () => void;
+  currentTime?: string;
 }
 
 const Settings = ({
   beatsPerBar,
+  currentTime,
   isPlaying,
   setBeats,
   setSubdivision,
@@ -30,16 +32,19 @@ const Settings = ({
 }: SettingsProps) => {
   return (
     <div className={classes.settings}>
-      <div className={classes.tempo}>
+      <div className={classes.player}>
         <ButtonPlay active playing={isPlaying} onClick={togglePlaying} />
-        <Range
-          className={classes.bpm}
-          max={tempoMax}
-          min={tempoMin}
-          value={tempo}
-          onChange={setTempo}
-        />
+        <span className={classes.time}>{currentTime}</span>
       </div>
+
+      <Range
+        className={classes.bpm}
+        label="tempo"
+        max={tempoMax}
+        min={tempoMin}
+        value={tempo}
+        onChange={setTempo}
+      />
 
       <InputNumber label="beats" min={1} value={beatsPerBar} onChange={setBeats} />
       <InputNumber label="subdivision" min={1} value={subdivision} onChange={setSubdivision} />

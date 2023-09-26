@@ -1,7 +1,18 @@
 .root {
+  /* empty */
+}
+
+.rangeContainer {
   display: flex;
   gap: var(--size-3);
   align-items: center;
+}
+
+.label {
+  font-weight: var(--font-weight-9);
+  font-size: var(--font-size-3);
+  letter-spacing: -0.8px;
+  text-transform: uppercase;
 }
 
 .value {
