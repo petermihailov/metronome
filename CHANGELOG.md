@@ -1,3 +1,12 @@
+## [1.6.2](https://github.com/petermihailov/metronome/compare/v1.6.1...v1.6.2) (2023-09-26)
+
+
+### Bug Fixes
+
+* colors ([c1dd392](https://github.com/petermihailov/metronome/commit/c1dd392102beb1e4a9c03332ba46f0599b027248))
+
+
+
 ## [1.6.1](https://github.com/petermihailov/metronome/compare/v1.6.0...v1.6.1) (2023-09-26)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * deploy ([36d9b7d](https://github.com/petermihailov/metronome/commit/36d9b7db4e7739be30cd58c24108116dc01d80c8))
-
-
-
-## [1.4.5](https://github.com/petermihailov/metronome/compare/v1.4.4...v1.4.5) (2023-09-25)
-
-
-### Bug Fixes
-
-* inputNumber click area ([88e091b](https://github.com/petermihailov/metronome/commit/88e091b3ac14df83eecd669b5436e041da98c848))
 
 
 
