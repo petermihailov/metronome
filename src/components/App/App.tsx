@@ -14,7 +14,6 @@ import checkBrowser from '../../utils/checkBrowser';
 import { BadBrowser } from '../BadBrowser';
 import { Display } from '../Display';
 import { Settings } from '../Settings';
-import { Version } from '../Version';
 
 import classes from './App.module.css';
 
@@ -120,8 +119,6 @@ const App = () => {
         tempo={groove.tempo}
         togglePlaying={togglePlaying}
       />
-
-      <Version />
     </div>
   );
 };

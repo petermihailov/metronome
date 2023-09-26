@@ -1,5 +1,20 @@
 import { useEffect } from 'react';
 
+const tapTempo = {
+  prev: 0,
+  tap() {
+    const now = Date.now();
+    const delta = now - this.prev;
+    this.prev = now;
+
+    if (delta < 4_000) {
+      return Math.round(60_000 / delta);
+    }
+
+    return null;
+  },
+};
+
 export const useHotkeys = (
   tempo: number,
   setTempo: (tempo: number) => void,
@@ -9,6 +24,11 @@ export const useHotkeys = (
     const callback = (event: KeyboardEvent) => {
       if (event.code === 'Space') {
         togglePlaying();
+      }
+
+      if (event.code === 'KeyT') {
+        const tap = tapTempo.tap();
+        if (tap) setTempo(tap);
       }
 
       if (event.shiftKey) {
