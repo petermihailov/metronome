@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/petermihailov/metronome/compare/v1.4.6...v1.5.0) (2023-09-26)
+
+
+### Features
+
+* tap tempo on key "T" ([7da1e80](https://github.com/petermihailov/metronome/commit/7da1e8053f07c11dff93c570a1252979a147206e))
+
+
+
 ## [1.4.6](https://github.com/petermihailov/metronome/compare/v1.4.5...v1.4.6) (2023-09-25)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * version file ([abac4f2](https://github.com/petermihailov/metronome/commit/abac4f279c5e9ed7b42d30bf670030842e183b5c))
-
-
-
-## [1.4.2](https://github.com/petermihailov/metronome/compare/v1.4.1...v1.4.2) (2023-09-24)
-
-
-### Bug Fixes
-
-* version file ([2f09630](https://github.com/petermihailov/metronome/commit/2f09630c7246bf4beec0c56f9f52e8f88ec38317))
 
 
 
