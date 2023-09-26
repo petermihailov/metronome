@@ -1,3 +1,12 @@
+## [1.6.1](https://github.com/petermihailov/metronome/compare/v1.6.0...v1.6.1) (2023-09-26)
+
+
+### Bug Fixes
+
+* mobile layout ([c0029f7](https://github.com/petermihailov/metronome/commit/c0029f700b50d21607f1d602c02d2b83c9bdaae0))
+
+
+
 # [1.6.0](https://github.com/petermihailov/metronome/compare/v1.5.0...v1.6.0) (2023-09-26)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * inputNumber click area ([88e091b](https://github.com/petermihailov/metronome/commit/88e091b3ac14df83eecd669b5436e041da98c848))
-
-
-
-## [1.4.4](https://github.com/petermihailov/metronome/compare/v1.4.3...v1.4.4) (2023-09-24)
-
-
-### Bug Fixes
-
-* version file ([85dfa6c](https://github.com/petermihailov/metronome/commit/85dfa6c3f3dca08fd09865f9ef6ed7fcdea523e5))
 
 
 
