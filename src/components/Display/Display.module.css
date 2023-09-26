@@ -34,7 +34,7 @@
   block-size: 50px;
   border-radius: var(--radius-2);
   background-color: var(--color-inidicator);
-  box-shadow: inset 0 0 50px #000a;
+  box-shadow: inset 0 0 20px #000;
   overflow: hidden;
 }
 
