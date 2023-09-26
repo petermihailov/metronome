@@ -1,5 +1,10 @@
 import clsx from 'clsx';
-import type { InputHTMLAttributes, ChangeEventHandler, KeyboardEventHandler } from 'react';
+import type {
+  InputHTMLAttributes,
+  ChangeEventHandler,
+  KeyboardEventHandler,
+  MouseEventHandler,
+} from 'react';
 import { memo, useEffect, useState } from 'react';
 
 import { Icon } from '../Icon';
@@ -46,6 +51,16 @@ const InputNumber = ({
     onChange?.((value || 0) - 1);
   };
 
+  const increaseHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.currentTarget.blur();
+    increase();
+  };
+
+  const decreaseHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.currentTarget.blur();
+    decrease();
+  };
+
   const onKeyDownHandler: KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (['ArrowUp', 'ArrowDown'].includes(event.code)) {
       event.stopPropagation();
@@ -80,10 +95,10 @@ const InputNumber = ({
         />
       </label>
       <div className={classes.buttons} onClick={(e) => e.stopPropagation()}>
-        <button className={classes.button} onClick={increase}>
+        <button className={classes.button} onClick={increaseHandler}>
           <Icon name="icon.plus" />
         </button>
-        <button className={classes.button} onClick={decrease}>
+        <button className={classes.button} onClick={decreaseHandler}>
           <Icon name="icon.minus" />
         </button>
       </div>
