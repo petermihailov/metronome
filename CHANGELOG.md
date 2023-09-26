@@ -1,3 +1,12 @@
+# [1.6.0](https://github.com/petermihailov/metronome/compare/v1.5.0...v1.6.0) (2023-09-26)
+
+
+### Features
+
+* timers ([69c3e74](https://github.com/petermihailov/metronome/commit/69c3e747708c5fddcaf8451b086fd4cad18ce880))
+
+
+
 # [1.5.0](https://github.com/petermihailov/metronome/compare/v1.4.6...v1.5.0) (2023-09-26)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * version file ([85dfa6c](https://github.com/petermihailov/metronome/commit/85dfa6c3f3dca08fd09865f9ef6ed7fcdea523e5))
-
-
-
-## [1.4.3](https://github.com/petermihailov/metronome/compare/v1.4.2...v1.4.3) (2023-09-24)
-
-
-### Bug Fixes
-
-* version file ([abac4f2](https://github.com/petermihailov/metronome/commit/abac4f279c5e9ed7b42d30bf670030842e183b5c))
 
 
 
