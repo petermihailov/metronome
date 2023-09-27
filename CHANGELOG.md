@@ -1,3 +1,12 @@
+## [1.7.1](https://github.com/petermihailov/metronome/compare/v1.7.0...v1.7.1) (2023-09-27)
+
+
+### Bug Fixes
+
+* favicon ([2dd66f0](https://github.com/petermihailov/metronome/commit/2dd66f00a0af685a16978b12df09799b053e66e6))
+
+
+
 # [1.7.0](https://github.com/petermihailov/metronome/compare/v1.6.3...v1.7.0) (2023-09-27)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * mobile layout ([c0029f7](https://github.com/petermihailov/metronome/commit/c0029f700b50d21607f1d602c02d2b83c9bdaae0))
-
-
-
-# [1.6.0](https://github.com/petermihailov/metronome/compare/v1.5.0...v1.6.0) (2023-09-26)
-
-
-### Features
-
-* timers ([69c3e74](https://github.com/petermihailov/metronome/commit/69c3e747708c5fddcaf8451b086fd4cad18ce880))
 
 
 
