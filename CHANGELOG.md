@@ -1,3 +1,12 @@
+# [1.7.0](https://github.com/petermihailov/metronome/compare/v1.6.3...v1.7.0) (2023-09-27)
+
+
+### Features
+
+* add day timer ([9dcc59e](https://github.com/petermihailov/metronome/commit/9dcc59edfa6268b618479aced33d2fbff7a0856f))
+
+
+
 ## [1.6.3](https://github.com/petermihailov/metronome/compare/v1.6.2...v1.6.3) (2023-09-26)
 
 
@@ -31,15 +40,6 @@
 ### Features
 
 * timers ([69c3e74](https://github.com/petermihailov/metronome/commit/69c3e747708c5fddcaf8451b086fd4cad18ce880))
-
-
-
-# [1.5.0](https://github.com/petermihailov/metronome/compare/v1.4.6...v1.5.0) (2023-09-26)
-
-
-### Features
-
-* tap tempo on key "T" ([7da1e80](https://github.com/petermihailov/metronome/commit/7da1e8053f07c11dff93c570a1252979a147206e))
 
 
 
