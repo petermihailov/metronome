@@ -1,8 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { timeFormat } from '../utils/time';
+import { StorageField } from '../lib/LocalStorage';
+import { dateFormat, timeFormat } from '../utils/format';
 
-const defaults = { current: 0, session: 0 };
+const defaults = {
+  current: 0,
+  session: 0,
+  day: 0,
+};
+
+const currentDate = dateFormat();
+const trainingStorageField = new StorageField<{ [date: string]: number }>('training');
+const storageValue = trainingStorageField.get();
+
+if (!storageValue) {
+  trainingStorageField.set({ [currentDate]: 0 });
+} else {
+  if (storageValue[currentDate]) {
+    defaults.day = storageValue[currentDate];
+  }
+}
 
 export const useTrainingTime = (isPlaying: boolean) => {
   const [elapsed, setElapsed] = useState(defaults);
@@ -10,17 +27,18 @@ export const useTrainingTime = (isPlaying: boolean) => {
 
   useEffect(() => {
     const callback = () => {
-      setElapsed((prev) => ({
-        current: prev.current + 1,
-        session: prev.session + 1,
-      }));
+      setElapsed((prev) => {
+        const current = prev.current + 1;
+        const session = prev.session + 1;
+        const day = prev.day + 1;
+
+        trainingStorageField.merge({ [currentDate]: day });
+        return { current, session, day };
+      });
     };
 
     if (isPlaying) {
-      setElapsed((prev) => ({
-        current: 0,
-        session: prev.session,
-      }));
+      setElapsed((prev) => ({ ...prev, current: 0 }));
       refInterval.current = window.setInterval(callback, 1000);
     }
 
@@ -32,5 +50,6 @@ export const useTrainingTime = (isPlaying: boolean) => {
   return {
     current: timeFormat(elapsed.current),
     session: timeFormat(elapsed.session),
+    day: timeFormat(elapsed.day),
   };
 };

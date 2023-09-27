@@ -131,7 +131,10 @@ const App = () => {
         togglePlaying={togglePlaying}
       />
 
-      <div className={classes.time}>Total Play Time: {timer.session}</div>
+      <div className={classes.time}>
+        <time>Session Time: {timer.session}</time>
+        <time>Total Today: {timer.day}</time>
+      </div>
     </div>
   );
 };

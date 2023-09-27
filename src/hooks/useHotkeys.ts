@@ -7,7 +7,7 @@ const tapTempo = {
     const delta = now - this.prev;
     this.prev = now;
 
-    if (delta < 4_000) {
+    if (delta < 3_000) {
       return Math.round(60_000 / delta);
     }
 
