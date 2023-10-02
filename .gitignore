@@ -10,3 +10,6 @@ node_modules/
 
 # out
 dist/
+
+# dev
+dev-dist/

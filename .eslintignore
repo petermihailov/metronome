@@ -5,6 +5,9 @@ node_modules/
 # out
 dist/
 
+# dev
+dev-dist/
+
 # files
 webpack.config.js
 postcss.config.js

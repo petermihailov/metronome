@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 
+// import artwork from '../../../public/pwa-512x512.png'
 import {
   setBeatsPerBarAction,
   setGridBeatAction,
@@ -104,6 +105,26 @@ const App = () => {
     setIsBadBrowser(!checkBrowser.test(navigator.userAgent));
   }, []);
 
+  // useEffect(() => {
+  //   if ('mediaSession' in navigator) {
+  //     navigator.mediaSession.metadata = new MediaMetadata({
+  //       title: 'beats 4, subdivision 1',
+  //       artist: 'metronome',
+  //       album: 'album',
+  //       artwork: [{
+  //         src: artwork,
+  //         sizes: '512x512',
+  //         type: 'image/png'
+  //       }]
+  //     })
+  //
+  //     navigator.mediaSession.setActionHandler('play', () => setPlaying(true))
+  //     navigator.mediaSession.setActionHandler('stop', () => setPlaying(false))
+  //
+  //     navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
+  //   }
+  // }, [playing, setPlaying]);
+
   // Render
 
   if (!env.DEV && isBadBrowser) {
@@ -132,7 +153,6 @@ const App = () => {
       />
 
       <div className={classes.time}>
-        <time>Session Time: {timer.session}</time>
         <time>Total Today: {timer.day}</time>
       </div>
     </div>
