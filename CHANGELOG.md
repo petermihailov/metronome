@@ -1,3 +1,12 @@
+## [1.9.1](https://github.com/petermihailov/metronome/compare/v1.9.0...v1.9.1) (2023-10-07)
+
+
+### Bug Fixes
+
+* pwa update prompt ([405834a](https://github.com/petermihailov/metronome/commit/405834a1ac4793682d78aeac68d5ba6ddb6913cc))
+
+
+
 # [1.9.0](https://github.com/petermihailov/metronome/compare/v1.8.0...v1.9.0) (2023-10-07)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * favicon ([2dd66f0](https://github.com/petermihailov/metronome/commit/2dd66f00a0af685a16978b12df09799b053e66e6))
-
-
-
-# [1.7.0](https://github.com/petermihailov/metronome/compare/v1.6.3...v1.7.0) (2023-09-27)
-
-
-### Features
-
-* add day timer ([9dcc59e](https://github.com/petermihailov/metronome/commit/9dcc59edfa6268b618479aced33d2fbff7a0856f))
 
 
 
