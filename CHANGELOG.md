@@ -1,3 +1,12 @@
+## [1.9.3](https://github.com/petermihailov/metronome/compare/v1.9.2...v1.9.3) (2023-10-07)
+
+
+### Bug Fixes
+
+* try to fix pwa ready notification ([3d53d6a](https://github.com/petermihailov/metronome/commit/3d53d6ac034e600fb44cfafa9ec97b9c90c5aa78))
+
+
+
 ## [1.9.2](https://github.com/petermihailov/metronome/compare/v1.9.1...v1.9.2) (2023-10-07)
 
 
@@ -31,15 +40,6 @@
 ### Features
 
 * pwa quick start ([8b3d74a](https://github.com/petermihailov/metronome/commit/8b3d74a3087d449281b4d7056619da7c662a214f))
-
-
-
-## [1.7.2](https://github.com/petermihailov/metronome/compare/v1.7.1...v1.7.2) (2023-09-27)
-
-
-### Bug Fixes
-
-* favicon ([1a70ab6](https://github.com/petermihailov/metronome/commit/1a70ab6b9329fb31d532a470ca576091f0b0e7e1))
 
 
 
