@@ -1,3 +1,12 @@
+## [1.9.2](https://github.com/petermihailov/metronome/compare/v1.9.1...v1.9.2) (2023-10-07)
+
+
+### Bug Fixes
+
+* impact animation ([e85c0e2](https://github.com/petermihailov/metronome/commit/e85c0e270624d2f5f687b1cb74f8f3fd62e3599a))
+
+
+
 ## [1.9.1](https://github.com/petermihailov/metronome/compare/v1.9.0...v1.9.1) (2023-10-07)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * favicon ([1a70ab6](https://github.com/petermihailov/metronome/commit/1a70ab6b9329fb31d532a470ca576091f0b0e7e1))
-
-
-
-## [1.7.1](https://github.com/petermihailov/metronome/compare/v1.7.0...v1.7.1) (2023-09-27)
-
-
-### Bug Fixes
-
-* favicon ([2dd66f0](https://github.com/petermihailov/metronome/commit/2dd66f00a0af685a16978b12df09799b053e66e6))
 
 
 
