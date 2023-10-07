@@ -44,7 +44,7 @@
   border-radius: 5ex;
   background:
     linear-gradient(to right, transparent var(--track-fill), var(--color-border) 0%),
-    linear-gradient(to bottom, var(--color-accent), transparent) fixed;
+    linear-gradient(to bottom, var(--color-accent-2), transparent) fixed;
   appearance: none;
 }
 
@@ -53,7 +53,7 @@
   border-radius: 5ex;
   background:
     linear-gradient(to right, transparent var(--track-fill), var(--color-border) 0%),
-    linear-gradient(to bottom, var(--color-accent), transparent) fixed;
+    linear-gradient(to bottom, var(--color-accent-2), transparent) fixed;
   appearance: none;
 }
 
@@ -63,7 +63,7 @@
   margin-block-start: var(--thumb-offset);
   border: 3px solid var(--color-surface-2);
   border-radius: var(--radius-round);
-  background-color: var(--color-accent);
+  background-color: var(--color-accent-1);
   box-shadow: 0 0 0 var(--thumb-highlight-size) var(--color-thumb-highlight);
   cursor: ew-resize;
   appearance: none;
@@ -76,7 +76,7 @@
   margin-block-start: var(--thumb-offset);
   border: 3px solid var(--color-surface-2);
   border-radius: var(--radius-round);
-  background-color: var(--color-accent);
+  background-color: var(--color-accent-1);
   box-shadow: 0 0 0 var(--thumb-highlight-size) var(--color-thumb-highlight);
   cursor: ew-resize;
   appearance: none;

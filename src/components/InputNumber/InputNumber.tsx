@@ -5,9 +5,9 @@ import type {
   KeyboardEventHandler,
   MouseEventHandler,
 } from 'react';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 
-import { Icon } from '../Icon';
+import { ButtonIcon } from '../ButtonIcon';
 
 import classes from './InputNumber.module.css';
 
@@ -28,6 +28,9 @@ const InputNumber = ({
   onChange,
   ...restProps
 }: InputNumberProps) => {
+  const increaseButtonRef = useRef<HTMLButtonElement>(null);
+  const decreaseButtonRef = useRef<HTMLButtonElement>(null);
+
   const [inputValue, setInputValue] = useState(String(value));
 
   const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -66,13 +69,22 @@ const InputNumber = ({
       event.stopPropagation();
     }
 
+    let button;
+
     if (event.code === 'ArrowUp') {
+      button = increaseButtonRef.current;
       increase();
     }
 
     if (event.code === 'ArrowDown') {
+      button = decreaseButtonRef.current;
       decrease();
     }
+
+    // Blink animation
+    button?.classList.remove(classes.blink);
+    button?.offsetTop;
+    button?.classList.add(classes.blink);
   };
 
   useEffect(() => {
@@ -95,12 +107,22 @@ const InputNumber = ({
         />
       </label>
       <div className={classes.buttons} onClick={(e) => e.stopPropagation()}>
-        <button className={classes.button} onClick={increaseHandler}>
-          <Icon name="icon.plus" />
-        </button>
-        <button className={classes.button} onClick={decreaseHandler}>
-          <Icon name="icon.minus" />
-        </button>
+        <ButtonIcon
+          ref={increaseButtonRef}
+          aria-label="increase"
+          className={classes.button}
+          color="accent1"
+          icon="icon.plus"
+          onClick={increaseHandler}
+        />
+        <ButtonIcon
+          ref={decreaseButtonRef}
+          aria-label="decrease"
+          className={classes.button}
+          color="accent1"
+          icon="icon.minus"
+          onClick={decreaseHandler}
+        />
       </div>
     </div>
   );

@@ -54,4 +54,8 @@ export type IconName =
   | 'icon.zoom-in'
   | 'icon.zoom-out'
   | 'icon.plus'
-  | 'icon.minus';
+  | 'icon.minus'
+  | 'icon.box'
+  | 'icon.close'
+  | 'icon.downloaded'
+  | 'icon.done';

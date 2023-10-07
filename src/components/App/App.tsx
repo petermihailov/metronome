@@ -21,6 +21,7 @@ import checkBrowser from '../../utils/checkBrowser';
 import { BadBrowser } from '../BadBrowser';
 import { Display } from '../Display';
 import { Settings } from '../Settings';
+import { UpdatePrompt } from '../UpdatePrompt';
 
 import classes from './App.module.css';
 
@@ -155,6 +156,8 @@ const App = () => {
       <div className={classes.time}>
         <time>Total Today: {timer.day}</time>
       </div>
+
+      <UpdatePrompt />
     </div>
   );
 };

@@ -15,7 +15,7 @@ const defaultOptions: AnimateOptions = {
   easing: (t) => t,
 };
 
-export const animate = (
+export const animateFromTo = (
   duration: number,
   onFrame: OnFrameCallback,
   options?: Partial<AnimateOptions>,

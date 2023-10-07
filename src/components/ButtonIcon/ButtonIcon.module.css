@@ -26,6 +26,12 @@
   opacity: 0.48;
 }
 
-.active {
-  color: var(--color-accent);
+.accent1.root:active,
+.accent1.active {
+  color: var(--color-accent-1);
+}
+
+.accent2.root:active,
+.accent2.active {
+  color: var(--color-accent-2);
 }

@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     /** @see https://vite-pwa-org.netlify.app/ */
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       includeAssets: [
         // images
         'keyboard-mac.png',

@@ -1,6 +1,6 @@
 .root {
   --fill: 0%;
-  --color: #c63971;
+  --color: var(--color-accent-2);
 
   position: relative;
   block-size: 60px;
@@ -26,7 +26,7 @@
 }
 
 .root.active {
-  --color: #00eaff;
+  --color: var(--color-accent-1);
 }
 
 .root.beat::after {
@@ -37,5 +37,5 @@
   inline-size: 6px;
   block-size: 6px;
   border-radius: var(--radius-round);
-  background-color: var(--color-accent);
+  background-color: var(--color-accent-1);
 }

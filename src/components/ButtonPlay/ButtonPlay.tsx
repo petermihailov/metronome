@@ -6,7 +6,7 @@ import { ButtonIcon } from '../ButtonIcon';
 
 import classes from './ButtonPlay.module.css';
 
-export interface ButtonPlayProps extends Omit<ButtonIconProps, 'aria-label'> {
+export interface ButtonPlayProps extends Omit<ButtonIconProps, 'aria-label' | 'color'> {
   playing: boolean;
 }
 
@@ -36,6 +36,7 @@ const ButtonPlay = ({ className, playing, ...restProps }: ButtonPlayProps) => {
     <ButtonIcon
       aria-label={playing ? 'stop' : 'play'}
       className={clsx(className, classes.root)}
+      color={playing ? 'accent2' : 'accent1'}
       {...restProps}
     >
       <svg fill="currentColor" height="24" stroke="currentColor" viewBox="0 0 24 24" width="24">

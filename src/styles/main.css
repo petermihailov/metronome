@@ -1,6 +1,6 @@
 :where(html) {
-  accent-color: var(--color-accent);
-  caret-color: var(--color-accent);
+  accent-color: var(--color-accent-1);
+  caret-color: var(--color-accent-1);
   color: var(--color-text);
   font-family: var(--font-sans);
   line-height: var(--font-lineheight-3);
@@ -23,4 +23,12 @@
 
 :where(svg) {
   fill: currentcolor;
+}
+
+:where(button) {
+  color: inherit; /* safari iOS */
+}
+
+button > * {
+  pointer-events: none;
 }

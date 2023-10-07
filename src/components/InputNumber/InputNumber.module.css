@@ -40,15 +40,27 @@
 }
 
 .button {
-  flex: 1;
   block-size: 100%;
-  padding: 0;
-  padding: 0 var(--size-1);
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
+  color: #fffa;
 }
 
+.active,
 .button:active {
-  background-color: #fff5;
+  opacity: 1;
+}
+
+.blink {
+  animation: blink 0.2s ease-out;
+}
+
+@keyframes blink {
+  from {
+    color: var(--color-accent-1);
+    opacity: 1;
+    filter: drop-shadow(0 0 4px var(--color-accent-1));
+  }
+
+  to {
+    color: #fffa;
+  }
 }
