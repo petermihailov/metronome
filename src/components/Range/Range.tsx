@@ -66,6 +66,7 @@ const Range = ({
             list="tickmarks"
             max={max}
             min={min}
+            tabIndex={-1}
             type="range"
             value={String(value)}
             onChange={handleTrackChange}

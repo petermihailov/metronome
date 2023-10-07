@@ -11,6 +11,12 @@ import { ButtonIcon } from '../ButtonIcon';
 
 import classes from './InputNumber.module.css';
 
+const blinkAnimationStart = (element: HTMLElement | null) => {
+  element?.classList.remove(classes.blink);
+  element?.offsetTop;
+  element?.classList.add(classes.blink);
+};
+
 export interface InputNumberProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   label?: string;
   value?: number;
@@ -56,11 +62,13 @@ const InputNumber = ({
 
   const increaseHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.currentTarget.blur();
+    blinkAnimationStart(increaseButtonRef.current);
     increase();
   };
 
   const decreaseHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.currentTarget.blur();
+    blinkAnimationStart(decreaseButtonRef.current);
     decrease();
   };
 
@@ -69,22 +77,15 @@ const InputNumber = ({
       event.stopPropagation();
     }
 
-    let button;
-
     if (event.code === 'ArrowUp') {
-      button = increaseButtonRef.current;
+      blinkAnimationStart(increaseButtonRef.current);
       increase();
     }
 
     if (event.code === 'ArrowDown') {
-      button = decreaseButtonRef.current;
+      blinkAnimationStart(decreaseButtonRef.current);
       decrease();
     }
-
-    // Blink animation
-    button?.classList.remove(classes.blink);
-    button?.offsetTop;
-    button?.classList.add(classes.blink);
   };
 
   useEffect(() => {
@@ -113,6 +114,7 @@ const InputNumber = ({
           className={classes.button}
           color="accent1"
           icon="icon.plus"
+          tabIndex={-1}
           onClick={increaseHandler}
         />
         <ButtonIcon
@@ -121,6 +123,7 @@ const InputNumber = ({
           className={classes.button}
           color="accent1"
           icon="icon.minus"
+          tabIndex={-1}
           onClick={decreaseHandler}
         />
       </div>

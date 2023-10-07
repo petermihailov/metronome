@@ -50,7 +50,7 @@
 }
 
 .blink {
-  animation: blink 0.2s ease-out;
+  animation: blink 0.5s ease-out;
 }
 
 @keyframes blink {
