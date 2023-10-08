@@ -1,3 +1,12 @@
+# [1.10.0](https://github.com/petermihailov/metronome/compare/v1.9.3...v1.10.0) (2023-10-08)
+
+
+### Features
+
+* tap tempo multiple of four ([4cfcd20](https://github.com/petermihailov/metronome/commit/4cfcd2085fe37179770d8f91ae744f7cd5c79d0e))
+
+
+
 ## [1.9.3](https://github.com/petermihailov/metronome/compare/v1.9.2...v1.9.3) (2023-10-07)
 
 
@@ -31,15 +40,6 @@
 ### Features
 
 * pwa update prompt ([12dbf4d](https://github.com/petermihailov/metronome/commit/12dbf4d1cdf7d179a99cc0ea713c97e553056f23))
-
-
-
-# [1.8.0](https://github.com/petermihailov/metronome/compare/v1.7.2...v1.8.0) (2023-10-02)
-
-
-### Features
-
-* pwa quick start ([8b3d74a](https://github.com/petermihailov/metronome/commit/8b3d74a3087d449281b4d7056619da7c662a214f))
 
 
 
