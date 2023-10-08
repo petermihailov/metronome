@@ -8,7 +8,8 @@ const tapTempo = {
     this.prev = now;
 
     if (delta < 3_000) {
-      return Math.round(60_000 / delta);
+      const value = Math.round(60_000 / delta);
+      return Math.round(value / 4) * 4;
     }
 
     return null;
