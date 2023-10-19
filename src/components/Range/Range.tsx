@@ -2,14 +2,10 @@ import clsx from 'clsx';
 import type { ChangeEventHandler, HTMLAttributes } from 'react';
 import { useEffect, useRef } from 'react';
 
+import { minMax, percentOfRange } from '../../utils/math';
 import { InputNumber } from '../InputNumber';
 
 import classes from './Range.module.css';
-
-const rangeToPercent = (value: number, min: number, max: number) => {
-  const percent = value / (max - min) - min / (max - min);
-  return `${percent * 100}%`;
-};
 
 export interface RangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 'onChange'> {
   min?: number;
@@ -30,19 +26,20 @@ const Range = ({
 }: RangeProps) => {
   const decimalRef = useRef<HTMLInputElement>(null);
   const rangeRef = useRef<HTMLInputElement>(null);
-
   const labelsCount = 1 + (max - min) / 10;
 
+  const setValue = (value: number) => onChange(minMax(value, { min, max }));
+
   const handleTrackChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const val = Math.min(Number(e.target.value), max);
+    const val = parseInt(e.target.value);
     if (!Number.isNaN(val)) {
-      onChange(Math.max(min, val));
+      setValue(val);
       e.target.blur();
     }
   };
 
   useEffect(() => {
-    rangeRef.current?.style.setProperty('--track-fill', rangeToPercent(value, min, max));
+    rangeRef.current?.style.setProperty('--track-fill', percentOfRange(value, min, max));
     if (decimalRef.current?.value) {
       decimalRef.current.value = String(value);
     }
@@ -79,7 +76,7 @@ const Range = ({
                 label={String(min + idx * 10)}
                 value={min + idx * 10}
                 onClick={() => {
-                  onChange(min + idx * 10);
+                  setValue(min + idx * 10);
                 }}
               />
             ))}

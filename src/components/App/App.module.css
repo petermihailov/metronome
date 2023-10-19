@@ -11,8 +11,3 @@
   max-inline-size: 800px;
   margin: auto;
 }
-
-.time {
-  display: flex;
-  justify-content: flex-end;
-}

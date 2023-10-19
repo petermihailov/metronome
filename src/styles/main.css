@@ -32,3 +32,8 @@
 button > * {
   pointer-events: none;
 }
+
+::selection {
+  color: #fff;
+  background-color: var(--color-accent-2);
+}

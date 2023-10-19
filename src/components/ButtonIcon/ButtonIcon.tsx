@@ -27,6 +27,7 @@ const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
           [classes[color]]: color,
         })}
         title={title}
+        type="button"
         {...restProps}
       >
         {icon ? <Icon className={classes.icon} name={icon} /> : children}

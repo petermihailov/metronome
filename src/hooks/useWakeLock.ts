@@ -1,11 +1,16 @@
 import { useEffect, useRef } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
-export const useWakeLock = (isLock: boolean) => {
+import { useMetronomeStore } from '../store/useMetronomeStore';
+
+export const useWakeLock = () => {
   const refLockWindow = useRef<WakeLockSentinel>();
+
+  const { isPlaying } = useMetronomeStore(useShallow(({ isPlaying }) => ({ isPlaying })));
 
   useEffect(() => {
     if ('wakeLock' in navigator) {
-      if (isLock) {
+      if (isPlaying) {
         navigator.wakeLock.request('screen').then((res) => (refLockWindow.current = res));
         console.log('lock');
       } else {
@@ -14,5 +19,5 @@ export const useWakeLock = (isLock: boolean) => {
         });
       }
     }
-  }, [isLock]);
+  }, [isPlaying]);
 };

@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 
-import type { Note as NoteType } from '../../types/instrument';
+import type { Note as NoteType } from '../../types/common';
 
 import classes from './Note.module.css';
 
@@ -33,6 +33,7 @@ const Note = ({ className, note, beat, active, ...restProps }: NoteProps) => {
         [classes.sound2]: note.instrument === 'fxMetronome2',
         [classes.sound3]: note.instrument === 'fxMetronome3',
       })}
+      type="button"
       {...restProps}
     />
   );

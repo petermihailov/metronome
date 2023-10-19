@@ -22,10 +22,6 @@
   block-size: 100%;
 }
 
-.root[disabled] {
-  opacity: 0.48;
-}
-
 .accent1.root:active,
 .accent1.active {
   color: var(--color-accent-1);
@@ -34,4 +30,8 @@
 .accent2.root:active,
 .accent2.active {
   color: var(--color-accent-2);
+}
+
+.root[disabled] {
+  opacity: 0.48;
 }

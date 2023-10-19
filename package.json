@@ -25,7 +25,8 @@
     "open-props": "^1.6.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-popper": "^2.3.0"
+    "react-popper": "^2.3.0",
+    "zustand": "^4.4.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.7.2",
@@ -54,6 +55,7 @@
     "ts-loader": "^9.4.4",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
-    "vite-plugin-pwa": "^0.16.5"
+    "vite-plugin-pwa": "^0.16.5",
+    "workbox-window": "^7.0.0"
   }
 }

@@ -6,21 +6,22 @@ import './styles/main.css';
 import './styles/helpers.css';
 
 import { App } from './components/App';
+import { BadBrowser } from './components/BadBrowser';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { GrooveProvider } from './context/MetronomeContext';
+import env from './env';
 import { Sprite } from './icons';
+import checkBrowser from './utils/checkBrowser';
 
 const container = document.querySelector('[data-react-root]');
 
 if (container) {
   const root = createRoot(container);
+  const isBadBrowser = !checkBrowser.test(navigator.userAgent);
 
   root.render(
     <ErrorBoundary>
       <Sprite />
-      <GrooveProvider>
-        <App />
-      </GrooveProvider>
+      {!env.DEV && isBadBrowser ? <BadBrowser /> : <App />}
     </ErrorBoundary>,
   );
 }

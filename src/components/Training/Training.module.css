@@ -1,0 +1,13 @@
+.root {
+  display: flex;
+  gap: 1ch;
+  align-items: baseline;
+}
+
+.select {
+  text-align: center;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  border-block-end: 1px solid var(--color-accent-1);
+}

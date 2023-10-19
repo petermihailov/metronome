@@ -1,5 +1,4 @@
-export const lead0 = (n: number, digits = 2) =>
-  [...'0'.repeat(digits), ...String(n)].join('').slice(-1 * digits);
+export const lead0 = (n: number) => ('0' + n).slice(-2);
 
 export const timeFormat = (totalSeconds: number) => {
   const hours = Math.floor(totalSeconds / 3600);

@@ -9,6 +9,8 @@
   text-transform: uppercase;
 }
 
+/* Input */
+
 .input {
   display: block;
   inline-size: 100%;
@@ -26,6 +28,8 @@
   margin: 0;
   appearance: none;
 }
+
+/* Button */
 
 .buttons {
   position: absolute;
@@ -48,6 +52,14 @@
 .button:active {
   opacity: 1;
 }
+
+/* Button Disabled */
+
+.button[disabled] {
+  opacity: 0.48 !important;
+}
+
+/* Animations */
 
 .blink {
   animation: blink 0.5s ease-out;

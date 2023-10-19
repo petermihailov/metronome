@@ -10,11 +10,7 @@ import { Icon } from '../Icon';
 
 import classes from './UpdatePrompt.module.css';
 
-export interface UpdatePromptProps {
-  className?: string;
-}
-
-const UpdatePrompt = ({ className, ...restProps }: UpdatePromptProps) => {
+const UpdatePrompt = () => {
   const promptRef = useRef<HTMLDivElement>(null);
   const [isAnimation, setIsAnimation] = useState(false);
 
@@ -48,11 +44,10 @@ const UpdatePrompt = ({ className, ...restProps }: UpdatePromptProps) => {
   if (isVisibleUpdate || isVisibleReady || isAnimation) {
     return (
       <div
-        className={clsx(className, classes.root, {
+        className={clsx(classes.root, {
           [classes.updatePrompt]: isVisibleUpdate,
           [classes.readyPrompt]: isVisibleReady,
         })}
-        {...restProps}
       >
         <div
           ref={promptRef}
@@ -66,7 +61,7 @@ const UpdatePrompt = ({ className, ...restProps }: UpdatePromptProps) => {
             <Icon className={classes.icon} name={isVisibleUpdate ? 'icon.box' : 'icon.done'} />
             <h1 className={classes.title}>
               {isVisibleUpdate && 'New version available!'}
-              {isVisibleReady && 'Thanks for updating! ❤️'}
+              {isVisibleReady && 'Thank you for install! ❤️'}
             </h1>
             <ButtonIcon
               aria-label="close"
@@ -79,11 +74,15 @@ const UpdatePrompt = ({ className, ...restProps }: UpdatePromptProps) => {
 
           {isVisibleUpdate && (
             <div className={classes.actions}>
-              <button className={classes.skip} onClick={close}>
+              <button className={classes.skip} type="button" onClick={close}>
                 skip this version
               </button>
               <span>or</span>
-              <button className={classes.update} onClick={() => updateServiceWorker()}>
+              <button
+                className={classes.update}
+                type="button"
+                onClick={() => updateServiceWorker()}
+              >
                 Update
               </button>
             </div>

@@ -1,53 +1,85 @@
 import { memo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
-import { tempoMax, tempoMin } from '../../constants';
+import { MINMAX } from '../../constants';
+import { useMetronomeStore } from '../../store/useMetronomeStore';
+import { useTrainingStore } from '../../store/useTrainingStore';
+import { timeFormat } from '../../utils/format';
 import { ButtonPlay } from '../ButtonPlay';
 import { InputNumber } from '../InputNumber';
 import { Range } from '../Range';
 
 import classes from './Settings.module.css';
 
-export interface SettingsProps {
-  beatsPerBar: number;
-  isPlaying: boolean;
-  setBeats: (beats: number) => void;
-  setSubdivision: (subdivision: number) => void;
-  setTempo: (tempo: number) => void;
-  subdivision: number;
-  tempo: number;
-  togglePlaying: () => void;
-  currentTime?: string;
-}
+const Settings = () => {
+  const {
+    beats,
+    isPlaying,
+    subdivision,
+    tempo,
+    setBeatsAction,
+    setIsPlayingAction,
+    setSubdivisionAction,
+    setTempoAction,
+  } = useMetronomeStore(
+    useShallow(
+      ({
+        beats,
+        isPlaying,
+        subdivision,
+        tempo,
+        setBeatsAction,
+        setIsPlayingAction,
+        setSubdivisionAction,
+        setTempoAction,
+      }) => ({
+        beats,
+        isPlaying,
+        subdivision,
+        tempo,
+        setBeatsAction,
+        setIsPlayingAction,
+        setSubdivisionAction,
+        setTempoAction,
+      }),
+    ),
+  );
 
-const Settings = ({
-  beatsPerBar,
-  currentTime,
-  isPlaying,
-  setBeats,
-  setSubdivision,
-  setTempo,
-  subdivision,
-  tempo,
-  togglePlaying,
-}: SettingsProps) => {
+  const { currentTime } = useTrainingStore(
+    useShallow(({ time }) => ({ currentTime: timeFormat(time.current) })),
+  );
+
   return (
     <div className={classes.settings}>
       <div className={classes.player}>
-        <ButtonPlay active playing={isPlaying} onClick={togglePlaying} />
+        <ButtonPlay active playing={isPlaying} onClick={() => setIsPlayingAction(!isPlaying)} />
         <span className={classes.time}>{currentTime}</span>
       </div>
 
       <Range
         className={classes.bpm}
         label="tempo"
-        max={tempoMax}
-        min={tempoMin}
+        max={MINMAX.tempo.max}
+        min={MINMAX.tempo.min}
         value={tempo}
-        onChange={setTempo}
+        onChange={setTempoAction}
       />
 
-      <InputNumber label="beats" min={1} value={beatsPerBar} onChange={setBeats} />
-      <InputNumber label="subdivision" min={1} value={subdivision} onChange={setSubdivision} />
+      <InputNumber
+        label="beats"
+        max={MINMAX.beats.max}
+        min={MINMAX.beats.min}
+        value={beats}
+        onChange={setBeatsAction}
+      />
+
+      <InputNumber
+        label="subdivision"
+        max={MINMAX.subdivision.max}
+        min={MINMAX.subdivision.min}
+        value={subdivision}
+        onChange={setSubdivisionAction}
+      />
     </div>
   );
 };

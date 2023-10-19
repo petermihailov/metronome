@@ -1,36 +1,39 @@
 import { memo, useEffect, useRef } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
-import type { Note as NoteType } from '../../types/instrument';
+import { useBeatStore } from '../../store/useBeatStore';
+import { useMetronomeStore } from '../../store/useMetronomeStore';
 import { Note } from '../Note';
 
 import classes from './Display.module.css';
 
-export interface DisplayProps {
-  beatIndex?: number;
-  notes: NoteType[];
-  beatsPerBar: number;
-  onNoteClick?: (idx: number) => void;
-}
+const Display = () => {
+  const { notes, beats, switchInstrumentAction } = useMetronomeStore(
+    useShallow(({ notes, beats, switchInstrumentAction }) => ({
+      notes,
+      beats,
+      switchInstrumentAction,
+    })),
+  );
 
-const Display = ({ beatIndex, notes, beatsPerBar, onNoteClick }: DisplayProps) => {
+  const { beat } = useBeatStore(useShallow(({ beat }) => ({ beat })));
+
   const refIndicator = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (beatIndex !== undefined) {
-      const partIndex = beatIndex % (notes.length / beatsPerBar);
+    const partIndex = beat.index % (notes.length / beats);
 
-      if (partIndex === 0) {
-        refIndicator.current?.classList.remove(classes.accent, classes.regular);
-        refIndicator.current?.offsetTop;
+    if (partIndex === 0) {
+      refIndicator.current?.classList.remove(classes.accent, classes.regular);
+      refIndicator.current?.offsetTop;
 
-        if (beatIndex === 0) {
-          refIndicator.current?.classList.add(classes.accent);
-        } else {
-          refIndicator.current?.classList.add(classes.regular);
-        }
+      if (beat.index === 0) {
+        refIndicator.current?.classList.add(classes.accent);
+      } else {
+        refIndicator.current?.classList.add(classes.regular);
       }
     }
-  }, [beatIndex, beatsPerBar, notes.length]);
+  }, [beat.index, beats, notes.length]);
 
   return (
     <div className={classes.display}>
@@ -43,10 +46,10 @@ const Display = ({ beatIndex, notes, beatsPerBar, onNoteClick }: DisplayProps) =
         {notes.map((note, idx) => (
           <Note
             key={idx}
-            active={Boolean(beatIndex === idx)}
+            active={Boolean(beat.index === idx)}
             className={classes.note}
             note={note}
-            onClick={() => onNoteClick?.(idx)}
+            onClick={() => switchInstrumentAction(idx)}
           />
         ))}
       </div>

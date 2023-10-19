@@ -1,4 +1,7 @@
 import { useEffect } from 'react';
+import { useShallow } from 'zustand/react/shallow';
+
+import { useMetronomeStore } from '../store/useMetronomeStore';
 
 const tapTempo = {
   prev: 0,
@@ -16,37 +19,42 @@ const tapTempo = {
   },
 };
 
-export const useHotkeys = (
-  tempo: number,
-  setTempo: (tempo: number) => void,
-  togglePlaying: () => void,
-) => {
+export const useHotkeys = () => {
+  const { isPlaying, tempo, setIsPlayingAction, setTempoAction } = useMetronomeStore(
+    useShallow(({ isPlaying, tempo, setIsPlayingAction, setTempoAction }) => ({
+      isPlaying,
+      tempo,
+      setIsPlayingAction,
+      setTempoAction,
+    })),
+  );
+
   useEffect(() => {
     const callback = (event: KeyboardEvent) => {
       if (event.code === 'Space') {
-        togglePlaying();
+        setIsPlayingAction(!isPlaying);
       }
 
       if (event.code === 'KeyT') {
         const tap = tapTempo.tap();
-        if (tap) setTempo(tap);
+        if (tap) setTempoAction(tap);
       }
 
       if (event.shiftKey) {
         if (event.code === 'ArrowUp') {
-          setTempo(tempo + 10);
+          setTempoAction(tempo + 10);
         }
 
         if (event.code === 'ArrowDown') {
-          setTempo(tempo - 10);
+          setTempoAction(tempo - 10);
         }
       } else {
         if (event.code === 'ArrowUp') {
-          setTempo(tempo + 1);
+          setTempoAction(tempo + 1);
         }
 
         if (event.code === 'ArrowDown') {
-          setTempo(tempo - 1);
+          setTempoAction(tempo - 1);
         }
       }
     };
@@ -56,5 +64,5 @@ export const useHotkeys = (
     return () => {
       document.removeEventListener('keydown', callback);
     };
-  }, [setTempo, tempo, togglePlaying]);
+  }, [isPlaying, setIsPlayingAction, setTempoAction, tempo]);
 };

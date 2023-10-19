@@ -1,13 +1,13 @@
-import type { Instrument, DrumKit, Beat, Note } from '../types/instrument';
+import { DEFAULTS } from '../constants';
+import type { Instrument, SoundMap, Beat, Note } from '../types/common';
 import { getAudioContext } from '../utils/audio';
 
 export class Player {
   private readonly audioCtx: AudioContext;
-  private kit: DrumKit;
+  private kit: SoundMap;
   private tempo: number;
-  private beatsPerBar: number;
+  private beats: number;
   private noteValue: number;
-  private timeDivision: number;
   private subdivision: number;
   private muted: boolean;
   private nextBeatAt: number;
@@ -18,13 +18,12 @@ export class Player {
   private needFinish: boolean;
 
   constructor() {
-    this.kit = {} as DrumKit;
-    this.tempo = 60;
-    this.noteValue = 4;
-    this.beatsPerBar = 4;
-    this.timeDivision = 16;
+    this.kit = {} as SoundMap;
+    this.tempo = DEFAULTS.tempo;
+    this.noteValue = DEFAULTS.noteValue;
+    this.beats = DEFAULTS.beats;
     this.notes = [];
-    this.subdivision = 1;
+    this.subdivision = DEFAULTS.subdivision;
     this.muted = false;
     this.nextBeatAt = 0;
     this.audioCtx = getAudioContext();
@@ -32,7 +31,7 @@ export class Player {
     this.needFinish = false;
   }
 
-  public setKit(kit: DrumKit) {
+  public setKit(kit: SoundMap) {
     this.kit = kit;
   }
 
@@ -40,16 +39,12 @@ export class Player {
     this.tempo = bpm;
   }
 
-  public setBeatsPerBar(value: number) {
-    this.beatsPerBar = value;
+  public setBeats(value: number) {
+    this.beats = value;
   }
 
   public setNoteValue(value: number) {
     this.noteValue = value;
-  }
-
-  public setTimeDivision(value: number) {
-    this.timeDivision = value;
   }
 
   public setNotes(notes: Note[]) {
@@ -114,7 +109,7 @@ export class Player {
 
   schedule(index: number) {
     // Schedule next
-    this.nextBeatAt += 60 / ((this.tempo * this.notes.length) / this.beatsPerBar);
+    this.nextBeatAt += 60 / ((this.tempo * this.notes.length) / this.beats);
     const nextIndex = (index + 1) % this.notes.length;
     const nextNote = this.notes[nextIndex];
 
