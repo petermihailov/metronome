@@ -3,59 +3,28 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { MINMAX } from '../../constants';
 import { useMetronomeStore } from '../../store/useMetronomeStore';
-import { useTrainingStore } from '../../store/useTrainingStore';
-import { timeFormat } from '../../utils/format';
-import { ButtonPlay } from '../ButtonPlay';
 import { InputNumber } from '../InputNumber';
 import { Range } from '../Range';
 
 import classes from './Settings.module.css';
 
 const Settings = () => {
-  const {
-    beats,
-    isPlaying,
-    subdivision,
-    tempo,
-    setBeatsAction,
-    setIsPlayingAction,
-    setSubdivisionAction,
-    setTempoAction,
-  } = useMetronomeStore(
-    useShallow(
-      ({
-        beats,
-        isPlaying,
-        subdivision,
-        tempo,
-        setBeatsAction,
-        setIsPlayingAction,
-        setSubdivisionAction,
-        setTempoAction,
-      }) => ({
-        beats,
-        isPlaying,
-        subdivision,
-        tempo,
-        setBeatsAction,
-        setIsPlayingAction,
-        setSubdivisionAction,
-        setTempoAction,
-      }),
-    ),
-  );
-
-  const { currentTime } = useTrainingStore(
-    useShallow(({ time }) => ({ currentTime: timeFormat(time.current) })),
-  );
+  const { beats, subdivision, tempo, setBeatsAction, setSubdivisionAction, setTempoAction } =
+    useMetronomeStore(
+      useShallow(
+        ({ beats, subdivision, tempo, setBeatsAction, setSubdivisionAction, setTempoAction }) => ({
+          beats,
+          subdivision,
+          tempo,
+          setBeatsAction,
+          setSubdivisionAction,
+          setTempoAction,
+        }),
+      ),
+    );
 
   return (
     <div className={classes.settings}>
-      <div className={classes.player}>
-        <ButtonPlay active playing={isPlaying} onClick={() => setIsPlayingAction(!isPlaying)} />
-        <span className={classes.time}>{currentTime}</span>
-      </div>
-
       <Range
         className={classes.bpm}
         label="tempo"

@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  gap: var(--size-2);
+  align-items: center;
+}
+
+.time {
+  padding: var(--size-1) var(--size-2);
+  font-weight: bold;
+  font-size: var(--font-size-6);
+  line-height: var(--font-lineheight-00);
+}

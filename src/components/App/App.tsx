@@ -8,6 +8,7 @@ import {
   useWakeLock,
 } from '../../hooks';
 import { Display } from '../Display';
+import { MainControl } from '../MainControl';
 import { Settings } from '../Settings';
 import { TodayTimer } from '../TodayTimer';
 import { Training } from '../Training';
@@ -25,6 +26,7 @@ const App = () => {
   return (
     <div className={classes.root}>
       <Display />
+      <MainControl />
       <Settings />
       <TodayTimer />
       <Training />
