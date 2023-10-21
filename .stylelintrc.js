@@ -16,5 +16,6 @@ module.exports = {
       '^[a-z][a-zA-Z0-9]+$',
       { message: 'Expected class name to be lowerCamelCase' },
     ],
+    'declaration-block-no-redundant-longhand-properties': null,
   },
 };

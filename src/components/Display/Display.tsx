@@ -40,7 +40,7 @@ const Display = () => {
       <div
         className={classes.notes}
         style={{
-          gap: `min(var(--size-3), calc(var(--size-3) / ${0.2 * notes.length}))`,
+          gap: `min(2ch, calc(var(--size-3) / ${0.2 * notes.length}))`,
         }}
       >
         {notes.map((note, idx) => (

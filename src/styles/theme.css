@@ -46,7 +46,7 @@
 
 :where(html[data-theme='dark']) {
   --color-accent-1: #00eaff;
-  --color-accent-2: #c63971;
+  --color-accent-2: #ff357f; /* v1: c63971, v2: ff357f */
   --color-border: #394146;
   --color-error: #f03e3e;
   --color-success: #51cf66;

@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 // eslint-disable-next-line import/no-unresolved
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
@@ -42,9 +43,9 @@ const UpdatePrompt = () => {
   };
 
   if (isVisibleUpdate || isVisibleReady || isAnimation) {
-    return (
+    return createPortal(
       <div
-        className={clsx(classes.root, {
+        className={clsx({
           [classes.updatePrompt]: isVisibleUpdate,
           [classes.readyPrompt]: isVisibleReady,
         })}
@@ -88,11 +89,12 @@ const UpdatePrompt = () => {
             </div>
           )}
         </div>
-      </div>
+      </div>,
+      document.querySelector('[data-popups]')!,
     );
   }
 
   return null;
 };
 
-export default UpdatePrompt;
+export default UpdatePrompt; //createPortal(<UpdatePrompt />, document.querySelector('[data-popups]')!);

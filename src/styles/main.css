@@ -33,6 +33,20 @@ button > * {
   pointer-events: none;
 }
 
+a:not([class]) {
+  text-decoration-thickness: max(0.08em, 1px);
+  text-underline-offset: 0.15em;
+}
+
+:target {
+  /* Scroll padding allowance above anchor links */
+  scroll-padding-block-start: 2rem;
+
+  /* Scroll padding allowance below focused elements
+  to ensure they are clearly in view */
+  scroll-padding-block-end: 8vh;
+}
+
 ::selection {
   color: #fff;
   background-color: var(--color-accent-2);

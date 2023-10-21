@@ -4,7 +4,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { MINMAX } from '../../constants';
 import { useMetronomeStore } from '../../store/useMetronomeStore';
 import { InputNumber } from '../InputNumber';
-import { Range } from '../Range';
+import { InputRange } from '../InputRange';
 
 import classes from './Settings.module.css';
 
@@ -25,7 +25,7 @@ const Settings = () => {
 
   return (
     <div className={classes.settings}>
-      <Range
+      <InputRange
         className={classes.bpm}
         label="tempo"
         max={MINMAX.tempo.max}

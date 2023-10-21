@@ -14,7 +14,7 @@ export const timeFormat = (totalSeconds: number) => {
 
 export const dateFormat = (date = new Date()) => {
   const d = date.getDate();
-  const mm = lead0(date.getMonth());
+  const mm = lead0(date.getMonth() + 1);
   const yyyy = date.getFullYear();
 
   return `${d}.${mm}.${yyyy}`;

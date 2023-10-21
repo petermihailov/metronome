@@ -1,27 +1,6 @@
 .root {
-  /* empty */
-}
-
-.rangeContainer {
-  display: flex;
-  gap: var(--size-3);
-  align-items: center;
-}
-
-.label {
-  font-weight: var(--font-weight-9);
-  font-size: var(--font-size-3);
-  letter-spacing: -0.8px;
-  text-transform: uppercase;
-}
-
-.value {
-  inline-size: 100%;
-}
-
-.range {
-  display: none;
-  flex: 1;
+  min-inline-size: 27ch;
+  container: range-container / inline-size;
 }
 
 .input {
@@ -102,6 +81,11 @@
   letter-spacing: -0.8px;
   text-align: center;
   cursor: pointer;
+  transform-origin: top;
+  transition-property: transform, color, width;
+  transition-delay: 400ms, 0ms, 0s;
+  transition-timing-function: ease-out;
+  transition-duration: 200ms;
 }
 
 .labels > option::before {
@@ -121,12 +105,19 @@
   }
 }
 
-@media (min-width: 816px) {
-  .range {
-    display: block;
+@container range-container (inline-size < 600px) {
+  .labels > option:nth-child(2n) {
+    inline-size: 2px;
+    color: #0000;
+    transform: scale(0.5);
+    transition-delay: 0s, 400ms, 600ms;
   }
+}
 
-  .value {
-    inline-size: 150px;
+@container range-container (inline-size < 400px) {
+  .labels > option:nth-child(4n + 3) {
+    color: #0000;
+    transform: scale(0.75);
+    transition-delay: 0s, 400ms, 600ms;
   }
 }

@@ -1,12 +1,8 @@
-.root {
-  /* empty */
-}
-
 .prompt {
   position: fixed;
-  inset-block-end: var(--size-6);
-  inset-inline: var(--size-2);
-  padding: 12px;
+  inset-block-end: 3ch;
+  inset-inline: 3ch;
+  padding: 1ch;
   border: 1px solid var(--color-surface-2);
   border-radius: var(--radius-3);
   background-position: center;

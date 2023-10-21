@@ -1,6 +1,6 @@
 .display {
   display: grid;
-  gap: var(--size-3);
+  gap: 2ch;
   padding: var(--size-4);
   border: 2px solid #fffa;
   border-radius: var(--radius-3);

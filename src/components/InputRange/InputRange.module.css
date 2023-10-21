@@ -1,0 +1,35 @@
+.root {
+  --duration: 225ms;
+  --timing-function: ease-out;
+
+  container: input-range-container / inline-size;
+}
+
+.input {
+  inline-size: 100%;
+  transition: inline-size var(--duration) var(--timing-function);
+  transition-delay: calc(2 * var(--duration));
+}
+
+.range {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: calc(15ch + 2ch) 0;
+  opacity: 0;
+  transition: opacity var(--duration) var(--timing-function);
+  transition-delay: 0ms;
+}
+
+@container input-range-container (inline-size > 44ch) {
+  .input {
+    inline-size: 15ch;
+    transition-delay: var(--duration);
+    transition-delay: 0ms;
+  }
+
+  .range {
+    opacity: 1;
+    pointer-events: none;
+    transition-delay: calc(2 * var(--duration));
+  }
+}

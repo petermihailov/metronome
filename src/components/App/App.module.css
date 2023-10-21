@@ -1,13 +1,23 @@
 .root {
+  position: relative;
   display: grid;
   grid-template-rows: 1fr;
-  row-gap: var(--size-6);
-  max-block-size: 100%;
-  padding: var(--size-2);
+  row-gap: 3ch;
+  inline-size: min(100%, 40ch);
+  margin-block-start: clamp(0ch, 5%, 2ch);
+  margin-inline: auto;
+  padding-block: 0;
+  padding-inline: clamp(0ch, 5%, 3ch);
+  border-radius: var(--radius-4);
+  background-color: #fff0;
+  transition-timing-function: ease-out;
+  transition-duration: 200ms;
 }
 
-.root > * {
-  inline-size: 100%;
-  max-inline-size: 800px;
-  margin: auto;
+@media (min-width: 60ch) {
+  .root {
+    inline-size: min(100% - 6ch, 80ch);
+    padding: 3ch;
+    background-color: #fff1;
+  }
 }

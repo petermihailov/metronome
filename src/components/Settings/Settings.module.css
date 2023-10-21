@@ -1,7 +1,7 @@
 .settings {
   display: grid;
   grid-template-rows: 1fr;
-  row-gap: var(--size-3);
+  row-gap: 2ch;
 }
 
 .bpm {
