@@ -27,7 +27,7 @@ const Select = <T,>({ className, value, options, onChange, ...restProps }: Selec
   };
 
   return (
-    <div className={clsx(className, classes.root)}>
+    <div className={clsx(className, classes.select)}>
       <select
         className={classes.selectNative}
         value={selectedIndex}

@@ -14,7 +14,7 @@ const Icon = ({ name, className }: IconProps) => {
   return (
     <svg
       aria-hidden="true"
-      className={clsx(className, classes.root)}
+      className={clsx(className, classes.icon)}
       fill="currentColor"
       viewBox="0 0 24 24"
     >

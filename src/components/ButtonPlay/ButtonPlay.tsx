@@ -35,7 +35,7 @@ const ButtonPlay = ({ className, playing, ...restProps }: ButtonPlayProps) => {
   return (
     <ButtonIcon
       aria-label={playing ? 'stop' : 'play'}
-      className={clsx(className, classes.root)}
+      className={clsx(className, classes.buttonPlay)}
       color={playing ? 'accent2' : 'accent1'}
       {...restProps}
     >

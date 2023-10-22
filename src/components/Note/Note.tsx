@@ -27,7 +27,7 @@ const Note = ({ className, note, beat, active, ...restProps }: NoteProps) => {
   return (
     <button
       ref={refNote}
-      className={clsx(className, classes.root, {
+      className={clsx(className, classes.note, {
         [classes.beat]: beat,
         [classes.sound1]: note.instrument === 'fxMetronome1',
         [classes.sound2]: note.instrument === 'fxMetronome2',

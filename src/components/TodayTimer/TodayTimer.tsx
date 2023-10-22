@@ -10,7 +10,7 @@ const TodayTimer = () => {
     useShallow(({ time }) => ({ dayTime: timeFormat(time.day) })),
   );
 
-  return <time className={classes.root}>Total today: {dayTime}</time>;
+  return <time className={classes.todayTimer}>Total today: {dayTime}</time>;
 };
 
 export default TodayTimer;

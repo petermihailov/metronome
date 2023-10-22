@@ -1,4 +1,4 @@
-.root {
+.app {
   position: relative;
   display: grid;
   grid-template-rows: 1fr;
@@ -15,7 +15,7 @@
 }
 
 @media (min-width: 60ch) {
-  .root {
+  .app {
     inline-size: min(100% - 6ch, 80ch);
     padding: 3ch;
     background-color: #fff1;

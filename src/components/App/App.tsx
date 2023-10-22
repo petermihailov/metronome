@@ -24,7 +24,7 @@ const App = () => {
   useButtonsPreventSpacePress();
 
   return (
-    <div className={classes.root}>
+    <div className={classes.app}>
       <Display />
       <MainControl />
       <Settings />

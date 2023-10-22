@@ -22,7 +22,7 @@ const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
     return (
       <button
         ref={ref}
-        className={clsx(className, classes.root, {
+        className={clsx(className, classes.buttonIcon, {
           [classes.active]: active,
           [classes[color]]: color,
         })}

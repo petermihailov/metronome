@@ -1,9 +1,9 @@
-.root {
+.select {
   position: relative;
   overflow: hidden;
 }
 
-.selectNative {
+.select-native {
   position: absolute;
   inset-block-start: 0;
   inset-inline-start: 0;

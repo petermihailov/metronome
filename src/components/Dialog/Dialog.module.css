@@ -1,8 +1,8 @@
-html:has(.root[open][data-mode='mega']) {
+html:has(.dialog[open][data-mode='mega']) {
   overflow: hidden;
 }
 
-.root {
+.dialog {
   position: fixed;
   inset: 0;
   z-index: var(--z-index-dialog);
@@ -21,27 +21,27 @@ html:has(.root[open][data-mode='mega']) {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .root {
+  .dialog {
     animation: var(--animation-scale-down) forwards;
     animation-timing-function: var(--ease-squish-3);
   }
 
-  .root[open] {
+  .dialog[open] {
     animation: var(--animation-slide-in-up) forwards;
   }
 }
 
-.root:not([open]) {
+.dialog:not([open]) {
   opacity: 0;
   pointer-events: none;
 }
 
-.root[data-mode='mega']::backdrop {
+.dialog[data-mode='mega']::backdrop {
   -webkit-backdrop-filter: blur(25px);
   backdrop-filter: blur(25px);
 }
 
-.root[data-mode='mini']::backdrop {
+.dialog[data-mode='mini']::backdrop {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }

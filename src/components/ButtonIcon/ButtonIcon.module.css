@@ -1,4 +1,4 @@
-.root {
+.button-icon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,21 +17,21 @@
   user-select: none;
 }
 
-.root > svg {
+.button-icon > svg {
   inline-size: 100%;
   block-size: 100%;
 }
 
-.accent1.root:active,
+.accent1.button-icon:active,
 .accent1.active {
   color: var(--color-accent-1);
 }
 
-.accent2.root:active,
+.accent2.button-icon:active,
 .accent2.active {
   color: var(--color-accent-2);
 }
 
-.root[disabled] {
+.button-icon[disabled] {
   opacity: 0.48;
 }

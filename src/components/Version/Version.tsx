@@ -17,7 +17,7 @@ const Version = () => {
     }
   }, []);
 
-  return <div className={classes.root}>{version}</div>;
+  return <div className={classes.version}>{version}</div>;
 };
 
 export default memo(Version);

@@ -43,7 +43,7 @@ const Range = ({
   }, [value, min, max]);
 
   return (
-    <div className={clsx(className, classes.root)}>
+    <div className={clsx(className, classes.range)}>
       <input
         ref={rangeRef}
         className={classes.input}

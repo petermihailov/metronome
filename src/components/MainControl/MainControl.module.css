@@ -1,4 +1,4 @@
-.root {
+.main-control {
   display: flex;
   gap: var(--size-2);
   align-items: center;

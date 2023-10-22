@@ -10,7 +10,7 @@
   opacity: 0;
 }
 
-.titleWrapper {
+.title-wrapper {
   position: relative;
   display: flex;
   align-items: center;
@@ -21,7 +21,7 @@
   font-size: var(--font-size-2);
 }
 
-.closeButton {
+.close-button {
   margin-inline-start: auto;
   opacity: 0.76;
 }
@@ -60,10 +60,10 @@
   transform: scale(0.94);
 }
 
-.updatePrompt .icon {
+.update-prompt .icon {
   color: var(--color-icon);
 }
 
-.readyPrompt .icon {
+.ready-prompt .icon {
   color: var(--color-success);
 }

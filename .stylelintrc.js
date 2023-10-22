@@ -12,10 +12,6 @@ module.exports = {
     'property-no-vendor-prefix': [true, { ignoreProperties: ['mask', 'backdrop-filter'] }],
     'selector-pseudo-class-no-unknown': [true, { ignorePseudoClasses: ['global'] }],
     'number-max-precision': 4,
-    'selector-class-pattern': [
-      '^[a-z][a-zA-Z0-9]+$',
-      { message: 'Expected class name to be lowerCamelCase' },
-    ],
     'declaration-block-no-redundant-longhand-properties': null,
   },
 };

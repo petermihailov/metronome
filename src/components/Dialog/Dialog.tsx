@@ -39,7 +39,7 @@ const Dialog = forwardRef<DialogHandlers, DialogProps>(function Dialog(props, re
   return (
     <dialog
       ref={dialogRef}
-      className={clsx(className, classes.root)}
+      className={clsx(className, classes.dialog)}
       data-mode={mode}
       onClick={lightDismiss}
       {...restProps}

@@ -16,7 +16,7 @@ export interface InputRangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 
 
 const InputRange = ({ className, label, max = 100, min = 0, value, onChange }: InputRangeProps) => {
   return (
-    <div className={clsx(className, classes.root)}>
+    <div className={clsx(className, classes.inputRange)}>
       <InputNumber
         className={classes.input}
         label={label}

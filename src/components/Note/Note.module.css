@@ -1,4 +1,4 @@
-.root {
+.note {
   --fill: 0%;
   --color: var(--color-accent-2);
 
@@ -13,23 +13,23 @@
   transition: background-position var(--ease-out-3) 0.1s;
 }
 
-.root.sound3 {
+.note.sound3 {
   --fill: 33.333%;
 }
 
-.root.sound2 {
+.note.sound2 {
   --fill: 66.666%;
 }
 
-.root.sound1 {
+.note.sound1 {
   --fill: 100%;
 }
 
-.root.active {
+.note.active {
   --color: var(--color-accent-1);
 }
 
-.root.beat::after {
+.note.beat::after {
   position: absolute;
   inset-block-end: -11px;
   inset-inline-start: calc(50% - 3px);

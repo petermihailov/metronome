@@ -110,7 +110,7 @@ const InputNumber = ({
   }, [max, min, onChange, value]);
 
   return (
-    <div className={clsx(className, classes.root)}>
+    <div className={clsx(className, classes.inputNumber)}>
       <label>
         {label && <span className={classes.label}>{label}</span>}
         <input

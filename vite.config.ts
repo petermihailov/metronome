@@ -7,15 +7,16 @@ import { VitePWA } from 'vite-plugin-pwa';
  */
 
 export default defineConfig({
+  css: {
+    modules: {
+      localsConvention: 'camelCaseOnly',
+    },
+  },
   plugins: [
     /** @see https://vite-pwa-org.netlify.app/ */
     VitePWA({
       registerType: 'prompt',
       includeAssets: [
-        // images
-        'keyboard-mac.png',
-        'keyboard-win.png',
-
         // sounds
         'sounds/fxMetronome1.mp3',
         'sounds/fxMetronome2.mp3',
