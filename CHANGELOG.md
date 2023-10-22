@@ -1,3 +1,12 @@
+## [1.11.2](https://github.com/petermihailov/metronome/compare/v1.11.1...v1.11.2) (2023-10-22)
+
+
+### Bug Fixes
+
+* pointer-events ([6937484](https://github.com/petermihailov/metronome/commit/69374842511f921a5f4f5f72ad284ff504190bbb))
+
+
+
 ## [1.11.1](https://github.com/petermihailov/metronome/compare/v1.11.0...v1.11.1) (2023-10-22)
 
 
@@ -34,15 +43,6 @@
 ### Bug Fixes
 
 * try to fix pwa ready notification ([3d53d6a](https://github.com/petermihailov/metronome/commit/3d53d6ac034e600fb44cfafa9ec97b9c90c5aa78))
-
-
-
-## [1.9.2](https://github.com/petermihailov/metronome/compare/v1.9.1...v1.9.2) (2023-10-07)
-
-
-### Bug Fixes
-
-* impact animation ([e85c0e2](https://github.com/petermihailov/metronome/commit/e85c0e270624d2f5f687b1cb74f8f3fd62e3599a))
 
 
 
