@@ -79,7 +79,7 @@ const Training = () => {
   // }, [type]);
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{ display: 'none' }}>
       <ButtonPlay playing={isPlaying} onClick={toggle} />
       change
       <select
