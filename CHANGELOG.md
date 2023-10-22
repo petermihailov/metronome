@@ -1,3 +1,12 @@
+## [1.11.1](https://github.com/petermihailov/metronome/compare/v1.11.0...v1.11.1) (2023-10-22)
+
+
+### Bug Fixes
+
+* some styles ([eb755a5](https://github.com/petermihailov/metronome/commit/eb755a50d91db353ad2e0fa4d1105f6cc4eefcf7))
+
+
+
 # [1.11.0](https://github.com/petermihailov/metronome/compare/v1.10.0...v1.11.0) (2023-10-22)
 
 
@@ -34,15 +43,6 @@
 ### Bug Fixes
 
 * impact animation ([e85c0e2](https://github.com/petermihailov/metronome/commit/e85c0e270624d2f5f687b1cb74f8f3fd62e3599a))
-
-
-
-## [1.9.1](https://github.com/petermihailov/metronome/compare/v1.9.0...v1.9.1) (2023-10-07)
-
-
-### Bug Fixes
-
-* pwa update prompt ([405834a](https://github.com/petermihailov/metronome/commit/405834a1ac4793682d78aeac68d5ba6ddb6913cc))
 
 
 
