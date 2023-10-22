@@ -1,3 +1,15 @@
+# [1.11.0](https://github.com/petermihailov/metronome/compare/v1.10.0...v1.11.0) (2023-10-22)
+
+
+### Features
+
+* new layout ([6bd4078](https://github.com/petermihailov/metronome/commit/6bd4078ec2ab6268af715240d4101e6f2b282253))
+* new layout ([a470484](https://github.com/petermihailov/metronome/commit/a470484387579a6f07e3a268554022c0c7d538fa))
+* training ([9dd81e1](https://github.com/petermihailov/metronome/commit/9dd81e12454c29aea6b2cbfc220d4825977d741f))
+* training ([1ff0942](https://github.com/petermihailov/metronome/commit/1ff0942f40a45d656c1c8c25e0bae369ddab9943))
+
+
+
 # [1.10.0](https://github.com/petermihailov/metronome/compare/v1.9.3...v1.10.0) (2023-10-08)
 
 
@@ -31,15 +43,6 @@
 ### Bug Fixes
 
 * pwa update prompt ([405834a](https://github.com/petermihailov/metronome/commit/405834a1ac4793682d78aeac68d5ba6ddb6913cc))
-
-
-
-# [1.9.0](https://github.com/petermihailov/metronome/compare/v1.8.0...v1.9.0) (2023-10-07)
-
-
-### Features
-
-* pwa update prompt ([12dbf4d](https://github.com/petermihailov/metronome/commit/12dbf4d1cdf7d179a99cc0ea713c97e553056f23))
 
 
 
