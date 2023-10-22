@@ -1,3 +1,12 @@
+## [1.11.3](https://github.com/petermihailov/metronome/compare/v1.11.2...v1.11.3) (2023-10-22)
+
+
+### Bug Fixes
+
+* theme color ([d8c7736](https://github.com/petermihailov/metronome/commit/d8c7736f5566304dd0e0888fc9aee9ff90d22b35))
+
+
+
 ## [1.11.2](https://github.com/petermihailov/metronome/compare/v1.11.1...v1.11.2) (2023-10-22)
 
 
@@ -34,15 +43,6 @@
 ### Features
 
 * tap tempo multiple of four ([4cfcd20](https://github.com/petermihailov/metronome/commit/4cfcd2085fe37179770d8f91ae744f7cd5c79d0e))
-
-
-
-## [1.9.3](https://github.com/petermihailov/metronome/compare/v1.9.2...v1.9.3) (2023-10-07)
-
-
-### Bug Fixes
-
-* try to fix pwa ready notification ([3d53d6a](https://github.com/petermihailov/metronome/commit/3d53d6ac034e600fb44cfafa9ec97b9c90c5aa78))
 
 
 
