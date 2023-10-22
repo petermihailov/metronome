@@ -1,11 +1,11 @@
 .main-control {
   display: flex;
-  gap: var(--size-2);
+  gap: 0.5ch;
   align-items: center;
 }
 
 .time {
-  padding: var(--size-1) var(--size-2);
+  padding: 0.25ch 0.5ch;
   font-weight: bold;
   font-size: var(--font-size-6);
   line-height: var(--font-lineheight-00);

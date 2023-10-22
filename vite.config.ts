@@ -9,6 +9,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
   css: {
     modules: {
+      generateScopedName: '[local]--[hash:4]',
       localsConvention: 'camelCaseOnly',
     },
   },

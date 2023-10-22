@@ -12,9 +12,9 @@ html:has(.dialog[open][data-mode='mega']) {
   margin: auto;
   padding: 0;
   color: var(--text-1);
-  border: 1.5px solid;
-  border-radius: var(--radius-3);
+  border-radius: var(--radius-2);
   background: var(--surface-2);
+  outline: var(--border);
   box-shadow: var(--shadow-6);
   overflow: hidden;
   transition: opacity 0.4s var(--ease-3);

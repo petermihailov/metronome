@@ -4,19 +4,24 @@
   grid-template-rows: 1fr;
   row-gap: 3ch;
   inline-size: min(100%, 40ch);
-  margin-block-start: clamp(0ch, 5%, 2ch);
+  margin-block-start: 1ch;
   margin-inline: auto;
   padding-block: 0;
-  padding-inline: clamp(0ch, 5%, 3ch);
-  border-radius: var(--radius-4);
+  padding-inline: clamp(1ch, 5%, 3ch);
+  border-radius: var(--radius-3);
   background-color: #fff0;
   transition-timing-function: ease-out;
   transition-duration: 200ms;
 }
 
 @media (min-width: 60ch) {
+  body {
+    background-color: var(--color-background-1);
+  }
+
   .app {
     inline-size: min(100% - 6ch, 80ch);
+    margin-block-start: clamp(1ch, 5%, 3ch);
     padding: 3ch;
     background-color: #fff1;
   }

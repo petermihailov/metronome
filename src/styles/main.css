@@ -1,3 +1,8 @@
+:where([data-react-root]) {
+  block-size: inherit;
+  isolation: isolate;
+}
+
 :where(html) {
   accent-color: var(--color-accent-1);
   caret-color: var(--color-accent-1);
@@ -7,44 +12,12 @@
 }
 
 :where(body) {
-  block-size: 100%;
-  -webkit-overflow-scrolling: touch;
-  background-color: var(--color-surface-1);
+  background-color: var(--color-background-2);
+  transition: background-color 200ms ease-out;
 }
 
 :where(h1, h2, h3, h4, h5, h6, dt) {
   color: var(--color-text);
-}
-
-:where([data-react-root]) {
-  block-size: inherit;
-  isolation: isolate;
-}
-
-:where(svg) {
-  fill: currentcolor;
-}
-
-:where(button) {
-  color: inherit; /* safari iOS */
-}
-
-button > * {
-  pointer-events: none;
-}
-
-a:not([class]) {
-  text-decoration-thickness: max(0.08em, 1px);
-  text-underline-offset: 0.15em;
-}
-
-:target {
-  /* Scroll padding allowance above anchor links */
-  scroll-padding-block-start: 2rem;
-
-  /* Scroll padding allowance below focused elements
-  to ensure they are clearly in view */
-  scroll-padding-block-end: 8vh;
 }
 
 ::selection {

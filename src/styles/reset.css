@@ -1,5 +1,3 @@
-/* css-reset */
-
 * {
   margin: 0;
   padding: 0;
@@ -18,14 +16,12 @@ html {
 }
 
 body {
-  min-inline-size: 100%;
-  min-block-size: 100%;
-  overflow: hidden;
   user-select: none;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
+  -webkit-overflow-scrolling: touch;
 }
 
 img,
@@ -41,8 +37,12 @@ input,
 button,
 textarea,
 select {
+  color: inherit;
   font: inherit;
+  border: none;
+  background: none;
   outline: none;
+  appearance: none;
 }
 
 button {
@@ -63,6 +63,31 @@ pre {
   white-space: pre-line;
 }
 
-#root {
-  isolation: isolate;
+svg {
+  fill: currentcolor;
 }
+
+/* Baseline for default links */
+a:not([class]) {
+  text-decoration-thickness: max(0.08em, 1px);
+  text-underline-offset: 0.15em;
+}
+
+:target {
+  /* Scroll padding allowance above anchor links */
+  scroll-padding-block-start: 2rem;
+
+  /* Scroll padding allowance below focused elements
+  to ensure they are clearly in view */
+  scroll-padding-block-end: 8vh;
+}
+
+/* :focus-visible { */
+
+/*  --outline-size: max(2px, 0.2rem); */
+
+/*  outline: var(--outline-size) dashed var(--color-accent-2); */
+
+/*  outline-offset: var(--outline-size); */
+
+/* } */

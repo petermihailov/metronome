@@ -1,8 +1,8 @@
 /* prettier-ignore */
 .tooltip {
-  --p-inline: var(--size-2);
-  --p-block: var(--size-2);
-  --triangle-size: var(--size-2);
+  --p-inline: 0.5ch;
+  --p-block: 0.5ch;
+  --triangle-size: 0.5ch;
   --bottom-tip: conic-gradient(from -30deg at bottom, rgb(0 0 0 / 0%), #000 1deg 60deg, rgb(0 0 0 / 0%) 61deg) bottom / 100% 50% no-repeat;
   --top-tip: conic-gradient(from 150deg at top, rgb(0 0 0 / 0%), #000 1deg 60deg, rgb(0 0 0 / 0%) 61deg) top / 100% 50% no-repeat;
   --right-tip: conic-gradient(from -120deg at right, rgb(0 0 0 / 0%), #000 1deg 60deg, rgb(0 0 0 / 0%) 61deg) right / 50% 100% no-repeat;
@@ -16,7 +16,7 @@
   font-size: var(--font-size-2);
   text-align: start;
   word-break: break-word;
-  border-radius: var(--radius-2);
+  border-radius: var(--radius-1);
   background-color: var(--color-surface-3);
   box-shadow: var(--shadow-4);
   opacity: 0;

@@ -4,17 +4,8 @@
   align-items: center;
   inline-size: var(--size-control);
   block-size: var(--size-control);
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
   color: var(--color-icon);
-  border: none;
   border-radius: var(--radius-round);
-  background: none;
-  outline-offset: 5px;
-  cursor: pointer;
-  appearance: none;
-  user-select: none;
 }
 
 .button-icon > svg {
