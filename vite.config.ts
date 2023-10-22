@@ -27,7 +27,7 @@ export default defineConfig({
         name: 'Metronome',
         short_name: 'Metronome',
         description: 'just metronome',
-        theme_color: '#121216',
+        theme_color: '#222226',
         icons: [
           {
             src: 'pwa-64x64.png',
