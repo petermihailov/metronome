@@ -16,6 +16,7 @@
   inset-block-end: 0;
   inset-inline: calc(15ch + 2ch) 0;
   opacity: 0;
+  pointer-events: none;
   transition: opacity var(--duration) var(--timing-function);
   transition-delay: 0ms;
 }
@@ -29,7 +30,7 @@
 
   .range {
     opacity: 1;
-    pointer-events: none;
+    pointer-events: auto;
     transition-delay: calc(2 * var(--duration));
   }
 }
