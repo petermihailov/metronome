@@ -1,3 +1,12 @@
+## [1.11.4](https://github.com/petermihailov/metronome/compare/v1.11.3...v1.11.4) (2023-11-04)
+
+
+### Bug Fixes
+
+* some fixes ([801c7a7](https://github.com/petermihailov/metronome/commit/801c7a72d9c77d5aafc804118fecca3f6161ba27))
+
+
+
 ## [1.11.3](https://github.com/petermihailov/metronome/compare/v1.11.2...v1.11.3) (2023-10-22)
 
 
@@ -34,15 +43,6 @@
 * new layout ([a470484](https://github.com/petermihailov/metronome/commit/a470484387579a6f07e3a268554022c0c7d538fa))
 * training ([9dd81e1](https://github.com/petermihailov/metronome/commit/9dd81e12454c29aea6b2cbfc220d4825977d741f))
 * training ([1ff0942](https://github.com/petermihailov/metronome/commit/1ff0942f40a45d656c1c8c25e0bae369ddab9943))
-
-
-
-# [1.10.0](https://github.com/petermihailov/metronome/compare/v1.9.3...v1.10.0) (2023-10-08)
-
-
-### Features
-
-* tap tempo multiple of four ([4cfcd20](https://github.com/petermihailov/metronome/commit/4cfcd2085fe37179770d8f91ae744f7cd5c79d0e))
 
 
 
