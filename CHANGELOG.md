@@ -1,3 +1,12 @@
+## [1.11.5](https://github.com/petermihailov/metronome/compare/v1.11.4...v1.11.5) (2023-11-04)
+
+
+### Bug Fixes
+
+* safari range ([43a88fb](https://github.com/petermihailov/metronome/commit/43a88fb668949581d33d3746e55371760e067c85))
+
+
+
 ## [1.11.4](https://github.com/petermihailov/metronome/compare/v1.11.3...v1.11.4) (2023-11-04)
 
 
@@ -31,18 +40,6 @@
 ### Bug Fixes
 
 * some styles ([eb755a5](https://github.com/petermihailov/metronome/commit/eb755a50d91db353ad2e0fa4d1105f6cc4eefcf7))
-
-
-
-# [1.11.0](https://github.com/petermihailov/metronome/compare/v1.10.0...v1.11.0) (2023-10-22)
-
-
-### Features
-
-* new layout ([6bd4078](https://github.com/petermihailov/metronome/commit/6bd4078ec2ab6268af715240d4101e6f2b282253))
-* new layout ([a470484](https://github.com/petermihailov/metronome/commit/a470484387579a6f07e3a268554022c0c7d538fa))
-* training ([9dd81e1](https://github.com/petermihailov/metronome/commit/9dd81e12454c29aea6b2cbfc220d4825977d741f))
-* training ([1ff0942](https://github.com/petermihailov/metronome/commit/1ff0942f40a45d656c1c8c25e0bae369ddab9943))
 
 
 
