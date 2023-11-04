@@ -47,7 +47,6 @@ const Range = ({
       <input
         ref={rangeRef}
         className={classes.input}
-        list="tickmarks"
         max={max}
         min={min}
         tabIndex={-1}
@@ -56,18 +55,19 @@ const Range = ({
         onChange={handleTrackChange}
         {...restInputProps}
       />
-      <datalist className={classes.labels} id="tickmarks">
+      <div aria-hidden className={classes.labels}>
         {Array.from(Array(labelsCount)).map((_, idx) => (
-          <option
+          <span
             key={idx}
-            label={String(min + idx * 10)}
-            value={min + idx * 10}
+            className={classes.label}
             onClick={() => {
               setValue(min + idx * 10);
             }}
-          />
+          >
+            {min + idx * 10}
+          </span>
         ))}
-      </datalist>
+      </div>
     </div>
   );
 };

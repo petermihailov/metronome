@@ -1,4 +1,6 @@
 .range {
+  display: grid;
+  gap: var(--size-0);
   min-inline-size: var(--size-6);
   container: range-container / inline-size;
 }
@@ -78,7 +80,7 @@
   justify-content: space-between;
 }
 
-.labels > option {
+.label {
   position: relative;
   inline-size: var(--size-2);
   padding-block-start: var(--size-0);
@@ -95,10 +97,10 @@
   transition-duration: 200ms;
 }
 
-.labels > option::before {
+.label::before {
   position: absolute;
   inset-block-start: 0;
-  inset-inline-start: 50%;
+  inset-inline-start: calc(50% - 1px);
   content: '';
   inline-size: 2px;
   block-size: var(--size-00);
@@ -110,14 +112,14 @@
     --thumb-highlight-size: var(--size-0);
   }
 
-  .labels > option:hover {
+  .label:hover {
     opacity: 1;
     transition: opacity 100ms ease-out;
   }
 }
 
 @container range-container (inline-size < 40rem) {
-  .labels > option:nth-child(2n) {
+  .label:nth-child(2n) {
     inline-size: 2px;
     color: #0000;
     transform: scale(0.5);
@@ -126,7 +128,7 @@
 }
 
 @container range-container (inline-size < 28rem) {
-  .labels > option:nth-child(4n + 3) {
+  .label:nth-child(4n + 3) {
     color: #0000;
     transform: scale(0.75);
     transition-delay: 0ms, 400ms, 600ms;
