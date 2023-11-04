@@ -1,0 +1,7 @@
+@font-face {
+  font-weight: 1 1000;
+  font-family: sfns;
+  font-style: normal;
+  src: url('/fonts/SFNS.woff2') format('woff2');
+  font-display: swap;
+}

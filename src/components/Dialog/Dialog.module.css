@@ -5,7 +5,7 @@ html:has(.dialog[open][data-mode='mega']) {
 .dialog {
   position: fixed;
   inset: 0;
-  z-index: var(--z-index-dialog);
+  z-index: 1;
   display: flex;
   max-inline-size: min(90vw, var(--size-content-3));
   max-block-size: min(80vh, 100%);
@@ -13,17 +13,15 @@ html:has(.dialog[open][data-mode='mega']) {
   padding: 0;
   color: var(--text-1);
   border-radius: var(--radius-2);
-  background: var(--surface-2);
   outline: var(--border);
-  box-shadow: var(--shadow-6);
   overflow: hidden;
-  transition: opacity 0.4s var(--ease-3);
+  transition: opacity 400ms ease-out;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .dialog {
     animation: var(--animation-scale-down) forwards;
-    animation-timing-function: var(--ease-squish-3);
+    animation-timing-function: ease-out;
   }
 
   .dialog[open] {

@@ -26,26 +26,25 @@ const Settings = () => {
   return (
     <div className={classes.settings}>
       <InputRange
-        className={classes.bpm}
-        label="tempo"
         max={MINMAX.tempo.max}
         min={MINMAX.tempo.min}
+        title="tempo"
         value={tempo}
         onChange={setTempoAction}
       />
 
       <InputNumber
-        label="beats"
         max={MINMAX.beats.max}
         min={MINMAX.beats.min}
+        title="beats"
         value={beats}
         onChange={setBeatsAction}
       />
 
       <InputNumber
-        label="subdivision"
         max={MINMAX.subdivision.max}
         min={MINMAX.subdivision.min}
+        title="subdivision"
         value={subdivision}
         onChange={setSubdivisionAction}
       />

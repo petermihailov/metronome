@@ -1,28 +1,27 @@
 .app {
-  position: relative;
+  --app-max-size: 50rem;
+
   display: grid;
   grid-template-rows: 1fr;
-  row-gap: 3ch;
-  inline-size: min(100%, 40ch);
-  margin-block-start: 1ch;
+  row-gap: min(5vw, var(--size-2));
+  max-inline-size: var(--app-max-size);
   margin-inline: auto;
-  padding-block: 0;
-  padding-inline: clamp(1ch, 5%, 3ch);
+  padding: min(5vw, var(--size-3));
   border-radius: var(--radius-3);
-  background-color: #fff0;
-  transition-timing-function: ease-out;
-  transition-duration: 200ms;
+  background-color: var(--color-background-2);
+  box-shadow: 0 0 0 40vmax var(--color-background-2);
+  transition: box-shadow 600ms ease-in;
 }
 
-@media (min-width: 60ch) {
+@media (min-width: 50rem) {
   body {
-    background-color: var(--color-background-1);
+    margin-block-start: clamp(0px, calc(0.5 * (100vw - 50rem) / 2), var(--size-3));
   }
+}
 
+@media (min-width: 55rem) {
   .app {
-    inline-size: min(100% - 6ch, 80ch);
-    margin-block-start: clamp(1ch, 5%, 3ch);
-    padding: 3ch;
-    background-color: #fff1;
+    box-shadow: 0 0 0 0 var(--color-background-2);
+    transition-timing-function: ease-out;
   }
 }

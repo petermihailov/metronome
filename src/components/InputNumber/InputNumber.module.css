@@ -3,33 +3,34 @@
 }
 
 .label {
-  font-weight: var(--font-weight-9);
-  font-size: var(--font-size-3);
-  letter-spacing: -0.8px;
-  text-transform: uppercase;
+  display: grid;
+  gap: var(--size-000);
 }
 
-/* Input */
+.title {
+  font-weight: 1000;
+  font-size: var(--font-size-1);
+  letter-spacing: -0.05rem;
+  text-transform: uppercase;
+}
 
 .input {
   display: block;
   inline-size: 100%;
-  padding: 0.25ch 0.5ch;
-  font-weight: bold;
-  font-size: var(--font-size-5);
-  line-height: var(--font-lineheight-00);
+  block-size: var(--block-size-control);
+  padding-inline: var(--size-0);
+  font-weight: 900;
+  font-size: var(--font-size-4);
+  line-height: var(--font-lineheight-0);
   border-radius: var(--radius-1);
   background-color: transparent;
   outline: var(--border);
 }
 
-.input::-webkit-outer-spin-button,
-.input::-webkit-inner-spin-button {
+.input:where(::-webkit-outer-spin-button, ::-webkit-inner-spin-button) {
   margin: 0;
   appearance: none;
 }
-
-/* Button */
 
 .buttons {
   position: absolute;
@@ -37,42 +38,21 @@
   inset-inline-end: 0;
   z-index: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  block-size: 50px;
-  padding: 0 0.5ch;
+  gap: var(--size-0);
+  block-size: var(--block-size-control);
+  padding-inline: 0 var(--size-0);
 }
 
 .button {
-  block-size: 100%;
-  color: #fffa;
+  opacity: var(--opacity-dimmed);
 }
 
-.active,
-.button:active {
-  opacity: 1;
+.disabled {
+  /* empty */
 }
 
-/* Button Disabled */
-
-.button[disabled] {
-  opacity: 0.48 !important;
-}
-
-/* Animations */
-
-.blink {
-  animation: blink 0.5s ease-out;
-}
-
-@keyframes blink {
-  from {
-    color: var(--color-accent-1);
+@media (hover: hover) {
+  .button:not(:where([disabled], .disabled)):hover {
     opacity: 1;
-    filter: drop-shadow(0 0 4px var(--color-accent-1));
-  }
-
-  to {
-    color: #fffa;
   }
 }

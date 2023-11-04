@@ -2,14 +2,27 @@ import { produce } from 'immer';
 import { create } from 'zustand';
 
 import { DEFAULTS, MINMAX } from '../constants';
+import { Storage } from '../lib/LocalStorage';
 import type { Instrument, Note } from '../types/common';
+
+const settingsStorage = new Storage<{
+  tempo: number;
+  subdivision: number;
+  beats: number;
+}>('settings', {
+  tempo: DEFAULTS.tempo,
+  beats: DEFAULTS.beats,
+  subdivision: DEFAULTS.subdivision,
+});
+
+const storage = settingsStorage.get();
 
 interface Store {
   // Values
   tempo: number;
-  notes: Note[];
   subdivision: number;
   beats: number;
+  notes: Note[];
   title: string;
   isPlaying: boolean;
   isTraining: boolean;
@@ -22,6 +35,7 @@ interface Store {
   setTempoAction: (tempo: number) => void;
   setTitleAction: (title: string) => void;
   switchInstrumentAction: (noteIndex: number) => void;
+  resetAction: () => void;
 }
 
 export const useMetronomeStore = create<Store>((set) => {
@@ -29,10 +43,10 @@ export const useMetronomeStore = create<Store>((set) => {
 
   return {
     title: '',
-    tempo: DEFAULTS.tempo,
-    beats: DEFAULTS.beats,
+    tempo: storage?.tempo || DEFAULTS.tempo,
+    beats: storage?.beats || DEFAULTS.beats,
+    subdivision: storage?.subdivision || DEFAULTS.subdivision,
     noteValue: DEFAULTS.noteValue,
-    subdivision: DEFAULTS.subdivision,
     isPlaying: false,
     isTraining: false,
     notes: [{ instrument: 'fxMetronome1' }, { instrument: 'fxMetronome3' }],
@@ -45,6 +59,7 @@ export const useMetronomeStore = create<Store>((set) => {
 
           draft.beats = beats;
           draft.notes = gridAlignment(notes, beats, state.subdivision);
+          settingsStorage.update({ beats });
         });
       }),
 
@@ -70,6 +85,7 @@ export const useMetronomeStore = create<Store>((set) => {
 
           draft.subdivision = subdivision;
           draft.notes = gridAlignment(notes, state.beats, subdivision);
+          settingsStorage.update({ subdivision });
         });
       }),
 
@@ -77,6 +93,7 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.tempo = MINMAX.range('tempo', tempo);
+          settingsStorage.update({ tempo });
         });
       }),
 
@@ -99,6 +116,18 @@ export const useMetronomeStore = create<Store>((set) => {
 
           const next = order.indexOf(draft.notes[noteIndex].instrument) + 1;
           draft.notes[noteIndex].instrument = order[next % order.length];
+        });
+      }),
+
+    resetAction: () =>
+      set((state) => {
+        return produce(state, (draft) => {
+          const { tempo, beats, subdivision } = DEFAULTS;
+
+          draft.tempo = tempo;
+          draft.beats = beats;
+          draft.subdivision = subdivision;
+          settingsStorage.update({ tempo, beats, subdivision });
         });
       }),
   };

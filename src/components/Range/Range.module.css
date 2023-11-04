@@ -1,5 +1,5 @@
 .range {
-  min-inline-size: 27ch;
+  min-inline-size: var(--size-6);
   container: range-container / inline-size;
 }
 
@@ -12,27 +12,32 @@
 
   display: block;
   inline-size: 100%;
+  padding-inline-start: 1px;
   background: 0 0;
-  outline: none;
-  outline-offset: 5px;
   appearance: none;
 }
 
 .input::-webkit-slider-runnable-track {
   block-size: var(--track-height);
-  border-radius: 5ex;
-  background:
-    linear-gradient(to right, transparent var(--track-fill), #0000 0%),
-    linear-gradient(to bottom, var(--color-accent-2), transparent) fixed;
+  border-radius: var(--radius-pill);
+  background-color: #ff357faa;
+  background-image: linear-gradient(
+    to right,
+    var(--color-accent-2) var(--track-fill),
+    transparent 0%
+  );
   appearance: none;
 }
 
 .input::-moz-range-track {
   block-size: var(--track-height);
-  border-radius: 5ex;
-  background:
-    linear-gradient(to right, transparent var(--track-fill), #0000 0%),
-    linear-gradient(to bottom, var(--color-accent-2), transparent) fixed;
+  border-radius: var(--radius-pill);
+  background-color: #ff357faa;
+  background-image: linear-gradient(
+    to right,
+    var(--color-accent-2) var(--track-fill),
+    transparent 0%
+  );
   appearance: none;
 }
 
@@ -44,10 +49,10 @@
   border-color: #0004;
   border-radius: var(--radius-round);
   background-color: var(--color-accent-1);
-  box-shadow: 0 0 0 var(--thumb-highlight-size) var(--color-thumb-highlight);
+  box-shadow: 0 0 0 var(--thumb-highlight-size) #fff2;
   cursor: ew-resize;
   appearance: none;
-  transition: box-shadow 0.1s ease;
+  transition: box-shadow 100ms ease-out;
 }
 
 .input::-moz-range-thumb {
@@ -58,34 +63,34 @@
   border-color: #0004;
   border-radius: var(--radius-round);
   background-color: var(--color-accent-1);
-  box-shadow: 0 0 0 var(--thumb-highlight-size) var(--color-thumb-highlight);
+  box-shadow: 0 0 0 var(--thumb-highlight-size) #fff2;
   cursor: ew-resize;
   appearance: none;
-  transition: box-shadow 0.1s ease;
+  transition: box-shadow 100ms ease-out;
 }
 
-.input:is(:hover, .input :active) {
-  --thumb-highlight-size: 10px;
+.input:active {
+  --thumb-highlight-size: var(--size-0);
 }
 
 .labels {
   display: flex;
   justify-content: space-between;
-  padding-inline: 2px 4px;
 }
 
 .labels > option {
   position: relative;
-  flex: none;
-  inline-size: 20px;
-  padding-block-start: 10px;
-  font-size: 12px;
-  letter-spacing: -0.8px;
+  inline-size: var(--size-2);
+  padding-block-start: var(--size-0);
+  font-weight: 500;
+  font-size: var(--font-size-0);
+  font-stretch: semi-condensed;
   text-align: center;
   cursor: pointer;
+  opacity: var(--opacity-dimmed);
   transform-origin: top;
   transition-property: transform, color, width;
-  transition-delay: 400ms, 0ms, 0s;
+  transition-delay: 400ms, 0ms, 0ms;
   transition-timing-function: ease-out;
   transition-duration: 200ms;
 }
@@ -96,30 +101,34 @@
   inset-inline-start: 50%;
   content: '';
   inline-size: 2px;
-  block-size: 8px;
+  block-size: var(--size-00);
   background-color: var(--color-text);
 }
 
-@media (hover: none) {
-  .input {
-    --thumb-size: 30px;
-    --thumb-offset: -14px;
+@media (hover: hover) {
+  .input:hover {
+    --thumb-highlight-size: var(--size-0);
+  }
+
+  .labels > option:hover {
+    opacity: 1;
+    transition: opacity 100ms ease-out;
   }
 }
 
-@container range-container (inline-size < 600px) {
+@container range-container (inline-size < 40rem) {
   .labels > option:nth-child(2n) {
     inline-size: 2px;
     color: #0000;
     transform: scale(0.5);
-    transition-delay: 0s, 400ms, 600ms;
+    transition-delay: 0ms, 400ms, 600ms;
   }
 }
 
-@container range-container (inline-size < 400px) {
+@container range-container (inline-size < 28rem) {
   .labels > option:nth-child(4n + 3) {
     color: #0000;
     transform: scale(0.75);
-    transition-delay: 0s, 400ms, 600ms;
+    transition-delay: 0ms, 400ms, 600ms;
   }
 }

@@ -1,5 +1,0 @@
-.button-play {
-  inline-size: calc(1.5 * var(--size-control));
-  block-size: calc(1.5 * var(--size-control));
-  outline: none;
-}

@@ -1,10 +1,7 @@
-import clsx from 'clsx';
 import { memo, useEffect, useRef } from 'react';
 
 import type { ButtonIconProps } from '../ButtonIcon';
 import { ButtonIcon } from '../ButtonIcon';
-
-import classes from './ButtonPlay.module.css';
 
 export interface ButtonPlayProps extends Omit<ButtonIconProps, 'aria-label' | 'color'> {
   playing: boolean;
@@ -17,7 +14,7 @@ const animationProps = {
   dur: '150ms',
 };
 
-const ButtonPlay = ({ className, playing, ...restProps }: ButtonPlayProps) => {
+const ButtonPlay = ({ playing, ...restProps }: ButtonPlayProps) => {
   const playAnimationRef = useRef<SVGAnimateElement>(null);
   const stopAnimationRef = useRef<SVGAnimateElement>(null);
 
@@ -35,7 +32,6 @@ const ButtonPlay = ({ className, playing, ...restProps }: ButtonPlayProps) => {
   return (
     <ButtonIcon
       aria-label={playing ? 'stop' : 'play'}
-      className={clsx(className, classes.buttonPlay)}
       color={playing ? 'accent2' : 'accent1'}
       {...restProps}
     >

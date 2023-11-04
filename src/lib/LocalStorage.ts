@@ -8,11 +8,15 @@ export interface IStorage<T = unknown> {
   set: (value: T) => boolean;
 }
 
-export class StorageField<T extends JSONValue> implements IStorage<T> {
+export class Storage<T extends JSONValue> implements IStorage<T> {
   private readonly key: string;
 
-  constructor(key: string) {
+  constructor(key: string, defaults?: T) {
     this.key = `${prefix}_${key}`;
+
+    if (!this.get() && defaults) {
+      this.set(defaults);
+    }
   }
 
   public clear() {
@@ -51,7 +55,7 @@ export class StorageField<T extends JSONValue> implements IStorage<T> {
     }
   }
 
-  public merge(value: { [x: string]: JSONValue }) {
+  public update(value: Partial<T>) {
     const prev = (this.get() || {}) as { [x: string]: JSONValue };
     return this.set({ ...prev, ...value } as T);
   }

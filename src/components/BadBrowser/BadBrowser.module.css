@@ -1,5 +1,5 @@
 .bad-browser h1 {
-  padding: 2ch;
+  padding: var(--size-000);
   font-size: var(--font-size-3);
   text-align: center;
 }

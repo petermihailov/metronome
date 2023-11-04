@@ -1,9 +1,5 @@
 .settings {
   display: grid;
   grid-template-rows: 1fr;
-  row-gap: 2ch;
-}
-
-.bpm {
-  flex: 1;
+  row-gap: var(--size-1);
 }

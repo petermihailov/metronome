@@ -1,22 +1,23 @@
+:root {
+  accent-color: var(--color-accent-1);
+  caret-color: var(--color-accent-1);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: var(--font-lineheight-1);
+}
+
 :where([data-react-root]) {
   block-size: inherit;
   isolation: isolate;
 }
 
-:where(html) {
-  accent-color: var(--color-accent-1);
-  caret-color: var(--color-accent-1);
-  color: var(--color-text);
-  font-family: var(--font-sans);
-  line-height: var(--font-lineheight-3);
-}
-
 :where(body) {
-  background-color: var(--color-background-2);
-  transition: background-color 200ms ease-out;
+  background-color: var(--color-background-1);
+
+  /* transition: background-color 200ms linear; */
 }
 
-:where(h1, h2, h3, h4, h5, h6, dt) {
+:where(h1, h2, h3, h4, h5, h6) {
   color: var(--color-text);
 }
 

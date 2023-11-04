@@ -1,11 +1,11 @@
 .display {
   display: grid;
-  gap: 2ch;
-  padding: 2ch;
+  gap: var(--size-1);
+  padding: min(5vw, var(--size-2));
   border-radius: var(--radius-2);
   background-color: #2c2c2e;
   outline: var(--border);
-  box-shadow: inset 0 0 16px #000;
+  box-shadow: inset 0 0 var(--size-2) #000d;
 }
 
 .notes {
@@ -15,7 +15,6 @@
 
 .note {
   flex: 1;
-  filter: drop-shadow(1px 1px 4px #0002);
 }
 
 .beat {
@@ -23,7 +22,6 @@
   flex: 1;
   block-size: 40px;
   margin: 0 0 8px 8px;
-  filter: drop-shadow(-8px 8px black);
 }
 
 .indicator {
@@ -33,7 +31,7 @@
   block-size: 50px;
   border-radius: var(--radius-1);
   background-color: var(--color-inidicator);
-  box-shadow: inset 0 0 20px #000;
+  box-shadow: inset 0 0 var(--size-2) #000a;
   overflow: hidden;
 }
 
@@ -51,13 +49,13 @@
 .indicator.accent {
   --color-inidicator: #f00;
 
-  animation: blink both 0.24s cubic-bezier(0, 0.2, 1, 1);
+  animation: blink both 200ms cubic-bezier(0, 0.2, 1, 1);
 }
 
 .indicator.regular {
   --color-inidicator: #0f0;
 
-  animation: blink both 0.24s cubic-bezier(0, 0.2, 1, 1);
+  animation: blink both 200ms cubic-bezier(0, 0.2, 1, 1);
 }
 
 @keyframes blink {

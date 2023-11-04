@@ -11,8 +11,8 @@ export const BEAT_DEFAULT: Beat = {
 export const MINMAX = (() => {
   const ranges = {
     tempo: { min: 20, max: 240 },
-    beats: { min: 1, max: 32 },
-    subdivision: { min: 1, max: 32 },
+    beats: { min: 1, max: 16 },
+    subdivision: { min: 1, max: 16 },
   } as const;
 
   return {

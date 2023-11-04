@@ -57,5 +57,6 @@ export type IconName =
   | 'icon.minus'
   | 'icon.box'
   | 'icon.close'
+  | 'icon.download'
   | 'icon.downloaded'
   | 'icon.done';

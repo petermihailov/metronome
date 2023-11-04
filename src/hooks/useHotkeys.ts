@@ -20,12 +20,13 @@ const tapTempo = {
 };
 
 export const useHotkeys = () => {
-  const { isPlaying, tempo, setIsPlayingAction, setTempoAction } = useMetronomeStore(
-    useShallow(({ isPlaying, tempo, setIsPlayingAction, setTempoAction }) => ({
+  const { isPlaying, tempo, setIsPlayingAction, setTempoAction, resetAction } = useMetronomeStore(
+    useShallow(({ isPlaying, tempo, setIsPlayingAction, setTempoAction, resetAction }) => ({
       isPlaying,
       tempo,
       setIsPlayingAction,
       setTempoAction,
+      resetAction,
     })),
   );
 
@@ -38,6 +39,10 @@ export const useHotkeys = () => {
       if (event.code === 'KeyT') {
         const tap = tapTempo.tap();
         if (tap) setTempoAction(tap);
+      }
+
+      if (event.code === 'KeyR') {
+        resetAction();
       }
 
       if (event.shiftKey) {
@@ -64,5 +69,5 @@ export const useHotkeys = () => {
     return () => {
       document.removeEventListener('keydown', callback);
     };
-  }, [isPlaying, setIsPlayingAction, setTempoAction, tempo]);
+  }, [isPlaying, resetAction, setIsPlayingAction, setTempoAction, tempo]);
 };

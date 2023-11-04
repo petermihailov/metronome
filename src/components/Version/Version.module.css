@@ -2,9 +2,9 @@
   position: fixed;
   inset-block-end: 0;
   inset-inline-end: 0;
-  padding-inline: 0.5ch;
+  padding-inline: var(--size-00);
   font: var(--font-mono);
   font-size: var(--font-size-0);
-  opacity: 0.5;
+  opacity: var(--opacity-disabled);
   pointer-events: none;
 }

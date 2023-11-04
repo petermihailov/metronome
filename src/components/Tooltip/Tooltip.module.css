@@ -17,8 +17,6 @@
   text-align: start;
   word-break: break-word;
   border-radius: var(--radius-1);
-  background-color: var(--color-surface-3);
-  box-shadow: var(--shadow-4);
   opacity: 0;
   transform: translate(var(--x, 0)) translateY(var(--y, 0));
   user-select: none;
@@ -31,7 +29,6 @@
   inset: 0;
   content: '';
   z-index: -1;
-  background: var(--color-surface-3);
   -webkit-mask: var(--tip);
   mask: var(--tip);
 }
@@ -107,5 +104,5 @@
 
 :has(> .tooltip):is(:hover, :focus-visible, :active) > .tooltip {
   opacity: 1;
-  transition-delay: 0.2s;
+  transition-delay: 200ms;
 }

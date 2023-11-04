@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 
 import './styles/reset.css';
+import './styles/fonts.css';
 import './styles/theme.css';
 import './styles/main.css';
 import './styles/helpers.css';

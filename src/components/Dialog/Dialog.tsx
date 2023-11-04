@@ -36,6 +36,9 @@ const Dialog = forwardRef<DialogHandlers, DialogProps>(function Dialog(props, re
     [],
   );
 
+  // ToDo: при открытии модалки установить аттрибут inert у react-root элемента: <div inert>
+  //  это a11y фича. inert выключит взаимодействие с клавой и мышью, и фокус останется внутри модалки
+
   return (
     <dialog
       ref={dialogRef}

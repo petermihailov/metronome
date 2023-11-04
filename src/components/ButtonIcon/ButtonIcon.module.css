@@ -1,28 +1,82 @@
 .button-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  inline-size: var(--size-control);
-  block-size: var(--size-control);
-  color: var(--color-icon);
-  border-radius: var(--radius-round);
+  position: relative;
+  display: grid;
+  place-content: center;
 }
 
-.button-icon > svg {
-  inline-size: 100%;
-  block-size: 100%;
+.button-icon svg {
+  inline-size: var(--size-icon);
+  block-size: var(--size-icon);
+  transition: transform 400ms ease-out;
 }
 
-.accent1.button-icon:active,
-.accent1.active {
+.button-icon:not(:where([disabled], .disabled)):active svg {
+  transform: scale(1.125);
+  transition-duration: 100ms;
+}
+
+.button-icon.accent1:where(:active, .active) {
   color: var(--color-accent-1);
 }
 
-.accent2.button-icon:active,
-.accent2.active {
+.button-icon.accent2:where(:active, .active) {
   color: var(--color-accent-2);
 }
 
-.button-icon[disabled] {
-  opacity: 0.48;
+.button-icon:is([disabled], .disabled) {
+  opacity: var(--opacity-disabled);
+}
+
+.button-icon::before {
+  --size-circle: calc(var(--size-icon) * 1.25);
+  --highlight-size: 0;
+
+  position: absolute;
+  inset-block-start: calc(50% - var(--size-circle) / 2);
+  inset-inline-start: calc(50% - var(--size-circle) / 2);
+  content: '';
+  inline-size: var(--size-circle);
+  block-size: var(--size-circle);
+  border-radius: var(--radius-round);
+  background-color: #fff2;
+  transform: scale(0);
+  transition: transform 100ms ease-out;
+}
+
+@media (hover: hover) {
+  .highlight:not(:where([disabled], .disabled)):hover::before {
+    transform: scale(1);
+  }
+}
+
+.head-shake {
+  animation-name: head-shake;
+  animation-duration: 1000ms;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes head-shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  6.5% {
+    transform: translateX(-3px) rotateY(-9deg);
+  }
+
+  18.5% {
+    transform: translateX(2.5px) rotateY(7deg);
+  }
+
+  31.5% {
+    transform: translateX(-1.5px) rotateY(-5deg);
+  }
+
+  43.5% {
+    transform: translateX(1px) rotateY(3deg);
+  }
+
+  50% {
+    transform: translateX(0);
+  }
 }

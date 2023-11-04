@@ -1,17 +1,17 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
 
-import { StorageField } from '../lib/LocalStorage';
+import { Storage } from '../lib/LocalStorage';
 import { dateFormat } from '../utils/format';
 
 const TIME_DEFAULT = { current: 0, session: 0, day: 0 };
 
 const currentDate = dateFormat();
-const trainingStorageField = new StorageField<{ [date: string]: number }>('training');
-const storageValue = trainingStorageField.get();
+const trainingStorage = new Storage<{ [date: string]: number }>('training');
+const storageValue = trainingStorage.get();
 
 if (!storageValue) {
-  trainingStorageField.set({ [currentDate]: 0 });
+  trainingStorage.set({ [currentDate]: 0 });
 } else {
   if (storageValue[currentDate]) {
     TIME_DEFAULT.day = storageValue[currentDate];
@@ -42,8 +42,7 @@ export const useTrainingStore = create<Store>((set) => {
           draft.time.session++;
           draft.time.day++;
 
-          // update LocalStorage
-          trainingStorageField.merge({ [currentDate]: draft.time.day });
+          trainingStorage.update({ [currentDate]: draft.time.day });
         });
       }),
 

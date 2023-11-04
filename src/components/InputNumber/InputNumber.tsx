@@ -13,26 +13,20 @@ import { ButtonIcon } from '../ButtonIcon';
 
 import classes from './InputNumber.module.css';
 
-const blinkAnimationStart = (element: HTMLElement | null) => {
-  element?.classList.remove(classes.blink);
-  element?.offsetTop; // force repaint
-  element?.classList.add(classes.blink);
-};
-
 export interface InputNumberProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   value: number;
   onChange: (value: number) => void;
-  label?: string;
+  title?: string;
   min?: number;
   max?: number;
 }
 
 const InputNumber = ({
   className,
-  label,
+  title,
   value,
-  min,
-  max,
+  min = -Infinity,
+  max = +Infinity,
   onChange,
   ...restProps
 }: InputNumberProps) => {
@@ -43,22 +37,12 @@ const InputNumber = ({
 
   const setValue = (value: number) => onChange(minMax(value, { min, max }));
 
-  const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setTextValue(event.target.value);
-    const updatedValue = parseInt(event.target.value);
-
-    if (!Number.isNaN(updatedValue)) {
-      setValue(updatedValue);
-    }
-  };
-
   const increase = () => setValue(value + 1);
   const decrease = () => setValue(value - 1);
 
   const increaseHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.currentTarget.blur();
     if (value !== max) {
-      blinkAnimationStart(increaseButtonRef.current);
       increase();
     }
   };
@@ -66,7 +50,6 @@ const InputNumber = ({
   const decreaseHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.currentTarget.blur();
     if (value !== min) {
-      blinkAnimationStart(decreaseButtonRef.current);
       decrease();
     }
   };
@@ -77,12 +60,10 @@ const InputNumber = ({
     }
 
     if (event.code === 'ArrowUp') {
-      blinkAnimationStart(increaseButtonRef.current);
       increase();
     }
 
     if (event.code === 'ArrowDown') {
-      blinkAnimationStart(decreaseButtonRef.current);
       decrease();
     }
   };
@@ -92,12 +73,15 @@ const InputNumber = ({
   };
 
   const onBlurHandler = () => {
-    const updatedValue = parseInt(textValue);
+    setTextValue(String(value));
+  };
 
-    if (!Number.isNaN(updatedValue)) {
-      setTextValue(String(minMax(updatedValue, { min, max })));
-    } else {
-      setTextValue(String(min));
+  const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setTextValue(event.target.value);
+    const updatedValue = parseInt(event.target.value);
+
+    if (!Number.isNaN(updatedValue) && updatedValue >= min && updatedValue <= max) {
+      setValue(updatedValue);
     }
   };
 
@@ -111,8 +95,8 @@ const InputNumber = ({
 
   return (
     <div className={clsx(className, classes.inputNumber)}>
-      <label>
-        {label && <span className={classes.label}>{label}</span>}
+      <label className={classes.label}>
+        {title && <span className={classes.title}>{title}</span>}
         <input
           className={classes.input}
           inputMode="decimal"
@@ -129,8 +113,7 @@ const InputNumber = ({
         <ButtonIcon
           ref={decreaseButtonRef}
           aria-label="decrease"
-          className={classes.button}
-          color="accent1"
+          className={clsx(classes.button, { [classes.disabled]: value === min })}
           disabled={value === min}
           icon="icon.minus"
           tabIndex={-1}
@@ -139,8 +122,7 @@ const InputNumber = ({
         <ButtonIcon
           ref={increaseButtonRef}
           aria-label="increase"
-          className={classes.button}
-          color="accent1"
+          className={clsx(classes.button, { [classes.disabled]: value === max })}
           disabled={value === max}
           icon="icon.plus"
           tabIndex={-1}

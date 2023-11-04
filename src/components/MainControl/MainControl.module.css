@@ -1,12 +1,39 @@
 .main-control {
   display: flex;
-  gap: 0.5ch;
+  justify-content: space-between;
   align-items: center;
 }
 
+.playing,
+.helpers {
+  display: flex;
+  gap: var(--size-0);
+  align-items: center;
+}
+
+.play-button {
+  --size-icon: var(--size-3);
+
+  flex: none;
+}
+
 .time {
-  padding: 0.25ch 0.5ch;
-  font-weight: bold;
-  font-size: var(--font-size-6);
-  line-height: var(--font-lineheight-00);
+  font-weight: 700;
+  font-size: var(--font-size-5);
+  line-height: var(--font-lineheight-0);
+}
+
+.update {
+  position: relative;
+}
+
+.update::after {
+  position: absolute;
+  inset-block-start: -1px;
+  inset-inline-end: -1px;
+  content: '';
+  inline-size: var(--size-00);
+  block-size: var(--size-00);
+  border-radius: var(--radius-round);
+  background-color: var(--color-accent-2);
 }

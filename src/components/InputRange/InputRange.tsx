@@ -10,18 +10,18 @@ export interface InputRangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 
   min?: number;
   max?: number;
   value: number;
-  label?: string;
+  title?: string;
   onChange: (value: number) => void;
 }
 
-const InputRange = ({ className, label, max = 100, min = 0, value, onChange }: InputRangeProps) => {
+const InputRange = ({ className, title, max = 100, min = 0, value, onChange }: InputRangeProps) => {
   return (
     <div className={clsx(className, classes.inputRange)}>
       <InputNumber
         className={classes.input}
-        label={label}
         max={max}
         min={min}
+        title={title}
         value={value}
         onChange={onChange}
       />
