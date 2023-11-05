@@ -20,7 +20,7 @@
   transition-delay: 0ms;
 }
 
-@container input-range-container (inline-size > 32rem) {
+@container input-range-container (inline-size > 34rem) {
   .input {
     inline-size: var(--size-6);
     transition-delay: var(--duration);

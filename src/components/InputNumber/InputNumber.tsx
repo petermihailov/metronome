@@ -77,11 +77,20 @@ const InputNumber = ({
   };
 
   const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setTextValue(event.target.value);
-    const updatedValue = parseInt(event.target.value);
+    const maxDigit = Math.max(String(min).length, String(max).length);
 
-    if (!Number.isNaN(updatedValue) && updatedValue >= min && updatedValue <= max) {
-      setValue(updatedValue);
+    const stateValue = Number(event.target.value);
+    const inputValue =
+      event.target.value === ''
+        ? event.target.value
+        : String(Number(event.target.value.replace(/\D/, '')));
+
+    if (!isNaN(stateValue) && String(stateValue).length <= maxDigit) {
+      setTextValue(inputValue);
+
+      if (stateValue >= min && stateValue <= max) {
+        setValue(stateValue);
+      }
     }
   };
 
