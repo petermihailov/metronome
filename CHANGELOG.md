@@ -1,3 +1,12 @@
+## [1.11.6](https://github.com/petermihailov/metronome/compare/v1.11.5...v1.11.6) (2023-11-05)
+
+
+### Bug Fixes
+
+* input value handler ([db3eb69](https://github.com/petermihailov/metronome/commit/db3eb69c0f3a46764f48c7aab1a760a30d4f4bd0))
+
+
+
 ## [1.11.5](https://github.com/petermihailov/metronome/compare/v1.11.4...v1.11.5) (2023-11-04)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * pointer-events ([6937484](https://github.com/petermihailov/metronome/commit/69374842511f921a5f4f5f72ad284ff504190bbb))
-
-
-
-## [1.11.1](https://github.com/petermihailov/metronome/compare/v1.11.0...v1.11.1) (2023-10-22)
-
-
-### Bug Fixes
-
-* some styles ([eb755a5](https://github.com/petermihailov/metronome/commit/eb755a50d91db353ad2e0fa4d1105f6cc4eefcf7))
 
 
 
