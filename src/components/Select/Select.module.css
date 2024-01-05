@@ -1,13 +1,28 @@
 .select {
   position: relative;
-  overflow: hidden;
+}
+
+.label {
+  display: grid;
+  gap: var(--size-000);
+}
+
+.title {
+  font-weight: 1000;
+  font-size: var(--font-size-1);
+  letter-spacing: -0.05rem;
+  text-transform: uppercase;
 }
 
 .select-native {
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline-start: 0;
+  display: block;
   inline-size: 100%;
-  block-size: 100%;
-  opacity: 0;
+  block-size: var(--block-size-control);
+  padding-inline: var(--size-0);
+  font-weight: 900;
+  font-size: var(--font-size-4);
+  line-height: var(--block-size-control);
+  border-radius: var(--radius-1);
+  background-color: transparent;
+  outline: var(--border);
 }

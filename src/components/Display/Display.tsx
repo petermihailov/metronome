@@ -8,11 +8,12 @@ import { Note } from '../Note';
 import classes from './Display.module.css';
 
 const Display = () => {
-  const { notes, beats, switchInstrumentAction } = useMetronomeStore(
-    useShallow(({ notes, beats, switchInstrumentAction }) => ({
+  const { notes, beats, switchInstrumentAction, isPlaying } = useMetronomeStore(
+    useShallow(({ notes, beats, switchInstrumentAction, isPlaying }) => ({
       notes,
       beats,
       switchInstrumentAction,
+      isPlaying,
     })),
   );
 
@@ -34,6 +35,12 @@ const Display = () => {
       }
     }
   }, [beat.index, beats, notes.length]);
+
+  useEffect(() => {
+    refIndicator.current?.classList.remove(classes.accent, classes.regular);
+    refIndicator.current?.offsetTop;
+    refIndicator.current?.classList.add(classes.accent);
+  }, [isPlaying]);
 
   return (
     <div className={classes.display}>

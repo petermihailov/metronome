@@ -1,0 +1,35 @@
+.checkbox {
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+}
+
+.title {
+  position: relative;
+  display: block;
+  font-weight: 600;
+  font-size: var(--font-size-00);
+  font-variant: all-petite-caps;
+  font-stretch: condensed;
+  line-height: var(--font-lineheight-0);
+}
+
+.led {
+  position: absolute;
+  inset-block-start: -0.5rem;
+  inset-inline-start: -1.1rem;
+  inline-size: var(--size-2);
+  block-size: var(--size-2);
+}
+
+.toggler {
+  inline-size: 3rem;
+  block-size: 6rem;
+  margin-block-start: -1.1rem;
+  margin-block-end: -1.8rem;
+  object-fit: cover;
+}
+
+.checkbox-enabled {
+  color: var(--color-accent-2);
+}

@@ -9,10 +9,12 @@ const settingsStorage = new Storage<{
   tempo: number;
   subdivision: number;
   beats: number;
+  isTraining: boolean;
 }>('settings', {
   tempo: DEFAULTS.tempo,
   beats: DEFAULTS.beats,
   subdivision: DEFAULTS.subdivision,
+  isTraining: DEFAULTS.isTraining,
 });
 
 const storage = settingsStorage.get();
@@ -24,6 +26,7 @@ interface Store {
   beats: number;
   notes: Note[];
   title: string;
+  barDuration: number;
   isPlaying: boolean;
   isTraining: boolean;
 
@@ -38,17 +41,21 @@ interface Store {
   resetAction: () => void;
 }
 
+const getBarDuration = (tempo: number, beats: number) => (60 / tempo) * beats * 1000;
+
 export const useMetronomeStore = create<Store>((set) => {
-  // const action = <T>(args:T, setter: (draft: Store) => Store) => () => set((state) => produce(state, setter))
+  const tempo = storage?.tempo ?? DEFAULTS.tempo;
+  const beats = storage?.beats ?? DEFAULTS.beats;
 
   return {
     title: '',
-    tempo: storage?.tempo || DEFAULTS.tempo,
-    beats: storage?.beats || DEFAULTS.beats,
-    subdivision: storage?.subdivision || DEFAULTS.subdivision,
+    tempo,
+    beats,
+    barDuration: getBarDuration(tempo, beats),
+    subdivision: storage?.subdivision ?? DEFAULTS.subdivision,
     noteValue: DEFAULTS.noteValue,
     isPlaying: false,
-    isTraining: false,
+    isTraining: storage?.isTraining ?? DEFAULTS.isTraining,
     notes: [{ instrument: 'fxMetronome1' }, { instrument: 'fxMetronome3' }],
 
     setBeatsAction: (beats) =>
@@ -59,6 +66,7 @@ export const useMetronomeStore = create<Store>((set) => {
 
           draft.beats = beats;
           draft.notes = gridAlignment(notes, beats, state.subdivision);
+          draft.barDuration = getBarDuration(draft.tempo, draft.beats);
           settingsStorage.update({ beats });
         });
       }),
@@ -74,6 +82,7 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.isTraining = isTraining;
+          settingsStorage.update({ isTraining });
         });
       }),
 
@@ -93,6 +102,7 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.tempo = MINMAX.range('tempo', tempo);
+          draft.barDuration = getBarDuration(draft.tempo, draft.beats);
           settingsStorage.update({ tempo });
         });
       }),

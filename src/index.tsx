@@ -13,6 +13,7 @@ import env from './env';
 import { Sprite } from './icons';
 import checkBrowser from './utils/checkBrowser';
 
+window.DEBUG = {};
 const container = document.querySelector('[data-react-root]');
 
 if (container) {

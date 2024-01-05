@@ -59,4 +59,5 @@ export type IconName =
   | 'icon.close'
   | 'icon.download'
   | 'icon.downloaded'
-  | 'icon.done';
+  | 'icon.done'
+  | 'icon.bluetooth';

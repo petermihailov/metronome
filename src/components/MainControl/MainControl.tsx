@@ -8,15 +8,18 @@ import { useTrainingStore } from '../../store/useTrainingStore';
 import { timeFormat } from '../../utils/format';
 import { ButtonIcon } from '../ButtonIcon';
 import { ButtonPlay } from '../ButtonPlay';
-// import { Switch } from '../Switch';
+import { Checkbox } from '../Checkbox';
+import { useTraining } from '../Training/useTraining';
 
 import classes from './MainControl.module.css';
 
 const MainControl = () => {
-  const { isPlaying, setIsPlayingAction } = useMetronomeStore(
-    useShallow(({ isPlaying, setIsPlayingAction }) => ({
+  const { isPlaying, isTraining, setIsPlayingAction, setIsTrainingAction } = useMetronomeStore(
+    useShallow(({ isPlaying, isTraining, setIsPlayingAction, setIsTrainingAction }) => ({
+      isTraining,
       isPlaying,
       setIsPlayingAction,
+      setIsTrainingAction,
     })),
   );
 
@@ -24,26 +27,50 @@ const MainControl = () => {
     useShallow(({ time }) => ({ currentTime: timeFormat(time.current) })),
   );
 
+  const { playTraining } = useTraining();
+
+  const handlePlay = () => {
+    const isPlayingNew = !isPlaying;
+
+    if (isPlayingNew && isTraining) {
+      playTraining();
+    } else {
+      setIsPlayingAction(isPlayingNew);
+    }
+  };
+
   const {
     needRefresh: [isVisibleUpdate],
     updateServiceWorker,
   } = useRegisterSW();
 
   return (
-    <div className={classes.mainControl}>
+    <div className={clsx(classes.mainControl, { [classes.isPlaying]: isPlaying })}>
       <div className={classes.playing}>
         <ButtonPlay
           active
           withoutHighlight
-          className={clsx(classes.playButton, { [classes.isPlaying]: isPlaying })}
+          className={classes.playButton}
           playing={isPlaying}
-          onClick={() => setIsPlayingAction(!isPlaying)}
+          onClick={handlePlay}
         />
         <span className={classes.time}>{currentTime}</span>
       </div>
 
       <div className={classes.helpers}>
-        {/*<Switch />*/}
+        <Checkbox
+          checked={isTraining}
+          className={classes.training}
+          disabled={isPlaying}
+          label="training"
+          onClick={() => setIsTrainingAction(!isTraining)}
+        />
+        {/*<ButtonIcon*/}
+        {/*  aria-label="bluetooth input lag"*/}
+        {/*  // className={classes.update}*/}
+        {/*  icon="icon.bluetooth"*/}
+        {/*  onClick={() => {}}*/}
+        {/*/>*/}
         {isVisibleUpdate && (
           <ButtonIcon
             aria-label="update"

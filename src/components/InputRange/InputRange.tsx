@@ -7,6 +7,7 @@ import { Range } from '../Range';
 import classes from './InputRange.module.css';
 
 export interface InputRangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 'onChange'> {
+  inputOnly?: boolean;
   min?: number;
   max?: number;
   value: number;
@@ -14,7 +15,15 @@ export interface InputRangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 
   onChange: (value: number) => void;
 }
 
-const InputRange = ({ className, title, max = 100, min = 0, value, onChange }: InputRangeProps) => {
+const InputRange = ({
+  className,
+  title,
+  max = 100,
+  min = 0,
+  value,
+  inputOnly,
+  onChange,
+}: InputRangeProps) => {
   return (
     <div className={clsx(className, classes.inputRange)}>
       <InputNumber
@@ -25,7 +34,9 @@ const InputRange = ({ className, title, max = 100, min = 0, value, onChange }: I
         value={value}
         onChange={onChange}
       />
-      <Range className={classes.range} max={max} min={min} value={value} onChange={onChange} />
+      {!inputOnly && (
+        <Range className={classes.range} max={max} min={min} value={value} onChange={onChange} />
+      )}
     </div>
   );
 };

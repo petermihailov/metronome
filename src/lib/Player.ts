@@ -15,7 +15,6 @@ export class Player {
   private openBuffers: AudioBufferSourceNode[];
   private timeoutId: number | undefined;
   private notes: Note[];
-  private needFinish: boolean;
 
   constructor() {
     this.kit = {} as SoundMap;
@@ -28,7 +27,6 @@ export class Player {
     this.nextBeatAt = 0;
     this.audioCtx = getAudioContext();
     this.openBuffers = [];
-    this.needFinish = false;
   }
 
   public setKit(kit: SoundMap) {
@@ -59,18 +57,6 @@ export class Player {
     this.subdivision = subdivision;
   }
 
-  public mute() {
-    this.muted = true;
-  }
-
-  public unmute() {
-    this.muted = false;
-  }
-
-  public isMuted() {
-    return this.muted;
-  }
-
   public setOnBeat(onBeat: (beat: Beat) => void) {
     this.onBeat = onBeat;
   }
@@ -94,10 +80,6 @@ export class Player {
     this.openBuffers = [];
   }
 
-  public gentlyStop() {
-    this.needFinish = true;
-  }
-
   private playNotesAtNextBeatTime(time: number, instrument: Instrument) {
     const source = this.audioCtx.createBufferSource();
     source.buffer = this.kit[instrument];
@@ -112,11 +94,6 @@ export class Player {
     this.nextBeatAt += 60 / ((this.tempo * this.notes.length) / this.beats);
     const nextIndex = (index + 1) % this.notes.length;
     const nextNote = this.notes[nextIndex];
-
-    if (this.needFinish && (nextIndex === 2 || this.notes.length === 1)) {
-      this.stop();
-      return;
-    }
 
     // Schedule next beat
     if (nextNote?.instrument) {

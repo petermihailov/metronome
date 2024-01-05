@@ -59,10 +59,6 @@
 }
 
 @keyframes blink {
-  from {
-    background-color: var(--color-inidicator);
-  }
-
   to {
     background-color: transparent;
   }

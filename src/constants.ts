@@ -29,4 +29,5 @@ export const DEFAULTS = {
   beats: 2,
   noteValue: 4,
   subdivision: 1,
+  isTraining: false,
 };

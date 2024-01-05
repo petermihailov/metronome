@@ -10,7 +10,7 @@ export function usePlayer() {
   const kit = useSounds();
   const player = useRef(new Player());
 
-  const { isPlaying, beats, notes, tempo, subdivision } = useMetronomeStore(
+  const { isPlaying, beats, notes, tempo } = useMetronomeStore(
     useShallow(({ isPlaying, beats, notes, tempo, subdivision }) => ({
       isPlaying,
       beats,
@@ -30,6 +30,7 @@ export function usePlayer() {
       player.current.setKit(kit);
       player.current.setOnBeat(setBeatAction);
     }
+    window.DEBUG.player = new Player();
   }, [kit, setBeatAction]);
 
   /** Sync playing */
@@ -56,9 +57,4 @@ export function usePlayer() {
   useEffect(() => {
     player.current.setTempo(tempo);
   }, [tempo]);
-
-  /** Sync subdivision */
-  useEffect(() => {
-    player.current.setSubdivision(subdivision);
-  }, [subdivision]);
 }

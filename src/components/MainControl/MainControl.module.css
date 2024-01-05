@@ -12,15 +12,23 @@
 }
 
 .play-button {
-  --size-icon: var(--size-3);
+  --size-icon: var(--font-size-6);
 
   flex: none;
 }
 
 .time {
   font-weight: 700;
-  font-size: var(--font-size-5);
+  font-size: var(--font-size-6);
   line-height: var(--font-lineheight-0);
+}
+
+.training {
+  transition: opacity 100ms ease-out;
+}
+
+.is-playing .training {
+  opacity: var(--opacity-disabled);
 }
 
 .update {

@@ -1,42 +1,108 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
-import { rangeGenerator } from './Training.utils';
+import { calculateTime, rangeGenerator } from './Training.utils';
 import { useBeatStore } from '../../store/useBeatStore';
 import { useMetronomeStore } from '../../store/useMetronomeStore';
+import { useTrainingStore } from '../../store/useTrainingStore';
+import { timeFormat } from '../../utils/format';
 
-interface UseTrainingOptions {
-  every: number;
-  from: number;
-  to: number;
-  alternate?: boolean;
-  onChange: (value: number) => void;
-}
+export const useTraining = () => {
+  const [trainingTime, setTrainingTime] = useState('00:00');
 
-export const useTraining = ({ every, from, to, alternate, onChange }: UseTrainingOptions) => {
-  const { notes, setIsPlayingAction } = useMetronomeStore(
-    useShallow(({ notes, setIsPlayingAction }) => ({ notes, setIsPlayingAction })),
+  const { alternate, every, from, to, type, setFrom } = useTrainingStore(
+    useShallow(({ alternate, every, from, to, type, setFrom }) => ({
+      alternate,
+      every,
+      from,
+      to,
+      type,
+      setFrom,
+    })),
+  );
+
+  const {
+    beats,
+    isPlaying,
+    isTraining,
+    notes,
+    setBeatsAction,
+    setIsPlayingAction,
+    setSubdivisionAction,
+    setTempoAction,
+    subdivision,
+    tempo,
+  } = useMetronomeStore(
+    useShallow(
+      ({
+        beats,
+        isPlaying,
+        isTraining,
+        notes,
+        setBeatsAction,
+        setIsPlayingAction,
+        setSubdivisionAction,
+        setTempoAction,
+        subdivision,
+        tempo,
+      }) => ({
+        beats,
+        isPlaying,
+        isTraining,
+        notes,
+        setBeatsAction,
+        setIsPlayingAction,
+        setSubdivisionAction,
+        setTempoAction,
+        subdivision,
+        tempo,
+      }),
+    ),
   );
 
   const { beat, barsPlayed } = useBeatStore(
     useShallow(({ beat, barsPlayed }) => ({ beat, barsPlayed })),
   );
 
-  const [isPlaying, setIsPlaying] = useState(false);
   const refTrainingGenerator = useRef<Generator<number>>();
   const refIsDecrease = useRef(from > to);
 
-  const play = () => {
-    setIsPlaying(true);
-    setIsPlayingAction(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onChange = useCallback(
+    {
+      tempo: setTempoAction,
+      subdivision: setSubdivisionAction,
+      beats: setBeatsAction,
+    }[type],
+    [type],
+  );
+
+  const playTraining = () => {
     refTrainingGenerator.current = rangeGenerator({ from, to });
+    setIsPlayingAction(true);
   };
 
   const stop = useCallback(() => {
-    setIsPlaying(false);
     setIsPlayingAction(false);
   }, [setIsPlayingAction]);
 
+  // Update 'from'
+  useEffect(() => {
+    if (!isPlaying && isTraining) {
+      setFrom({ beats, tempo, subdivision }[type]);
+    }
+  }, [beats, tempo, subdivision, isTraining, isPlaying, type, setFrom]);
+
+  /** Calculate time */
+  useEffect(() => {
+    if (!isPlaying) {
+      const from = { beats, tempo, subdivision }[type];
+      const time = calculateTime({ key: type, from, to, every, tempo, beats });
+      setTrainingTime(timeFormat(time));
+    }
+  }, [beats, subdivision, every, isPlaying, tempo, to, type]);
+
+  // Training loop
   useEffect(() => {
     if (
       isPlaying &&
@@ -46,17 +112,7 @@ export const useTraining = ({ every, from, to, alternate, onChange }: UseTrainin
     ) {
       const { value, done } = refTrainingGenerator.current.next();
 
-      console.log(value, to);
-
       if (value && !done) {
-        if (value === to) {
-          console.log('to');
-        }
-
-        if (value === from) {
-          console.log('from');
-        }
-
         onChange(value);
       } else {
         if (alternate) {
@@ -80,8 +136,7 @@ export const useTraining = ({ every, from, to, alternate, onChange }: UseTrainin
   }, [alternate, barsPlayed, beat.index, every, from, isPlaying, notes.length, onChange, stop, to]);
 
   return {
-    isPlaying,
-    play,
-    stop,
+    trainingTime,
+    playTraining,
   };
 };

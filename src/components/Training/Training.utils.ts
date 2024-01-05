@@ -25,14 +25,14 @@ interface CalculateTimeOptions {
 }
 
 export const calculateTime = ({ key, from, to, every, tempo, beats }: CalculateTimeOptions) => {
-  const map = { tempo, beats, subdivision: 1 };
+  const values = { tempo, beats, subdivision: 1 };
 
   if (from > to) [from, to] = [to, from];
 
   return Math.floor(
-    [from, ...rangeGenerator({ from, to })].reduce((elapsed, value) => {
-      map[key] = value;
-      elapsed += (60 / tempo) * beats * every;
+    [from, ...rangeGenerator({ from, to })].reduce((elapsed, current) => {
+      values[key] = current;
+      elapsed += (60 / values.tempo) * values.beats * every;
       return elapsed;
     }, 0),
   );
