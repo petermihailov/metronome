@@ -3,23 +3,22 @@ import { create } from 'zustand';
 
 import type { TrainingType } from '../components/Training/Training.types';
 import { Storage } from '../lib/LocalStorage';
-import { dateFormat } from '../utils/format';
 
-const TIME_DEFAULT = { current: 0, session: 0, day: 0 };
+const trainingStorage = new Storage<{
+  alternate: boolean;
+  from: number;
+  to: number;
+  every: number;
+  type: TrainingType;
+}>('settings', {
+  alternate: false,
+  from: 60,
+  to: 240,
+  every: 1,
+  type: 'tempo',
+});
 
-const currentDate = dateFormat();
-const trainingStorage = new Storage<{ [date: string]: number }>('training');
-const storageValue = trainingStorage.get();
-
-if (!storageValue) {
-  trainingStorage.set({ [currentDate]: 0 });
-} else {
-  if (storageValue[currentDate]) {
-    TIME_DEFAULT.day = storageValue[currentDate];
-  }
-}
-
-type Seconds = number;
+const storage = trainingStorage.get()!;
 
 interface Store {
   alternate: boolean;
@@ -28,14 +27,6 @@ interface Store {
   every: number;
   type: TrainingType;
 
-  time: {
-    current: Seconds;
-    session: Seconds;
-    day: Seconds;
-  };
-
-  addSecond: () => void;
-  resetCurrentTime: () => void;
   setAlternate: (value: boolean) => void;
   setFrom: (value: number) => void;
   setTo: (value: number) => void;
@@ -45,63 +36,49 @@ interface Store {
 
 export const useTrainingStore = create<Store>((set) => {
   return {
-    time: TIME_DEFAULT,
-    alternate: false,
-    from: 80,
-    to: 240,
-    every: 1,
-    type: 'tempo',
+    alternate: storage.alternate ?? false,
+    from: storage.from ?? 80,
+    to: storage.to ?? 240,
+    every: storage.every ?? 1,
+    type: storage.type ?? 'tempo',
 
-    addSecond: () =>
+    setAlternate: (alternate) =>
       set((state) => {
         return produce(state, (draft) => {
-          draft.time.current++;
-          draft.time.session++;
-          draft.time.day++;
-
-          trainingStorage.update({ [currentDate]: draft.time.day });
+          draft.alternate = alternate;
+          trainingStorage.update({ alternate });
         });
       }),
 
-    resetCurrentTime: () =>
+    setFrom: (from) =>
       set((state) => {
         return produce(state, (draft) => {
-          draft.time.current = 0;
+          draft.from = from;
+          trainingStorage.update({ from });
         });
       }),
 
-    setAlternate: (value) =>
+    setTo: (to) =>
       set((state) => {
         return produce(state, (draft) => {
-          draft.alternate = value;
+          draft.to = to;
+          trainingStorage.update({ to });
         });
       }),
 
-    setFrom: (value) =>
+    setEvery: (every) =>
       set((state) => {
         return produce(state, (draft) => {
-          draft.from = value;
+          draft.every = every;
+          trainingStorage.update({ every });
         });
       }),
 
-    setTo: (value) =>
+    setType: (type) =>
       set((state) => {
         return produce(state, (draft) => {
-          draft.to = value;
-        });
-      }),
-
-    setEvery: (value) =>
-      set((state) => {
-        return produce(state, (draft) => {
-          draft.every = value;
-        });
-      }),
-
-    setType: (value) =>
-      set((state) => {
-        return produce(state, (draft) => {
-          draft.type = value;
+          draft.type = type;
+          trainingStorage.update({ type });
         });
       }),
   };

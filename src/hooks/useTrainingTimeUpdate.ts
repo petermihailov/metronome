@@ -2,14 +2,14 @@ import { useEffect, useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 import { useMetronomeStore } from '../store/useMetronomeStore';
-import { useTrainingStore } from '../store/useTrainingStore';
+import { usePlayingTimeStore } from '../store/usePlayingTimeStore';
 
 export const useTrainingTimeUpdate = () => {
   const refInterval = useRef<number>();
 
   const { isPlaying } = useMetronomeStore(useShallow(({ isPlaying }) => ({ isPlaying })));
 
-  const { addSecond, resetCurrentTime } = useTrainingStore(
+  const { addSecond, resetCurrentTime } = usePlayingTimeStore(
     useShallow(({ addSecond, resetCurrentTime }) => ({ addSecond, resetCurrentTime })),
   );
 

@@ -4,7 +4,7 @@ import { useRegisterSW } from 'virtual:pwa-register/react';
 import { useShallow } from 'zustand/react/shallow';
 
 import { useMetronomeStore } from '../../store/useMetronomeStore';
-import { useTrainingStore } from '../../store/useTrainingStore';
+import { usePlayingTimeStore } from '../../store/usePlayingTimeStore';
 import { timeFormat } from '../../utils/format';
 import { ButtonIcon } from '../ButtonIcon';
 import { ButtonPlay } from '../ButtonPlay';
@@ -23,7 +23,7 @@ const MainControl = () => {
     })),
   );
 
-  const { currentTime } = useTrainingStore(
+  const { currentTime } = usePlayingTimeStore(
     useShallow(({ time }) => ({ currentTime: timeFormat(time.current) })),
   );
 

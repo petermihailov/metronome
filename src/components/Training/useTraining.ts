@@ -93,7 +93,7 @@ export const useTraining = () => {
     }
   }, [beats, tempo, subdivision, isTraining, isPlaying, type, setFrom]);
 
-  /** Calculate time */
+  //Calculate time
   useEffect(() => {
     if (!isPlaying) {
       const from = { beats, tempo, subdivision }[type];
