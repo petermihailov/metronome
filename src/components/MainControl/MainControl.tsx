@@ -9,7 +9,6 @@ import { timeFormat } from '../../utils/format';
 import { ButtonIcon } from '../ButtonIcon';
 import { ButtonPlay } from '../ButtonPlay';
 import { Checkbox } from '../Checkbox';
-import { useTraining } from '../Training/useTraining';
 
 import classes from './MainControl.module.css';
 
@@ -26,22 +25,6 @@ const MainControl = () => {
   const { currentTime } = usePlayingTimeStore(
     useShallow(({ time }) => ({ currentTime: timeFormat(time.current) })),
   );
-
-  useTraining();
-
-  // const handlePlay = () => {
-  //   const isPlayingNew = !isPlaying;
-  //
-  //   if (isTraining) {
-  //     if (isPlayingNew) {
-  //       playTraining();
-  //     } else {
-  //       stopTraining();
-  //     }
-  //   } else {
-  //     setIsPlayingAction(isPlayingNew);
-  //   }
-  // };
 
   const {
     needRefresh: [isVisibleUpdate],

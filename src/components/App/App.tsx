@@ -11,6 +11,7 @@ import { Display } from '../Display';
 import { MainControl } from '../MainControl';
 import { Settings } from '../Settings';
 import { TodayTimer } from '../TodayTimer';
+import { useTraining } from '../Training/useTraining';
 
 import classes from './App.module.css';
 
@@ -20,6 +21,7 @@ const App = () => {
   useHotkeys();
   useWakeLock();
   useButtonsPreventSpacePress();
+  useTraining();
 
   return (
     <div className={classes.app}>
