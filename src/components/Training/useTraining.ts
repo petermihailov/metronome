@@ -27,7 +27,6 @@ export const useTraining = () => {
     isTraining,
     notes,
     setBeatsAction,
-    setIsPlayingAction,
     setSubdivisionAction,
     setTempoAction,
     subdivision,
@@ -65,6 +64,7 @@ export const useTraining = () => {
   );
 
   const refTrainingGenerator = useRef<Generator<number>>();
+  const refFrom = useRef(from);
   const refIsDecrease = useRef(from > to);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,14 +77,17 @@ export const useTraining = () => {
     [type],
   );
 
-  const playTraining = () => {
-    refTrainingGenerator.current = rangeGenerator({ from, to });
-    setIsPlayingAction(true);
-  };
-
-  const stop = useCallback(() => {
-    setIsPlayingAction(false);
-  }, [setIsPlayingAction]);
+  // Handle play/stop
+  useEffect(() => {
+    if (isTraining) {
+      if (isPlaying) {
+        refFrom.current = from;
+        refTrainingGenerator.current = rangeGenerator({ from, to });
+      } else {
+        onChange(refFrom.current);
+      }
+    }
+  }, [from, isPlaying, isTraining, onChange, to]);
 
   // Update 'from'
   useEffect(() => {
@@ -144,12 +147,10 @@ export const useTraining = () => {
     isTraining,
     notes.length,
     onChange,
-    stop,
     to,
   ]);
 
   return {
     trainingTime,
-    playTraining,
   };
 };

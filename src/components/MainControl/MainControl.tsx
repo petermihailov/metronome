@@ -27,17 +27,21 @@ const MainControl = () => {
     useShallow(({ time }) => ({ currentTime: timeFormat(time.current) })),
   );
 
-  const { playTraining } = useTraining();
+  useTraining();
 
-  const handlePlay = () => {
-    const isPlayingNew = !isPlaying;
-
-    if (isPlayingNew && isTraining) {
-      playTraining();
-    } else {
-      setIsPlayingAction(isPlayingNew);
-    }
-  };
+  // const handlePlay = () => {
+  //   const isPlayingNew = !isPlaying;
+  //
+  //   if (isTraining) {
+  //     if (isPlayingNew) {
+  //       playTraining();
+  //     } else {
+  //       stopTraining();
+  //     }
+  //   } else {
+  //     setIsPlayingAction(isPlayingNew);
+  //   }
+  // };
 
   const {
     needRefresh: [isVisibleUpdate],
@@ -52,7 +56,7 @@ const MainControl = () => {
           withoutHighlight
           className={classes.playButton}
           playing={isPlaying}
-          onClick={handlePlay}
+          onClick={() => setIsPlayingAction(!isPlaying)}
         />
         <span className={classes.time}>{currentTime}</span>
       </div>
