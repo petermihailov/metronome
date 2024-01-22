@@ -59,12 +59,22 @@ const InputNumber = ({
       event.stopPropagation();
     }
 
-    if (event.code === 'ArrowUp') {
-      increase();
-    }
+    if (event.shiftKey) {
+      if (event.code === 'ArrowUp') {
+        setValue(value + 10);
+      }
 
-    if (event.code === 'ArrowDown') {
-      decrease();
+      if (event.code === 'ArrowDown') {
+        setValue(value - 10);
+      }
+    } else {
+      if (event.code === 'ArrowUp') {
+        increase();
+      }
+
+      if (event.code === 'ArrowDown') {
+        decrease();
+      }
     }
   };
 
@@ -73,7 +83,11 @@ const InputNumber = ({
   };
 
   const onBlurHandler = () => {
-    setTextValue(String(value));
+    if (+textValue < min || +textValue > max) {
+      setValue(+textValue);
+    } else {
+      setTextValue(String(value));
+    }
   };
 
   const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {

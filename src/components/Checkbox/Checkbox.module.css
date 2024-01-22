@@ -25,7 +25,7 @@
 .toggler {
   inline-size: 3rem;
   block-size: 6rem;
-  margin-block-start: -1.1rem;
+  margin-block-start: -1rem;
   margin-block-end: -1.8rem;
   object-fit: cover;
 }

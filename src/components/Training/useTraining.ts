@@ -105,6 +105,7 @@ export const useTraining = () => {
   // Training loop
   useEffect(() => {
     if (
+      isTraining &&
       isPlaying &&
       beat.index === notes.length - 1 &&
       barsPlayed % every === 0 &&
@@ -129,11 +130,23 @@ export const useTraining = () => {
           const { value, done } = refTrainingGenerator.current.next();
           if (value !== undefined && !done) onChange(value);
         } else {
-          stop();
+          // stop();
         }
       }
     }
-  }, [alternate, barsPlayed, beat.index, every, from, isPlaying, notes.length, onChange, stop, to]);
+  }, [
+    alternate,
+    barsPlayed,
+    beat.index,
+    every,
+    from,
+    isPlaying,
+    isTraining,
+    notes.length,
+    onChange,
+    stop,
+    to,
+  ]);
 
   return {
     trainingTime,
