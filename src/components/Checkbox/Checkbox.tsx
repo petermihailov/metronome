@@ -18,17 +18,17 @@ interface CheckboxProps {
 const Checkbox = ({ className, label, checked, disabled, onClick }: CheckboxProps) => {
   return (
     <button
-      className={clsx(className, classes.checkbox, {
-        // [classes.checkboxEnabled]: checked,
-      })}
+      className={clsx(className, classes.checkbox, { [classes.checked]: checked })}
       disabled={disabled}
       onClick={onClick}
     >
       <span className={classes.title}>
+        <img alt="" aria-hidden="true" className={classes.led} src={imgLedDisabled} />
         <img
-          alt={checked ? 'enabled' : 'disabled'}
-          className={classes.led}
-          src={checked ? imgLedEnabled : imgLedDisabled}
+          alt=""
+          aria-hidden="true"
+          className={clsx(classes.led, classes.ledEnabled)}
+          src={imgLedEnabled}
         />
         {label}
       </span>

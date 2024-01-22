@@ -23,14 +23,6 @@
   line-height: var(--font-lineheight-0);
 }
 
-.training {
-  transition: opacity 100ms ease-out;
-}
-
-.is-playing .training {
-  opacity: var(--opacity-disabled);
-}
-
 .update {
   position: relative;
 }

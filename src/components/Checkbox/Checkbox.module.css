@@ -22,14 +22,27 @@
   block-size: var(--size-2);
 }
 
+.led-enabled {
+  opacity: 0;
+  transition: opacity 500ms ease-out;
+}
+
 .toggler {
   inline-size: 3rem;
   block-size: 6rem;
   margin-block-start: -1rem;
   margin-block-end: -1.8rem;
   object-fit: cover;
+  transition: opacity 100ms ease-out;
 }
 
-.checkbox-enabled {
-  color: var(--color-accent-2);
+.checkbox[disabled] .toggler {
+  opacity: var(--opacity-disabled);
+}
+
+.checked {
+  .led-enabled {
+    opacity: 1;
+    transition-duration: 50ms;
+  }
 }

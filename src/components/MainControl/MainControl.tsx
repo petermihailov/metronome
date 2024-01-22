@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 // eslint-disable-next-line import/no-unresolved
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { useShallow } from 'zustand/react/shallow';
@@ -32,7 +31,7 @@ const MainControl = () => {
   } = useRegisterSW();
 
   return (
-    <div className={clsx(classes.mainControl, { [classes.isPlaying]: isPlaying })}>
+    <div className={classes.mainControl}>
       <div className={classes.playing}>
         <ButtonPlay
           active
@@ -47,7 +46,6 @@ const MainControl = () => {
       <div className={classes.helpers}>
         <Checkbox
           checked={isTraining}
-          className={classes.training}
           disabled={isPlaying}
           label="training"
           onClick={() => setIsTrainingAction(!isTraining)}
