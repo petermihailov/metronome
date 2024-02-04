@@ -1,3 +1,12 @@
+## [1.11.7](https://github.com/petermihailov/metronome/compare/v1.11.6...v1.11.7) (2024-02-04)
+
+
+### Bug Fixes
+
+* og:url ([de31d94](https://github.com/petermihailov/metronome/commit/de31d94e180ff64365a4a5752044f7f16847202e))
+
+
+
 ## [1.11.6](https://github.com/petermihailov/metronome/compare/v1.11.5...v1.11.6) (2023-11-05)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * theme color ([d8c7736](https://github.com/petermihailov/metronome/commit/d8c7736f5566304dd0e0888fc9aee9ff90d22b35))
-
-
-
-## [1.11.2](https://github.com/petermihailov/metronome/compare/v1.11.1...v1.11.2) (2023-10-22)
-
-
-### Bug Fixes
-
-* pointer-events ([6937484](https://github.com/petermihailov/metronome/commit/69374842511f921a5f4f5f72ad284ff504190bbb))
 
 
 
