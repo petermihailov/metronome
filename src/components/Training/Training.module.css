@@ -8,3 +8,17 @@
   line-height: var(--block-size-control);
   text-align: center;
 }
+
+.alternate {
+  font-weight: 1000;
+  font-size: var(--font-size-2);
+}
+
+.alternate-enabled {
+  color: var(--color-accent-2);
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}

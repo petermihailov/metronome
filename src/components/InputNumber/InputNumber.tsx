@@ -16,6 +16,7 @@ import classes from './InputNumber.module.css';
 export interface InputNumberProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   value: number;
   onChange: (value: number) => void;
+  active?: boolean;
   title?: string;
   min?: number;
   max?: number;
@@ -27,6 +28,7 @@ const InputNumber = ({
   value,
   min = -Infinity,
   max = +Infinity,
+  active,
   onChange,
   ...restProps
 }: InputNumberProps) => {
@@ -121,7 +123,7 @@ const InputNumber = ({
       <label className={classes.label}>
         {title && <span className={classes.title}>{title}</span>}
         <input
-          className={classes.input}
+          className={clsx(classes.input, { [classes.active]: active })}
           inputMode="decimal"
           type="text"
           value={textValue}

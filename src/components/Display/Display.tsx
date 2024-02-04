@@ -3,6 +3,7 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { useBeatStore } from '../../store/useBeatStore';
 import { useMetronomeStore } from '../../store/useMetronomeStore';
+import { DisplayBar } from '../DisplayBar';
 import { Note } from '../Note';
 
 import classes from './Display.module.css';
@@ -62,6 +63,8 @@ const Display = () => {
       </div>
 
       <div ref={refIndicator} className={classes.indicator} />
+
+      <DisplayBar />
     </div>
   );
 };

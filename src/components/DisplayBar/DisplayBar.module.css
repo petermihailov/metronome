@@ -1,0 +1,23 @@
+.display-bar {
+  display: flex;
+  gap: var(--size-1);
+  justify-content: end;
+}
+
+.volume {
+  --size-icon: 1rem;
+
+  display: flex;
+  gap: var(--size-00);
+  justify-content: space-between;
+  inline-size: 6rem;
+}
+
+.range {
+  flex: 1;
+}
+
+.range input {
+  --thumb-size: 1.5ex;
+  --thumb-offset: -0.55ex;
+}

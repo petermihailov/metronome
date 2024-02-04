@@ -60,4 +60,5 @@ export type IconName =
   | 'icon.download'
   | 'icon.downloaded'
   | 'icon.done'
+  | 'icon.volume'
   | 'icon.bluetooth';

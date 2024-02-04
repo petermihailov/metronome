@@ -1,7 +1,6 @@
 .range {
   display: grid;
   gap: var(--size-0);
-  min-inline-size: var(--size-6);
   container: range-container / inline-size;
 }
 

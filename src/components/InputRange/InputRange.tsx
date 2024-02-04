@@ -12,6 +12,7 @@ export interface InputRangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 
   max?: number;
   value: number;
   title?: string;
+  active?: boolean;
   onChange: (value: number) => void;
 }
 
@@ -22,11 +23,13 @@ const InputRange = ({
   min = 0,
   value,
   inputOnly,
+  active,
   onChange,
 }: InputRangeProps) => {
   return (
     <div className={clsx(className, classes.inputRange)}>
       <InputNumber
+        active={active}
         className={classes.input}
         max={max}
         min={min}
@@ -35,7 +38,14 @@ const InputRange = ({
         onChange={onChange}
       />
       {!inputOnly && (
-        <Range className={classes.range} max={max} min={min} value={value} onChange={onChange} />
+        <Range
+          labels
+          className={classes.range}
+          max={max}
+          min={min}
+          value={value}
+          onChange={onChange}
+        />
       )}
     </div>
   );

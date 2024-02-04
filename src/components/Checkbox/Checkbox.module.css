@@ -17,7 +17,7 @@
 .led {
   position: absolute;
   inset-block-start: -0.5rem;
-  inset-inline-start: -1.1rem;
+  inset-inline-start: -1.3rem;
   inline-size: var(--size-2);
   block-size: var(--size-2);
 }
@@ -28,10 +28,10 @@
 }
 
 .toggler {
-  inline-size: 3rem;
-  block-size: 6rem;
-  margin-block-start: -1rem;
-  margin-block-end: -1.8rem;
+  inline-size: 2.8rem;
+  block-size: 5.5rem;
+  margin-block-start: -0.7rem;
+  margin-block-end: -1.7rem;
   object-fit: cover;
   transition: opacity 100ms ease-out;
 }

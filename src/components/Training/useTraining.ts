@@ -84,10 +84,12 @@ export const useTraining = () => {
         refFrom.current = from;
         refTrainingGenerator.current = rangeGenerator({ from, to });
       } else {
+        refIsDecrease.current = false;
         onChange(refFrom.current);
       }
     }
-  }, [from, isPlaying, isTraining, onChange, to]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPlaying, isTraining]);
 
   // Update 'from'
   useEffect(() => {
@@ -121,11 +123,9 @@ export const useTraining = () => {
       } else {
         if (alternate) {
           if (!refIsDecrease.current) {
-            // switch to decrease
             refTrainingGenerator.current = rangeGenerator({ from: to, to: from });
             refIsDecrease.current = true;
           } else {
-            // switch to increase
             refTrainingGenerator.current = rangeGenerator({ from, to });
             refIsDecrease.current = false;
           }
@@ -133,7 +133,7 @@ export const useTraining = () => {
           const { value, done } = refTrainingGenerator.current.next();
           if (value !== undefined && !done) onChange(value);
         } else {
-          // stop();
+          // stop?
         }
       }
     }

@@ -10,11 +10,13 @@ const settingsStorage = new Storage<{
   subdivision: number;
   beats: number;
   isTraining: boolean;
+  volume: number;
 }>('settings', {
   tempo: DEFAULTS.tempo,
   beats: DEFAULTS.beats,
   subdivision: DEFAULTS.subdivision,
   isTraining: DEFAULTS.isTraining,
+  volume: DEFAULTS.volume,
 });
 
 const storage = settingsStorage.get();
@@ -26,6 +28,7 @@ interface Store {
   beats: number;
   notes: Note[];
   title: string;
+  volume: number;
   barDuration: number;
   isPlaying: boolean;
   isTraining: boolean;
@@ -37,6 +40,7 @@ interface Store {
   setSubdivisionAction: (subdivision: number) => void;
   setTempoAction: (tempo: number) => void;
   setTitleAction: (title: string) => void;
+  setVolumeAction: (volume: number) => void;
   switchInstrumentAction: (noteIndex: number) => void;
   resetAction: () => void;
 }
@@ -49,6 +53,7 @@ export const useMetronomeStore = create<Store>((set) => {
 
   return {
     title: '',
+    volume: 1,
     tempo,
     beats,
     barDuration: getBarDuration(tempo, beats),
@@ -111,6 +116,14 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.title = title;
+        });
+      }),
+
+    setVolumeAction: (volume) =>
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.volume = volume;
+          settingsStorage.update({ volume });
         });
       }),
 

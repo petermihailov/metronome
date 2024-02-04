@@ -17,21 +17,17 @@ interface TrainingProps {
 }
 
 const Training = ({ className }: TrainingProps) => {
-  const { every, to, type, setEvery, setTo, setType } = useTrainingStore(
-    useShallow(
-      ({ alternate, every, from, to, type, setAlternate, setEvery, setFrom, setTo, setType }) => ({
-        alternate,
-        every,
-        from,
-        to,
-        type,
-        setAlternate,
-        setEvery,
-        setFrom,
-        setTo,
-        setType,
-      }),
-    ),
+  const { alternate, every, to, type, setAlternate, setEvery, setTo, setType } = useTrainingStore(
+    useShallow(({ alternate, every, to, type, setAlternate, setEvery, setTo, setType }) => ({
+      alternate,
+      every,
+      to,
+      type,
+      setAlternate,
+      setEvery,
+      setTo,
+      setType,
+    })),
   );
 
   const { trainingTime } = useTraining();
@@ -53,12 +49,15 @@ const Training = ({ className }: TrainingProps) => {
           onChange={setTo}
         />
         <InputNumber max={12} min={1} title="every (bars)" value={every} onChange={setEvery} />
-        {/*<Checkbox*/}
-        {/*  checked={alternate}*/}
-        {/*  label="alternate"*/}
-        {/*  onClick={() => setAlternate((prev) => !prev)}*/}
-        {/*/>*/}
-        <time className={classes.time}>{trainingTime}</time>
+        <div className={classes.spaceBetween}>
+          <button
+            className={clsx(classes.alternate, { [classes.alternateEnabled]: alternate })}
+            onClick={() => setAlternate(!alternate)}
+          >
+            alternate
+          </button>
+          <time className={classes.time}>{trainingTime}</time>
+        </div>
       </div>
     </>
   );

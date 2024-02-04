@@ -10,6 +10,7 @@ export interface RangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 'onCh
   min?: number;
   max?: number;
   value: number;
+  labels?: boolean;
   onChange: (value: number) => void;
 }
 
@@ -18,6 +19,7 @@ const Range = ({
   min = 0,
   max = 100,
   value,
+  labels,
   onChange,
   ...restInputProps
 }: RangeProps) => {
@@ -55,19 +57,21 @@ const Range = ({
         onChange={handleTrackChange}
         {...restInputProps}
       />
-      <div aria-hidden className={classes.labels}>
-        {Array.from(Array(labelsCount)).map((_, idx) => (
-          <span
-            key={idx}
-            className={classes.label}
-            onClick={() => {
-              setValue(min + idx * 10);
-            }}
-          >
-            {min + idx * 10}
-          </span>
-        ))}
-      </div>
+      {labels && (
+        <div aria-hidden className={classes.labels}>
+          {Array.from(Array(labelsCount)).map((_, idx) => (
+            <span
+              key={idx}
+              className={classes.label}
+              onClick={() => {
+                setValue(min + idx * 10);
+              }}
+            >
+              {min + idx * 10}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

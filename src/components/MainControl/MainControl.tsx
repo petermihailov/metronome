@@ -43,9 +43,10 @@ const MainControl = () => {
         <span className={classes.time}>{currentTime}</span>
       </div>
 
-      <div className={classes.helpers}>
+      <div className={classes.training}>
         <Checkbox
           checked={isTraining}
+          className={classes.toggler}
           disabled={isPlaying}
           label="training"
           onClick={() => setIsTrainingAction(!isTraining)}

@@ -9,7 +9,7 @@ export class Player {
   private beats: number;
   private noteValue: number;
   private subdivision: number;
-  private muted: boolean;
+  private volume: number;
   private nextBeatAt: number;
   private onBeat?: (beat: Beat) => void;
   private openBuffers: AudioBufferSourceNode[];
@@ -23,7 +23,7 @@ export class Player {
     this.beats = DEFAULTS.beats;
     this.notes = [];
     this.subdivision = DEFAULTS.subdivision;
-    this.muted = false;
+    this.volume = DEFAULTS.volume;
     this.nextBeatAt = 0;
     this.audioCtx = getAudioContext();
     this.openBuffers = [];
@@ -49,8 +49,8 @@ export class Player {
     this.notes = notes;
   }
 
-  public setNote(index: number, note: Note) {
-    this.notes[index] = note;
+  public setVolume(volume: number) {
+    this.volume = volume;
   }
 
   public setSubdivision(subdivision: number) {
@@ -81,9 +81,13 @@ export class Player {
   }
 
   private playNotesAtNextBeatTime(time: number, instrument: Instrument) {
+    const gainNode = this.audioCtx.createGain();
+    gainNode.gain.value = this.volume;
+    gainNode.connect(this.audioCtx.destination);
+
     const source = this.audioCtx.createBufferSource();
     source.buffer = this.kit[instrument];
-    source.connect(this.audioCtx.destination);
+    source.connect(gainNode);
     source.start(time);
 
     this.openBuffers.push(source);

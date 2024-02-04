@@ -4,6 +4,7 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { MINMAX } from '../../constants';
 import { useMetronomeStore } from '../../store/useMetronomeStore';
+import { useTrainingStore } from '../../store/useTrainingStore';
 import { InputNumber } from '../InputNumber';
 import { InputRange } from '../InputRange';
 import { Training } from '../Training';
@@ -44,6 +45,12 @@ const Settings = () => {
     ),
   );
 
+  const { type } = useTrainingStore(
+    useShallow(({ type }) => ({
+      type,
+    })),
+  );
+
   return (
     <div
       className={clsx(classes.settings, {
@@ -53,6 +60,7 @@ const Settings = () => {
     >
       <div className={classes.values}>
         <InputRange
+          active={isTraining && type === 'tempo'}
           inputOnly={isTraining}
           max={MINMAX.tempo.max}
           min={MINMAX.tempo.min}
@@ -62,6 +70,7 @@ const Settings = () => {
         />
 
         <InputNumber
+          active={isTraining && type === 'beats'}
           max={MINMAX.beats.max}
           min={MINMAX.beats.min}
           title="beats"
@@ -70,6 +79,7 @@ const Settings = () => {
         />
 
         <InputNumber
+          active={isTraining && type === 'subdivision'}
           max={MINMAX.subdivision.max}
           min={MINMAX.subdivision.min}
           title="subdivision"

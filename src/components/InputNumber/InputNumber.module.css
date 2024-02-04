@@ -51,6 +51,10 @@
   /* empty */
 }
 
+.active {
+  outline-color: var(--color-accent-2);
+}
+
 @media (hover: hover) {
   .button:not(:where([disabled], .disabled)):hover {
     opacity: 1;
