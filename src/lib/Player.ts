@@ -9,13 +9,12 @@ export class Player {
   private beats: number;
   private noteValue: number;
   private subdivision: number;
-  private muted: boolean;
+  private volume: number;
   private nextBeatAt: number;
   private onBeat?: (beat: Beat) => void;
   private openBuffers: AudioBufferSourceNode[];
   private timeoutId: number | undefined;
   private notes: Note[];
-  private needFinish: boolean;
 
   constructor() {
     this.kit = {} as SoundMap;
@@ -24,11 +23,10 @@ export class Player {
     this.beats = DEFAULTS.beats;
     this.notes = [];
     this.subdivision = DEFAULTS.subdivision;
-    this.muted = false;
+    this.volume = DEFAULTS.volume;
     this.nextBeatAt = 0;
     this.audioCtx = getAudioContext();
     this.openBuffers = [];
-    this.needFinish = false;
   }
 
   public setKit(kit: SoundMap) {
@@ -51,24 +49,12 @@ export class Player {
     this.notes = notes;
   }
 
-  public setNote(index: number, note: Note) {
-    this.notes[index] = note;
+  public setVolume(volume: number) {
+    this.volume = volume;
   }
 
   public setSubdivision(subdivision: number) {
     this.subdivision = subdivision;
-  }
-
-  public mute() {
-    this.muted = true;
-  }
-
-  public unmute() {
-    this.muted = false;
-  }
-
-  public isMuted() {
-    return this.muted;
   }
 
   public setOnBeat(onBeat: (beat: Beat) => void) {
@@ -94,14 +80,14 @@ export class Player {
     this.openBuffers = [];
   }
 
-  public gentlyStop() {
-    this.needFinish = true;
-  }
-
   private playNotesAtNextBeatTime(time: number, instrument: Instrument) {
+    const gainNode = this.audioCtx.createGain();
+    gainNode.gain.value = this.volume;
+    gainNode.connect(this.audioCtx.destination);
+
     const source = this.audioCtx.createBufferSource();
     source.buffer = this.kit[instrument];
-    source.connect(this.audioCtx.destination);
+    source.connect(gainNode);
     source.start(time);
 
     this.openBuffers.push(source);
@@ -112,11 +98,6 @@ export class Player {
     this.nextBeatAt += 60 / ((this.tempo * this.notes.length) / this.beats);
     const nextIndex = (index + 1) % this.notes.length;
     const nextNote = this.notes[nextIndex];
-
-    if (this.needFinish && (nextIndex === 2 || this.notes.length === 1)) {
-      this.stop();
-      return;
-    }
 
     // Schedule next beat
     if (nextNote?.instrument) {

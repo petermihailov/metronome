@@ -1,10 +1,15 @@
-import type { State } from './context/MetronomeContext';
+import type { Player } from './lib/Player';
 
 export {};
+
+interface Debug {
+  player: Player;
+}
 
 declare global {
   interface Window {
     webkitAudioContext: typeof AudioContext;
-    _STATE_: State;
+    webkitOfflineAudioContext: typeof OfflineAudioContext;
+    DEBUG: Partial<Debug>;
   }
 }

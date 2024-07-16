@@ -10,9 +10,11 @@ export const BEAT_DEFAULT: Beat = {
 
 export const MINMAX = (() => {
   const ranges = {
-    tempo: { min: 20, max: 240 },
+    tempo: { min: 20, max: 300 },
     beats: { min: 1, max: 16 },
+    every: { min: 1, max: 16 },
     subdivision: { min: 1, max: 16 },
+    inputLag: { min: 50, max: 250 },
   } as const;
 
   return {
@@ -26,7 +28,13 @@ export const MINMAX = (() => {
 
 export const DEFAULTS = {
   tempo: 60,
-  beats: 2,
+  beats: 4,
   noteValue: 4,
   subdivision: 1,
-};
+  every: 8,
+  volume: 1,
+  mute: false,
+  inputLag: 150,
+  inputLagEnabled: false,
+  isTraining: false,
+} as const;

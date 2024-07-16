@@ -16,6 +16,7 @@ import classes from './InputNumber.module.css';
 export interface InputNumberProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   value: number;
   onChange: (value: number) => void;
+  active?: boolean;
   title?: string;
   min?: number;
   max?: number;
@@ -27,11 +28,13 @@ const InputNumber = ({
   value,
   min = -Infinity,
   max = +Infinity,
+  active,
   onChange,
   ...restProps
 }: InputNumberProps) => {
   const [textValue, setTextValue] = useState(String(value));
 
+  const inputRef = useRef<HTMLInputElement>(null);
   const increaseButtonRef = useRef<HTMLButtonElement>(null);
   const decreaseButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -59,12 +62,22 @@ const InputNumber = ({
       event.stopPropagation();
     }
 
-    if (event.code === 'ArrowUp') {
-      increase();
-    }
+    if (event.shiftKey) {
+      if (event.code === 'ArrowUp') {
+        setValue(value + 10);
+      }
 
-    if (event.code === 'ArrowDown') {
-      decrease();
+      if (event.code === 'ArrowDown') {
+        setValue(value - 10);
+      }
+    } else {
+      if (event.code === 'ArrowUp') {
+        increase();
+      }
+
+      if (event.code === 'ArrowDown') {
+        decrease();
+      }
     }
   };
 
@@ -73,7 +86,11 @@ const InputNumber = ({
   };
 
   const onBlurHandler = () => {
-    setTextValue(String(value));
+    if (+textValue < min || +textValue > max) {
+      setValue(+textValue);
+    } else {
+      setTextValue(String(value));
+    }
   };
 
   const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -107,7 +124,8 @@ const InputNumber = ({
       <label className={classes.label}>
         {title && <span className={classes.title}>{title}</span>}
         <input
-          className={classes.input}
+          ref={inputRef}
+          className={clsx(classes.input, { [classes.active]: active })}
           inputMode="decimal"
           type="text"
           value={textValue}

@@ -1,0 +1,19 @@
+.toggleable-range {
+  display: flex;
+  gap: var(--size-00);
+  justify-content: space-between;
+}
+
+.range {
+  flex: 1;
+  inline-size: var(--size-4);
+}
+
+.range input {
+  --thumb-size: 1.5ex;
+  --thumb-offset: -0.55ex;
+}
+
+.button-active {
+  color: var(--color-accent-1);
+}

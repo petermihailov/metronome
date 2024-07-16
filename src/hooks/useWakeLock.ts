@@ -12,11 +12,8 @@ export const useWakeLock = () => {
     if ('wakeLock' in navigator) {
       if (isPlaying) {
         navigator.wakeLock.request('screen').then((res) => (refLockWindow.current = res));
-        console.log('lock');
       } else {
-        refLockWindow.current?.release().then(() => {
-          console.log('release');
-        });
+        refLockWindow.current?.release().then();
       }
     }
   }, [isPlaying]);

@@ -1,26 +1,30 @@
-import clsx from 'clsx';
 // eslint-disable-next-line import/no-unresolved
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { useShallow } from 'zustand/react/shallow';
 
 import { useMetronomeStore } from '../../store/useMetronomeStore';
-import { useTrainingStore } from '../../store/useTrainingStore';
+import { usePlayingTimeStore } from '../../store/usePlayingTimeStore';
 import { timeFormat } from '../../utils/format';
 import { ButtonIcon } from '../ButtonIcon';
 import { ButtonPlay } from '../ButtonPlay';
-// import { Switch } from '../Switch';
+import { Checkbox } from '../Checkbox';
+import { useTrainingTime } from '../Training/useTrainingTime';
 
 import classes from './MainControl.module.css';
 
 const MainControl = () => {
-  const { isPlaying, setIsPlayingAction } = useMetronomeStore(
-    useShallow(({ isPlaying, setIsPlayingAction }) => ({
+  const { isPlaying, isTraining, setIsPlayingAction, setIsTrainingAction } = useMetronomeStore(
+    useShallow(({ isPlaying, isTraining, setIsPlayingAction, setIsTrainingAction }) => ({
+      isTraining,
       isPlaying,
       setIsPlayingAction,
+      setIsTrainingAction,
     })),
   );
 
-  const { currentTime } = useTrainingStore(
+  const { trainingTime } = useTrainingTime();
+
+  const { currentTime } = usePlayingTimeStore(
     useShallow(({ time }) => ({ currentTime: timeFormat(time.current) })),
   );
 
@@ -35,15 +39,23 @@ const MainControl = () => {
         <ButtonPlay
           active
           withoutHighlight
-          className={clsx(classes.playButton, { [classes.isPlaying]: isPlaying })}
+          className={classes.playButton}
           playing={isPlaying}
           onClick={() => setIsPlayingAction(!isPlaying)}
         />
         <span className={classes.time}>{currentTime}</span>
       </div>
 
-      <div className={classes.helpers}>
-        {/*<Switch />*/}
+      <div className={classes.actions}>
+        <div className={classes.training} onClick={() => setIsTrainingAction(!isTraining)}>
+          <Checkbox
+            checked={isTraining}
+            className={classes.trainingButton}
+            disabled={isPlaying}
+            label="training"
+          />
+          {isTraining && <time className={classes.trainingTime}>{trainingTime}</time>}
+        </div>
         {isVisibleUpdate && (
           <ButtonIcon
             aria-label="update"

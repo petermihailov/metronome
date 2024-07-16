@@ -9,10 +9,20 @@ const settingsStorage = new Storage<{
   tempo: number;
   subdivision: number;
   beats: number;
+  isTraining: boolean;
+  volume: number;
+  mute: boolean;
+  inputLag: number;
+  inputLagEnabled: boolean;
 }>('settings', {
   tempo: DEFAULTS.tempo,
   beats: DEFAULTS.beats,
   subdivision: DEFAULTS.subdivision,
+  isTraining: DEFAULTS.isTraining,
+  volume: DEFAULTS.volume,
+  mute: DEFAULTS.mute,
+  inputLag: DEFAULTS.inputLag,
+  inputLagEnabled: DEFAULTS.inputLagEnabled,
 });
 
 const storage = settingsStorage.get();
@@ -24,6 +34,11 @@ interface Store {
   beats: number;
   notes: Note[];
   title: string;
+  volume: number;
+  mute: boolean;
+  inputLag: number;
+  inputLagEnabled: boolean;
+  barDuration: number;
   isPlaying: boolean;
   isTraining: boolean;
 
@@ -33,22 +48,39 @@ interface Store {
   setIsTrainingAction: (isTraining: boolean) => void;
   setSubdivisionAction: (subdivision: number) => void;
   setTempoAction: (tempo: number) => void;
+  setInputLagAction: (value: number) => void;
+  setInputLagEnabledAction: (enabled: boolean) => void;
   setTitleAction: (title: string) => void;
+  setVolumeAction: (volume: number) => void;
+  setMuteAction: (mute: boolean) => void;
   switchInstrumentAction: (noteIndex: number) => void;
   resetAction: () => void;
 }
 
+const getBarDuration = (tempo: number, beats: number) => (60 / tempo) * beats * 1000;
+
 export const useMetronomeStore = create<Store>((set) => {
-  // const action = <T>(args:T, setter: (draft: Store) => Store) => () => set((state) => produce(state, setter))
+  const tempo = storage?.tempo ?? DEFAULTS.tempo;
+  const beats = storage?.beats ?? DEFAULTS.beats;
+  const volume = storage?.volume ?? DEFAULTS.volume;
+  const mute = storage?.mute ?? DEFAULTS.mute;
+  const inputLag = storage?.inputLag ?? DEFAULTS.inputLag;
+  const inputLagEnabled = storage?.inputLagEnabled ?? DEFAULTS.inputLagEnabled;
+  const subdivision = storage?.subdivision ?? DEFAULTS.subdivision;
 
   return {
     title: '',
-    tempo: storage?.tempo || DEFAULTS.tempo,
-    beats: storage?.beats || DEFAULTS.beats,
-    subdivision: storage?.subdivision || DEFAULTS.subdivision,
+    volume,
+    mute,
+    tempo,
+    beats,
+    inputLag,
+    inputLagEnabled,
+    subdivision,
+    barDuration: getBarDuration(tempo, beats),
     noteValue: DEFAULTS.noteValue,
     isPlaying: false,
-    isTraining: false,
+    isTraining: storage?.isTraining ?? DEFAULTS.isTraining,
     notes: [{ instrument: 'fxMetronome1' }, { instrument: 'fxMetronome3' }],
 
     setBeatsAction: (beats) =>
@@ -59,6 +91,7 @@ export const useMetronomeStore = create<Store>((set) => {
 
           draft.beats = beats;
           draft.notes = gridAlignment(notes, beats, state.subdivision);
+          draft.barDuration = getBarDuration(draft.tempo, draft.beats);
           settingsStorage.update({ beats });
         });
       }),
@@ -74,6 +107,7 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.isTraining = isTraining;
+          settingsStorage.update({ isTraining });
         });
       }),
 
@@ -93,6 +127,7 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.tempo = MINMAX.range('tempo', tempo);
+          draft.barDuration = getBarDuration(draft.tempo, draft.beats);
           settingsStorage.update({ tempo });
         });
       }),
@@ -101,6 +136,38 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.title = title;
+        });
+      }),
+
+    setVolumeAction: (volume) =>
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.volume = volume;
+          settingsStorage.update({ volume });
+        });
+      }),
+
+    setMuteAction: (mute) =>
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.mute = mute;
+          settingsStorage.update({ mute });
+        });
+      }),
+
+    setInputLagAction: (inputLag) =>
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.inputLag = MINMAX.range('inputLag', inputLag);
+          settingsStorage.update({ inputLag });
+        });
+      }),
+
+    setInputLagEnabledAction: (inputLagEnabled) =>
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.inputLagEnabled = inputLagEnabled;
+          settingsStorage.update({ inputLagEnabled });
         });
       }),
 

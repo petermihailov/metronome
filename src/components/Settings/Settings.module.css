@@ -1,5 +1,30 @@
 .settings {
+  transition: opacity 100ms ease-out;
+}
+
+.values,
+.training {
   display: grid;
   grid-template-rows: 1fr;
   row-gap: var(--size-1);
+}
+
+.is-training.settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  column-gap: var(--size-2);
+}
+
+.is-training.is-playing {
+  opacity: var(--opacity-disabled);
+  pointer-events: none;
+}
+
+.time {
+  grid-column: 2 / -1;
+  font-weight: 1000;
+  font-size: var(--font-size-3);
+  line-height: var(--block-size-control);
+  text-align: center;
 }

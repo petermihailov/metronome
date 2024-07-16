@@ -11,8 +11,6 @@ import { Display } from '../Display';
 import { MainControl } from '../MainControl';
 import { Settings } from '../Settings';
 import { TodayTimer } from '../TodayTimer';
-// import { Training } from '../Training';
-// import { UpdatePrompt } from '../UpdatePrompt';
 
 import classes from './App.module.css';
 

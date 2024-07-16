@@ -13,37 +13,46 @@ export interface SelectOption<T> {
 
 export interface SelectProps<T>
   extends Omit<HTMLAttributes<HTMLSelectElement>, 'onChange' | 'children'> {
-  value?: T;
+  value: T;
+  title?: string;
   options: SelectOption<T>[];
   onChange?: (value: T) => void;
 }
 
-const Select = <T,>({ className, value, options, onChange, ...restProps }: SelectProps<T>) => {
+const Select = <T,>({
+  className,
+  value,
+  title,
+  options,
+  onChange,
+  ...restProps
+}: SelectProps<T>) => {
   const selectedIndex = options.findIndex((option) => option.value === value);
 
   const changeHandler: ChangeEventHandler<HTMLSelectElement> = (e) => {
-    const option = options[Number(e.target.value)];
+    const idx = Number(e.target.value);
+    const option = options[idx];
     onChange?.(option.value);
   };
 
   return (
     <div className={clsx(className, classes.select)}>
-      <select
-        className={classes.selectNative}
-        value={selectedIndex}
-        onChange={changeHandler}
-        {...restProps}
-      >
-        {options.map((option, idx) => (
-          <option key={idx} value={idx}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <label className={classes.label}>
+        {title && <span className={classes.title}>{title}</span>}
 
-      <div aria-hidden="true">
-        {options[selectedIndex]?.customLabel || options[selectedIndex]?.label}
-      </div>
+        <select
+          className={classes.selectNative}
+          value={selectedIndex}
+          onChange={changeHandler}
+          {...restProps}
+        >
+          {options.map((option, idx) => (
+            <option key={idx} value={idx}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
     </div>
   );
 };
