@@ -1,13 +1,9 @@
 .input-range {
-  --duration: 225ms;
-
   container: input-range-container / inline-size;
 }
 
 .input {
   inline-size: 100%;
-  transition: inline-size var(--duration) ease-out;
-  transition-delay: calc(2 * var(--duration));
 }
 
 .range {
@@ -16,20 +12,15 @@
   inset-inline: calc(var(--size-6) + var(--size-2)) 0;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--duration) ease-out;
-  transition-delay: 0ms;
 }
 
-@container input-range-container (inline-size > 34rem) {
+@container input-range-container (inline-size > 28rem) {
   .input {
     inline-size: var(--size-6);
-    transition-delay: var(--duration);
-    transition-delay: 0ms;
   }
 
   .range {
     opacity: 1;
     pointer-events: auto;
-    transition-delay: calc(2 * var(--duration));
   }
 }

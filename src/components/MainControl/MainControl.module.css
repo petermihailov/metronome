@@ -2,17 +2,44 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  block-size: var(--size-3);
 }
 
 .playing,
-.helpers {
+.actions {
   display: flex;
   gap: var(--size-0);
+  block-size: 100%;
+}
+
+.playing {
   align-items: center;
 }
 
+.actions {
+  align-items: start;
+}
+
+.training {
+  display: grid;
+  gap: var(--size-0);
+  justify-items: end;
+  cursor: pointer;
+}
+
+.training-button {
+  position: relative;
+}
+
+.training-button::before {
+  position: absolute;
+  inset: 0;
+  inset-block-end: -1rem;
+  content: '';
+}
+
 .play-button {
-  --size-icon: var(--size-3);
+  --size-icon: var(--font-size-5);
 
   flex: none;
 }
@@ -21,6 +48,13 @@
   font-weight: 700;
   font-size: var(--font-size-5);
   line-height: var(--font-lineheight-0);
+}
+
+.training-time {
+  font-weight: 700;
+  font-size: var(--font-size-2);
+  line-height: var(--font-lineheight-0);
+  opacity: var(--opacity-dimmed);
 }
 
 .update {

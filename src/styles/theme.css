@@ -26,7 +26,7 @@
   --radius-1: var(--font-size-0);
   --radius-2: var(--font-size-2);
   --radius-3: var(--font-size-4);
-  --radius-pill: 1e5px;
+  --radius-pill: 1e4px;
   --radius-round: 50%;
 
   /* sizes scale: 1.618 */
@@ -48,13 +48,9 @@
 :where(html[data-theme='dark']) {
   --color-accent-1: #00eaff;
   --color-accent-2: #ff357f;
-  --color-accent-3: #ffc107;
-  --color-accent-4: #7f20d2;
   --color-background-1: #121216;
   --color-background-2: #222226;
   --color-border: #fff2;
-  --color-error: #f03e3e;
-  --color-success: #51cf66;
   --color-text: #fffe;
 
   color-scheme: dark;

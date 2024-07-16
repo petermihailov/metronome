@@ -20,15 +20,28 @@ const tapTempo = {
 };
 
 export const useHotkeys = () => {
-  const { isPlaying, tempo, setIsPlayingAction, setTempoAction, resetAction } = useMetronomeStore(
-    useShallow(({ isPlaying, tempo, setIsPlayingAction, setTempoAction, resetAction }) => ({
-      isPlaying,
-      tempo,
-      setIsPlayingAction,
-      setTempoAction,
-      resetAction,
-    })),
-  );
+  const { isPlaying, tempo, setIsPlayingAction, setTempoAction, resetAction, mute, setMuteAction } =
+    useMetronomeStore(
+      useShallow(
+        ({
+          isPlaying,
+          tempo,
+          setIsPlayingAction,
+          setTempoAction,
+          resetAction,
+          mute,
+          setMuteAction,
+        }) => ({
+          isPlaying,
+          tempo,
+          setIsPlayingAction,
+          setTempoAction,
+          resetAction,
+          mute,
+          setMuteAction,
+        }),
+      ),
+    );
 
   useEffect(() => {
     const callback = (event: KeyboardEvent) => {
@@ -43,6 +56,10 @@ export const useHotkeys = () => {
 
       if (event.code === 'KeyR') {
         resetAction();
+      }
+
+      if (event.code === 'KeyM') {
+        setMuteAction(!mute);
       }
 
       if (event.shiftKey) {
@@ -69,5 +86,5 @@ export const useHotkeys = () => {
     return () => {
       document.removeEventListener('keydown', callback);
     };
-  }, [isPlaying, resetAction, setIsPlayingAction, setTempoAction, tempo]);
+  }, [isPlaying, mute, resetAction, setIsPlayingAction, setMuteAction, setTempoAction, tempo]);
 };

@@ -1,20 +1,19 @@
 .range {
+  --track-fill: 0%;
+
   display: grid;
   gap: var(--size-0);
-  min-inline-size: var(--size-6);
   container: range-container / inline-size;
 }
 
 .input {
   --track-height: 0.5ex;
-  --track-fill: 0%;
   --thumb-size: 3ex;
   --thumb-offset: -1.25ex;
   --thumb-highlight-size: 0;
 
   display: block;
   inline-size: 100%;
-  padding-inline-start: 1px;
   background: 0 0;
   appearance: none;
 }
@@ -76,12 +75,20 @@
 }
 
 .labels {
+  position: relative;
   display: flex;
   justify-content: space-between;
+  background:
+    linear-gradient(to right, #fffe 2px, transparent 2px) repeat-x 11.5px 0,
+    linear-gradient(to right, #fffa 2px, transparent 2px) repeat-x 11.5px 0,
+    linear-gradient(to right, #fffa 2px, transparent 2px) repeat-x 11.5px 0;
+  background-size:
+    calc((100% - 25px) / 14) 6px,
+    calc((100% - 25px) / 28) 4px,
+    0 0;
 }
 
 .label {
-  position: relative;
   inline-size: var(--size-2);
   padding-block-start: var(--size-0);
   font-weight: 500;
@@ -97,14 +104,19 @@
   transition-duration: 200ms;
 }
 
-.label::before {
+.popover {
   position: absolute;
-  inset-block-start: 0;
-  inset-inline-start: calc(50% - 1px);
-  content: '';
-  inline-size: 2px;
-  block-size: var(--size-00);
-  background-color: var(--color-text);
+  inset-block-end: calc(100% + var(--size-000));
+  inset-inline-start: var(--track-fill);
+  padding: 0 var(--size-000);
+  font-size: var(--font-size-0);
+  border-radius: var(--radius-pill);
+  background-color: #fff5;
+  opacity: 0;
+  pointer-events: none;
+  transition-property: transform, opacity;
+  transition-timing-function: ease-out;
+  transition-duration: 200ms;
 }
 
 @media (hover: hover) {
@@ -128,9 +140,26 @@
 }
 
 @container range-container (inline-size < 28rem) {
+  .labels {
+    background-size:
+      calc((100% - 25px) / 7) 6px,
+      calc((100% - 25px) / 14) 4px,
+      calc((100% - 25px) / 28) 3px;
+  }
+
   .label:nth-child(4n + 3) {
+    inline-size: 2px;
     color: #0000;
     transform: scale(0.75);
     transition-delay: 0ms, 400ms, 600ms;
+  }
+}
+
+@container range-container (inline-size < 20rem) {
+  .labels {
+    background-size:
+      calc((100% - 25px) / 7) 6px,
+      calc((100% - 25px) / 14) 4px,
+      0 0;
   }
 }

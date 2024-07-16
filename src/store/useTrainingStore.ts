@@ -1,55 +1,85 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
 
+import type { TrainingType } from '../components/Training/Training.types';
+import { DEFAULTS } from '../constants';
 import { Storage } from '../lib/LocalStorage';
-import { dateFormat } from '../utils/format';
 
-const TIME_DEFAULT = { current: 0, session: 0, day: 0 };
+const trainingStorage = new Storage<{
+  alternate: boolean;
+  from: number;
+  to: number;
+  every: number;
+  type: TrainingType;
+}>('settings', {
+  alternate: false,
+  from: 60,
+  to: 100,
+  every: 8,
+  type: 'tempo',
+});
 
-const currentDate = dateFormat();
-const trainingStorage = new Storage<{ [date: string]: number }>('training');
-const storageValue = trainingStorage.get();
-
-if (!storageValue) {
-  trainingStorage.set({ [currentDate]: 0 });
-} else {
-  if (storageValue[currentDate]) {
-    TIME_DEFAULT.day = storageValue[currentDate];
-  }
-}
-
-type Seconds = number;
+const storage = trainingStorage.get()!;
 
 interface Store {
-  time: {
-    current: Seconds;
-    session: Seconds;
-    day: Seconds;
-  };
+  alternate: boolean;
+  from: number;
+  to: number;
+  every: number;
+  type: TrainingType;
 
-  addSecond: () => void;
-  resetCurrentTime: () => void;
+  setAlternate: (value: boolean) => void;
+  setFrom: (value: number) => void;
+  setTo: (value: number) => void;
+  setEvery: (value: number) => void;
+  setType: (value: TrainingType) => void;
 }
 
 export const useTrainingStore = create<Store>((set) => {
   return {
-    time: TIME_DEFAULT,
+    alternate: storage.alternate ?? false,
+    from: storage.from ?? DEFAULTS.tempo,
+    to: storage.to ?? DEFAULTS.tempo + 20,
+    every: storage.every ?? DEFAULTS.every,
+    type: storage.type ?? 'tempo',
 
-    addSecond: () =>
+    setAlternate: (alternate) =>
       set((state) => {
         return produce(state, (draft) => {
-          draft.time.current++;
-          draft.time.session++;
-          draft.time.day++;
-
-          trainingStorage.update({ [currentDate]: draft.time.day });
+          draft.alternate = alternate;
+          trainingStorage.update({ alternate });
         });
       }),
 
-    resetCurrentTime: () =>
+    setFrom: (from) =>
       set((state) => {
         return produce(state, (draft) => {
-          draft.time.current = 0;
+          draft.from = from;
+          trainingStorage.update({ from });
+        });
+      }),
+
+    setTo: (to) =>
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.to = to;
+          trainingStorage.update({ to });
+        });
+      }),
+
+    setEvery: (every) =>
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.every = every;
+          trainingStorage.update({ every });
+        });
+      }),
+
+    setType: (type) =>
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.type = type;
+          trainingStorage.update({ type });
         });
       }),
   };

@@ -1,12 +1,12 @@
 import { useShallow } from 'zustand/react/shallow';
 
-import { useTrainingStore } from '../../store/useTrainingStore';
+import { usePlayingTimeStore } from '../../store/usePlayingTimeStore';
 import { timeFormat } from '../../utils/format';
 
 import classes from './TodayTimer.module.css';
 
 const TodayTimer = () => {
-  const { dayTime } = useTrainingStore(
+  const { dayTime } = usePlayingTimeStore(
     useShallow(({ time }) => ({ dayTime: timeFormat(time.day) })),
   );
 

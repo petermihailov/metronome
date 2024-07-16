@@ -7,7 +7,7 @@
   max-inline-size: var(--app-max-size);
   margin-inline: auto;
   padding: min(5vw, var(--size-3));
-  border-radius: var(--radius-3);
+  border-radius: calc(0.18rem + min(5vw, calc(var(--size-2) + var(--size-0))));
   background-color: var(--color-background-2);
   box-shadow: 0 0 0 40vmax var(--color-background-2);
   transition: box-shadow 600ms ease-in;
