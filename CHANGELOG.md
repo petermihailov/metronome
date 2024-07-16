@@ -1,3 +1,12 @@
+# [1.12.0](https://github.com/petermihailov/metronome/compare/v1.11.7...v1.12.0) (2024-07-16)
+
+
+### Features
+
+* training ([81e63b8](https://github.com/petermihailov/metronome/commit/81e63b8bface50d7b74c6a852a85b39bae189020))
+
+
+
 ## [1.11.7](https://github.com/petermihailov/metronome/compare/v1.11.6...v1.11.7) (2024-02-04)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * some fixes ([801c7a7](https://github.com/petermihailov/metronome/commit/801c7a72d9c77d5aafc804118fecca3f6161ba27))
-
-
-
-## [1.11.3](https://github.com/petermihailov/metronome/compare/v1.11.2...v1.11.3) (2023-10-22)
-
-
-### Bug Fixes
-
-* theme color ([d8c7736](https://github.com/petermihailov/metronome/commit/d8c7736f5566304dd0e0888fc9aee9ff90d22b35))
 
 
 
