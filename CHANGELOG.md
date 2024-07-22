@@ -1,3 +1,12 @@
+## [1.12.1](https://github.com/petermihailov/metronome/compare/v1.12.0...v1.12.1) (2024-07-22)
+
+
+### Bug Fixes
+
+* memoize ([f665de0](https://github.com/petermihailov/metronome/commit/f665de01adb2ba10fea0b599afd69f794e2b15ca))
+
+
+
 # [1.12.0](https://github.com/petermihailov/metronome/compare/v1.11.7...v1.12.0) (2024-07-16)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * safari range ([43a88fb](https://github.com/petermihailov/metronome/commit/43a88fb668949581d33d3746e55371760e067c85))
-
-
-
-## [1.11.4](https://github.com/petermihailov/metronome/compare/v1.11.3...v1.11.4) (2023-11-04)
-
-
-### Bug Fixes
-
-* some fixes ([801c7a7](https://github.com/petermihailov/metronome/commit/801c7a72d9c77d5aafc804118fecca3f6161ba27))
 
 
 
