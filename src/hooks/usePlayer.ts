@@ -32,7 +32,6 @@ export function usePlayer() {
       player.current.setKit(kit);
       player.current.setOnBeat(setBeatAction);
     }
-    window.DEBUG.player = new Player();
   }, [kit, setBeatAction]);
 
   /** Sync playing */

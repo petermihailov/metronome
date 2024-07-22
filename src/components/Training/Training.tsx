@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { memo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 import type { TrainingType } from './Training.types';
@@ -53,4 +54,4 @@ const Training = ({ className }: TrainingProps) => {
   );
 };
 
-export default Training;
+export default memo(Training);

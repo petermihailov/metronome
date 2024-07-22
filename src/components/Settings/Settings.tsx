@@ -66,7 +66,7 @@ const Settings = () => {
           min={MINMAX.tempo.min}
           title="tempo"
           value={tempo}
-          onChange={(value) => setTempoAction(value)}
+          onChange={setTempoAction}
         />
 
         <InputNumber
@@ -75,7 +75,7 @@ const Settings = () => {
           min={MINMAX.beats.min}
           title="beats"
           value={beats}
-          onChange={(value) => setBeatsAction(value)}
+          onChange={setBeatsAction}
         />
 
         <InputNumber
@@ -84,7 +84,7 @@ const Settings = () => {
           min={MINMAX.subdivision.min}
           title="subdivision"
           value={subdivision}
-          onChange={(value) => setSubdivisionAction(value)}
+          onChange={setSubdivisionAction}
         />
       </div>
 

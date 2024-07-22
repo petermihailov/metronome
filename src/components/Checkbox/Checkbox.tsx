@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { memo } from 'react';
 
 import imgLedDisabled from './led-black.png';
 import imgLedEnabled from './led-red.png';
@@ -42,4 +43,4 @@ const Checkbox = ({ className, label, checked, disabled, onClick }: CheckboxProp
   );
 };
 
-export default Checkbox;
+export default memo(Checkbox);

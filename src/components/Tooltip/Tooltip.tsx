@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { memo } from 'react';
 
 import classes from './Tooltip.module.css';
 
@@ -19,4 +19,4 @@ const Tooltip = ({ className, placement = 'bottom', ...restProps }: TooltipProps
   return <span className={clsx(className, classes.tooltip, classes[placement])} {...restProps} />;
 };
 
-export default Tooltip;
+export default memo(Tooltip);

@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import type { HTMLAttributes } from 'react';
+import { memo } from 'react';
 
 import { InputNumber } from '../InputNumber';
 import { Range } from '../Range';
@@ -51,4 +52,4 @@ const InputRange = ({
   );
 };
 
-export default InputRange;
+export default memo(InputRange);

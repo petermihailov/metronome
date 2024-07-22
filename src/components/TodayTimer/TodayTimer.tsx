@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 import { usePlayingTimeStore } from '../../store/usePlayingTimeStore';
@@ -13,4 +14,4 @@ const TodayTimer = () => {
   return <time className={classes.todayTimer}>Total today: {dayTime}</time>;
 };
 
-export default TodayTimer;
+export default memo(TodayTimer);

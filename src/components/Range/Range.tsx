@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import type { ChangeEventHandler, HTMLAttributes } from 'react';
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 import { minMax, percentOfRange } from '../../utils/math';
 
@@ -101,4 +101,4 @@ const Range = ({
   );
 };
 
-export default Range;
+export default memo(Range);

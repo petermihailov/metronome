@@ -1,3 +1,4 @@
+import { memo } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { useShallow } from 'zustand/react/shallow';
@@ -21,6 +22,10 @@ const MainControl = () => {
       setIsTrainingAction,
     })),
   );
+
+  // const stop = useCallback(() => {
+  //   setIsPlayingAction(false);
+  // }, [setIsPlayingAction]);
 
   const { trainingTime } = useTrainingTime();
 
@@ -69,4 +74,4 @@ const MainControl = () => {
   );
 };
 
-export default MainControl;
+export default memo(MainControl);

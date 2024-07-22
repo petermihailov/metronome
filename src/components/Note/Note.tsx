@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 import type { Note as NoteType } from '../../types/common';
 
@@ -39,4 +39,4 @@ const Note = ({ className, note, beat, active, ...restProps }: NoteProps) => {
   );
 };
 
-export default Note;
+export default memo(Note);

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import type { DialogHTMLAttributes, MouseEventHandler } from 'react';
-import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
+import { memo, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 
 import classes from './Dialog.module.css';
 
@@ -50,4 +50,4 @@ const Dialog = forwardRef<DialogHandlers, DialogProps>(function Dialog(props, re
   );
 });
 
-export default Dialog;
+export default memo(Dialog);

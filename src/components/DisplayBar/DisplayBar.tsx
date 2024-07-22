@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { memo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 import { MINMAX } from '../../constants';
@@ -79,4 +80,4 @@ const DisplayBar = () => {
   );
 };
 
-export default DisplayBar;
+export default memo(DisplayBar);

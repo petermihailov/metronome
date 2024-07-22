@@ -7,7 +7,11 @@ import { useMetronomeStore } from '../../store/useMetronomeStore';
 import { useTrainingStore } from '../../store/useTrainingStore';
 import { timeFormat } from '../../utils/format';
 
-export const useTrainingTime = () => {
+type Options = Partial<{
+  onStop: () => void;
+}>;
+
+export const useTrainingTime = ({ onStop }: Options = {}) => {
   const [trainingTime, setTrainingTime] = useState('00:00');
 
   const { alternate, every, from, to, type, setFrom } = useTrainingStore(
@@ -64,7 +68,6 @@ export const useTrainingTime = () => {
   );
 
   const refTrainingGenerator = useRef<Generator<number>>();
-  const refFrom = useRef(from);
   const refIsDecrease = useRef(from > to);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,11 +84,9 @@ export const useTrainingTime = () => {
   useEffect(() => {
     if (isTraining) {
       if (isPlaying) {
-        refFrom.current = from;
         refTrainingGenerator.current = rangeGenerator({ from, to });
       } else {
         refIsDecrease.current = false;
-        onChange(refFrom.current);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,7 +134,7 @@ export const useTrainingTime = () => {
           const { value, done } = refTrainingGenerator.current.next();
           if (value !== undefined && !done) onChange(value);
         } else {
-          // stop?
+          onStop?.();
         }
       }
     }
@@ -148,6 +149,7 @@ export const useTrainingTime = () => {
     notes.length,
     onChange,
     to,
+    onStop,
   ]);
 
   return {

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 
 import type { IconName } from '../../types/icons';
 import { ButtonIcon } from '../ButtonIcon';
@@ -82,4 +82,4 @@ const ToggleableRange = ({
   );
 };
 
-export default ToggleableRange;
+export default memo(ToggleableRange);

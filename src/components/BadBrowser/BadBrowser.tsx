@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import classes from './BadBrowser.module.css';
 
 const BadBrowser = () => {
@@ -8,4 +10,4 @@ const BadBrowser = () => {
   );
 };
 
-export default BadBrowser;
+export default memo(BadBrowser);

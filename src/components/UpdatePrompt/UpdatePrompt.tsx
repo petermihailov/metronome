@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { memo, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 // eslint-disable-next-line import/no-unresolved
 import { useRegisterSW } from 'virtual:pwa-register/react';
@@ -97,4 +97,4 @@ const UpdatePrompt = () => {
   return null;
 };
 
-export default UpdatePrompt; //createPortal(<UpdatePrompt />, document.querySelector('[data-popups]')!);
+export default memo(UpdatePrompt); //createPortal(<UpdatePrompt />, document.querySelector('[data-popups]')!);

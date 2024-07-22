@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import type { HTMLAttributes, MouseEventHandler } from 'react';
-import { forwardRef } from 'react';
+import { memo, forwardRef } from 'react';
 
 import type { IconName } from '../../types/icons';
 import { Icon } from '../Icon';
@@ -57,4 +57,4 @@ const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
 
 ButtonIcon.displayName = 'ButtonIcon';
 
-export default ButtonIcon;
+export default memo(ButtonIcon);

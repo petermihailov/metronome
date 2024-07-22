@@ -188,6 +188,7 @@ export const useMetronomeStore = create<Store>((set) => {
 
     resetAction: () =>
       set((state) => {
+        console.log('resetAction');
         return produce(state, (draft) => {
           const { tempo, beats, subdivision } = DEFAULTS;
 
