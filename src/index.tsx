@@ -1,29 +1,28 @@
-import { createRoot } from 'react-dom/client';
+import { createRoot } from 'react-dom/client'
 
-import './styles/reset.css';
-import './styles/fonts.css';
-import './styles/theme.css';
-import './styles/main.css';
-import './styles/helpers.css';
+import './styles/reset.css'
+import './styles/fonts.css'
+import './styles/theme.css'
+import './styles/main.css'
+import './styles/helpers.css'
 
-import { App } from './components/App';
-import { BadBrowser } from './components/BadBrowser';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import env from './env';
-import { Sprite } from './icons';
-import checkBrowser from './utils/checkBrowser';
+import { App } from './components/App'
+import { ErrorBoundary } from './components/ErrorBoundary'
+import { Sprite } from './components/icons'
+import { BadBrowser } from './components/ui/BadBrowser'
+import env from './env'
+import checkBrowser from './utils/checkBrowser'
 
-window.DEBUG = {};
-const container = document.querySelector('[data-react-root]');
+const container = document.querySelector('[data-react-root]')
 
 if (container) {
-  const root = createRoot(container);
-  const isBadBrowser = !checkBrowser.test(navigator.userAgent);
+  const root = createRoot(container)
+  const isBadBrowser = !checkBrowser.test(navigator.userAgent)
 
   root.render(
     <ErrorBoundary>
       <Sprite />
       {!env.DEV && isBadBrowser ? <BadBrowser /> : <App />}
     </ErrorBoundary>,
-  );
+  )
 }

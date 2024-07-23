@@ -1,9 +1,15 @@
-:where(html) {
-  /* misc */
-  --border: 0.18rem solid var(--color-border);
-  --opacity-disabled: 0.48;
-  --opacity-dimmed: 0.8;
+:where(html[data-theme='dark']) {
+  --color-accent-1: #00eaff;
+  --color-accent-2: #ff357f;
+  --color-background-1: #000;
+  --color-background-2: #222226;
+  --color-border: #fff2;
+  --color-text: #fffe;
 
+  color-scheme: dark;
+}
+
+:where(html) {
   /* fonts */
   --font-sans: sfns, system-ui, -apple-system, segoe ui, roboto, ubuntu, sans-serif;
   --font-mono: dank mono, operator mono, fira mono, sf mono, monospace;
@@ -43,15 +49,9 @@
   --size-8: 29.031rem;
   --size-icon: var(--font-size-4);
   --block-size-control: var(--font-size-6);
-}
 
-:where(html[data-theme='dark']) {
-  --color-accent-1: #00eaff;
-  --color-accent-2: #ff357f;
-  --color-background-1: #121216;
-  --color-background-2: #222226;
-  --color-border: #fff2;
-  --color-text: #fffe;
-
-  color-scheme: dark;
+  /* misc */
+  --border: 0.18rem solid var(--color-border);
+  --opacity-disabled: 0.48;
+  --opacity-dimmed: 0.8;
 }

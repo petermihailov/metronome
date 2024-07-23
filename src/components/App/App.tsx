@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo } from 'react'
 
 import {
   useButtonsPreventSpacePress,
@@ -6,20 +6,20 @@ import {
   usePlayer,
   useTrainingTimeUpdate,
   useWakeLock,
-} from '../../hooks';
-import { Display } from '../Display';
-import { MainControl } from '../MainControl';
-import { Settings } from '../Settings';
-import { TodayTimer } from '../TodayTimer';
+} from '../../hooks'
+import { Display } from '../features/Display'
+import { MainControl } from '../features/MainControl'
+import { Settings } from '../features/Settings'
+import { TodayTimer } from '../features/TodayTimer'
 
-import classes from './App.module.css';
+import classes from './App.module.css'
 
 const App = () => {
-  usePlayer();
-  useTrainingTimeUpdate();
-  useHotkeys();
-  useWakeLock();
-  useButtonsPreventSpacePress();
+  usePlayer()
+  useTrainingTimeUpdate()
+  useHotkeys()
+  useWakeLock()
+  useButtonsPreventSpacePress()
 
   return (
     <div className={classes.app}>
@@ -28,7 +28,7 @@ const App = () => {
       <Settings />
       <TodayTimer />
     </div>
-  );
-};
+  )
+}
 
-export default memo(App);
+export default memo(App)

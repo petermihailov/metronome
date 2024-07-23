@@ -1,15 +1,15 @@
-import { create } from 'zustand';
+import { create } from 'zustand'
 
-import { BEAT_DEFAULT } from '../constants';
-import type { Beat } from '../types/common';
+import { BEAT_DEFAULT } from '../constants'
+import type { Beat } from '../types/common'
 
 interface Store {
-  beat: Beat;
-  beatsPlayed: number;
-  barsPlayed: number;
+  beat: Beat
+  beatsPlayed: number
+  barsPlayed: number
 
-  setBeatAction: (beat: Beat) => void;
-  reset: () => void;
+  setBeatAction: (beat: Beat) => void
+  reset: () => void
 }
 
 export const useBeatStore = create<Store>((set) => {
@@ -31,5 +31,5 @@ export const useBeatStore = create<Store>((set) => {
         barsPlayed: 0,
         beatsPlayed: 0,
       })),
-  };
-});
+  }
+})

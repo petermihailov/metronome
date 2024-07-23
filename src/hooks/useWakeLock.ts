@@ -1,20 +1,20 @@
-import { useEffect, useRef } from 'react';
-import { useShallow } from 'zustand/react/shallow';
+import { useEffect, useRef } from 'react'
+import { useShallow } from 'zustand/react/shallow'
 
-import { useMetronomeStore } from '../store/useMetronomeStore';
+import { useMetronomeStore } from '../store/useMetronomeStore'
 
 export const useWakeLock = () => {
-  const refLockWindow = useRef<WakeLockSentinel>();
+  const refLockWindow = useRef<WakeLockSentinel>()
 
-  const { isPlaying } = useMetronomeStore(useShallow(({ isPlaying }) => ({ isPlaying })));
+  const { isPlaying } = useMetronomeStore(useShallow(({ isPlaying }) => ({ isPlaying })))
 
   useEffect(() => {
     if ('wakeLock' in navigator) {
       if (isPlaying) {
-        navigator.wakeLock.request('screen').then((res) => (refLockWindow.current = res));
+        navigator.wakeLock.request('screen').then((res) => (refLockWindow.current = res))
       } else {
-        refLockWindow.current?.release().then();
+        refLockWindow.current?.release().then()
       }
     }
-  }, [isPlaying]);
-};
+  }, [isPlaying])
+}

@@ -1,34 +1,34 @@
-import { produce } from 'immer';
-import { create } from 'zustand';
+import { produce } from 'immer'
+import { create } from 'zustand'
 
-import { Storage } from '../lib/LocalStorage';
-import { dateFormat } from '../utils/format';
+import { Storage } from '../lib/LocalStorage'
+import { dateFormat } from '../utils/format'
 
-const TIME_DEFAULT = { current: 0, session: 0, day: 0 };
+const TIME_DEFAULT = { current: 0, session: 0, day: 0 }
 
-const currentDate = dateFormat();
-const playingStorage = new Storage<{ [date: string]: number }>('playing');
-const storageValue = playingStorage.get();
+const currentDate = dateFormat()
+const playingStorage = new Storage<{ [date: string]: number }>('playing')
+const storageValue = playingStorage.get()
 
 if (!storageValue) {
-  playingStorage.set({ [currentDate]: 0 });
+  playingStorage.set({ [currentDate]: 0 })
 } else {
   if (storageValue[currentDate]) {
-    TIME_DEFAULT.day = storageValue[currentDate];
+    TIME_DEFAULT.day = storageValue[currentDate]
   }
 }
 
-type Seconds = number;
+type Seconds = number
 
 interface Store {
   time: {
-    current: Seconds;
-    session: Seconds;
-    day: Seconds;
-  };
+    current: Seconds
+    session: Seconds
+    day: Seconds
+  }
 
-  addSecond: () => void;
-  resetCurrentTime: () => void;
+  addSecond: () => void
+  resetCurrentTime: () => void
 }
 
 export const usePlayingTimeStore = create<Store>((set) => {
@@ -38,19 +38,19 @@ export const usePlayingTimeStore = create<Store>((set) => {
     addSecond: () =>
       set((state) => {
         return produce(state, (draft) => {
-          draft.time.current++;
-          draft.time.session++;
-          draft.time.day++;
+          draft.time.current++
+          draft.time.session++
+          draft.time.day++
 
-          playingStorage.update({ [currentDate]: draft.time.day });
-        });
+          playingStorage.update({ [currentDate]: draft.time.day })
+        })
       }),
 
     resetCurrentTime: () =>
       set((state) => {
         return produce(state, (draft) => {
-          draft.time.current = 0;
-        });
+          draft.time.current = 0
+        })
       }),
-  };
-});
+  }
+})

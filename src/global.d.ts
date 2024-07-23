@@ -1,15 +1,15 @@
-import type { Player } from './lib/Player';
+import type { Player } from './lib/Player'
 
-export {};
+export {}
 
 interface Debug {
-  player: Player;
+  player: Player
 }
 
 declare global {
   interface Window {
-    webkitAudioContext: typeof AudioContext;
-    webkitOfflineAudioContext: typeof OfflineAudioContext;
-    DEBUG: Partial<Debug>;
+    webkitAudioContext: typeof AudioContext
+    webkitOfflineAudioContext: typeof OfflineAudioContext
+    DEBUG: Partial<Debug>
   }
 }

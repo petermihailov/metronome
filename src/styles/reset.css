@@ -81,13 +81,3 @@ a:not([class]) {
   to ensure they are clearly in view */
   scroll-padding-block-end: 8vh;
 }
-
-/* :focus-visible { */
-
-/*  --outline-size: max(2px, 0.2rem); */
-
-/*  outline: var(--outline-size) dashed var(--color-accent-2); */
-
-/*  outline-offset: var(--outline-size); */
-
-/* } */

@@ -1,4 +1,4 @@
-const { propertyOrdering, selectorOrdering } = require('stylelint-semantic-groups');
+const { propertyOrdering, selectorOrdering } = require('stylelint-semantic-groups')
 
 module.exports = {
   extends: ['stylelint-config-standard', 'stylelint-config-prettier'],
@@ -14,4 +14,4 @@ module.exports = {
     'number-max-precision': 4,
     'declaration-block-no-redundant-longhand-properties': null,
   },
-};
+}

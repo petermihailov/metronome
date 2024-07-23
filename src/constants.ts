@@ -1,12 +1,12 @@
-import type { Beat, Instrument } from './types/common';
-import { minMax } from './utils/math';
+import type { Beat, Instrument } from './types/common'
+import { minMax } from './utils/math'
 
-export const INSTRUMENTS: Instrument[] = ['fxMetronome1', 'fxMetronome2', 'fxMetronome3'];
+export const INSTRUMENTS: Instrument[] = ['fxMetronome1', 'fxMetronome2', 'fxMetronome3']
 
 export const BEAT_DEFAULT: Beat = {
   index: 0,
   note: { instrument: 'fxMetronome1' },
-};
+}
 
 export const MINMAX = (() => {
   const ranges = {
@@ -15,16 +15,16 @@ export const MINMAX = (() => {
     every: { min: 1, max: 16 },
     subdivision: { min: 1, max: 16 },
     inputLag: { min: 50, max: 250 },
-  } as const;
+  } as const
 
   return {
     ...ranges,
     range(key: keyof typeof ranges, value: number) {
-      const { min, max } = MINMAX[key];
-      return minMax(value, { min, max });
+      const { min, max } = MINMAX[key]
+      return minMax(value, { min, max })
     },
-  };
-})();
+  }
+})()
 
 export const DEFAULTS = {
   tempo: 60,
@@ -37,4 +37,4 @@ export const DEFAULTS = {
   inputLag: 150,
   inputLagEnabled: false,
   isTraining: false,
-} as const;
+} as const
