@@ -9,7 +9,7 @@ import { timeFormat } from '../../../utils/format'
 import { ButtonIcon } from '../../ui/ButtonIcon'
 import { ButtonPlay } from '../../ui/ButtonPlay'
 import { Checkbox } from '../../ui/Checkbox'
-import { useTrainingTime } from '../Settings/Training/useTrainingTime'
+import { useTraining } from '../Settings/Training/useTraining'
 
 import classes from './MainControl.module.css'
 
@@ -27,7 +27,7 @@ const MainControl = () => {
   //   setIsPlayingAction(false);
   // }, [setIsPlayingAction]);
 
-  const { trainingTime } = useTrainingTime()
+  const { trainingTime } = useTraining()
 
   const { currentTime } = usePlayingTimeStore(
     useShallow(({ time }) => ({ currentTime: timeFormat(time.current) })),

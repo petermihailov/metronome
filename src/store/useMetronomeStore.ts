@@ -6,23 +6,25 @@ import { Storage } from '../lib/LocalStorage'
 import type { Instrument, Note } from '../types/common'
 
 const settingsStorage = new Storage<{
-  tempo: number
-  subdivision: number
   beats: number
-  isTraining: boolean
-  volume: number
-  mute: boolean
   inputLag: number
   inputLagEnabled: boolean
+  isTraining: boolean
+  mute: boolean
+  notes: Note[]
+  subdivision: number
+  tempo: number
+  volume: number
 }>('settings', {
-  tempo: DEFAULTS.tempo,
   beats: DEFAULTS.beats,
-  subdivision: DEFAULTS.subdivision,
-  isTraining: DEFAULTS.isTraining,
-  volume: DEFAULTS.volume,
-  mute: DEFAULTS.mute,
   inputLag: DEFAULTS.inputLag,
   inputLagEnabled: DEFAULTS.inputLagEnabled,
+  isTraining: DEFAULTS.isTraining,
+  mute: DEFAULTS.mute,
+  notes: [...DEFAULTS.notes],
+  subdivision: DEFAULTS.subdivision,
+  tempo: DEFAULTS.tempo,
+  volume: DEFAULTS.volume,
 })
 
 const storage = settingsStorage.get()
@@ -33,16 +35,15 @@ interface Store {
   subdivision: number
   beats: number
   notes: Note[]
-  title: string
   volume: number
   mute: boolean
   inputLag: number
   inputLagEnabled: boolean
-  barDuration: number
   isPlaying: boolean
   isTraining: boolean
 
   // Actions
+  applyGridAlignment: () => void
   setBeatsAction: (beats: number) => void
   setIsPlayingAction: (isPlaying: boolean) => void
   setIsTrainingAction: (isTraining: boolean) => void
@@ -50,49 +51,36 @@ interface Store {
   setTempoAction: (tempo: number) => void
   setInputLagAction: (value: number) => void
   setInputLagEnabledAction: (enabled: boolean) => void
-  setTitleAction: (title: string) => void
   setVolumeAction: (volume: number) => void
   setMuteAction: (mute: boolean) => void
   switchInstrumentAction: (noteIndex: number) => void
   resetAction: () => void
 }
 
-const getBarDuration = (tempo: number, beats: number) => (60 / tempo) * beats * 1000
-
 export const useMetronomeStore = create<Store>((set) => {
-  const tempo = storage?.tempo ?? DEFAULTS.tempo
-  const beats = storage?.beats ?? DEFAULTS.beats
-  const volume = storage?.volume ?? DEFAULTS.volume
-  const mute = storage?.mute ?? DEFAULTS.mute
-  const inputLag = storage?.inputLag ?? DEFAULTS.inputLag
-  const inputLagEnabled = storage?.inputLagEnabled ?? DEFAULTS.inputLagEnabled
-  const subdivision = storage?.subdivision ?? DEFAULTS.subdivision
-
   return {
-    title: '',
-    volume,
-    mute,
-    tempo,
-    beats,
-    inputLag,
-    inputLagEnabled,
-    subdivision,
-    barDuration: getBarDuration(tempo, beats),
-    noteValue: DEFAULTS.noteValue,
+    beats: storage!.beats,
+    inputLag: storage!.inputLag,
+    inputLagEnabled: storage!.inputLagEnabled,
     isPlaying: false,
-    isTraining: storage?.isTraining ?? DEFAULTS.isTraining,
-    notes: [{ instrument: 'fxMetronome1' }, { instrument: 'fxMetronome3' }],
+    isTraining: storage!.isTraining,
+    mute: storage!.mute,
+    noteValue: DEFAULTS.noteValue,
+    notes: storage!.notes,
+    subdivision: storage!.subdivision,
+    tempo: storage!.tempo,
+    volume: storage!.volume,
 
     setBeatsAction: (beats) =>
       set((state) => {
         return produce(state, (draft) => {
-          beats = MINMAX.range('beats', beats)
-          const notes: Note[] = Array(beats * state.subdivision)
+          draft.beats = MINMAX.range('beats', beats)
+          draft.notes = fillOrTrim(draft.notes, beats, draft.subdivision)
 
-          draft.beats = beats
-          draft.notes = gridAlignment(notes, beats, state.subdivision)
-          draft.barDuration = getBarDuration(draft.tempo, draft.beats)
-          settingsStorage.update({ beats })
+          settingsStorage.update({
+            beats: draft.beats,
+            notes: draft.notes,
+          })
         })
       }),
 
@@ -107,19 +95,20 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.isTraining = isTraining
-          settingsStorage.update({ isTraining })
+          settingsStorage.update({ isTraining: draft.isTraining })
         })
       }),
 
     setSubdivisionAction: (subdivision) =>
       set((state) => {
         return produce(state, (draft) => {
-          subdivision = MINMAX.range('subdivision', subdivision)
-          const notes: Note[] = Array(state.beats * subdivision)
+          draft.subdivision = MINMAX.range('subdivision', subdivision)
+          draft.notes = fillOrTrim(draft.notes, draft.beats, subdivision)
 
-          draft.subdivision = subdivision
-          draft.notes = gridAlignment(notes, state.beats, subdivision)
-          settingsStorage.update({ subdivision })
+          settingsStorage.update({
+            subdivision: draft.subdivision,
+            notes: draft.notes,
+          })
         })
       }),
 
@@ -127,15 +116,7 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.tempo = MINMAX.range('tempo', tempo)
-          draft.barDuration = getBarDuration(draft.tempo, draft.beats)
-          settingsStorage.update({ tempo })
-        })
-      }),
-
-    setTitleAction: (title) =>
-      set((state) => {
-        return produce(state, (draft) => {
-          draft.title = title
+          settingsStorage.update({ tempo: draft.tempo })
         })
       }),
 
@@ -143,7 +124,7 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.volume = volume
-          settingsStorage.update({ volume })
+          settingsStorage.update({ volume: draft.volume })
         })
       }),
 
@@ -151,7 +132,7 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.mute = mute
-          settingsStorage.update({ mute })
+          settingsStorage.update({ mute: draft.mute })
         })
       }),
 
@@ -159,7 +140,7 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.inputLag = MINMAX.range('inputLag', inputLag)
-          settingsStorage.update({ inputLag })
+          settingsStorage.update({ inputLag: draft.inputLag })
         })
       }),
 
@@ -167,7 +148,7 @@ export const useMetronomeStore = create<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.inputLagEnabled = inputLagEnabled
-          settingsStorage.update({ inputLagEnabled })
+          settingsStorage.update({ inputLagEnabled: draft.inputLagEnabled })
         })
       }),
 
@@ -183,37 +164,57 @@ export const useMetronomeStore = create<Store>((set) => {
 
           const next = order.indexOf(draft.notes[noteIndex].instrument) + 1
           draft.notes[noteIndex].instrument = order[next % order.length]
+
+          settingsStorage.update({ notes: draft.notes })
+        })
+      }),
+
+    applyGridAlignment: () =>
+      set((state) => {
+        return produce(state, (draft) => {
+          const { beats, subdivision } = draft
+
+          draft.notes = Array(beats * subdivision)
+            .fill({ instrument: 'fxMetronome3' })
+            .map((note, idx, arr) => {
+              const res = { ...note }
+              const isBeat = idx % (arr.length / beats) === 0
+
+              if (isBeat && subdivision !== 1) res.instrument = 'fxMetronome2'
+              if (idx === 0) res.instrument = 'fxMetronome1'
+
+              return res
+            })
+
+          settingsStorage.update({ notes: draft.notes })
         })
       }),
 
     resetAction: () =>
       set((state) => {
-        console.log('resetAction')
         return produce(state, (draft) => {
-          const { tempo, beats, subdivision } = DEFAULTS
+          const { tempo, beats, subdivision, notes } = DEFAULTS
 
           draft.tempo = tempo
           draft.beats = beats
           draft.subdivision = subdivision
-          settingsStorage.update({ tempo, beats, subdivision })
+          draft.notes = [...notes]
+
+          settingsStorage.update({
+            tempo: draft.tempo,
+            beats: draft.beats,
+            subdivision: draft.subdivision,
+            notes: draft.notes,
+          })
         })
       }),
   }
 })
 
 // Utils
-function gridAlignment(notes: Note[], beats: number, subdivision: number) {
-  const res: Note[] = []
 
-  for (let i = 0; i < notes.length; i++) {
-    const isBeat = i % (notes.length / beats) === 0
-
-    res[i] = {
-      instrument: isBeat && subdivision !== 1 ? 'fxMetronome2' : 'fxMetronome3',
-    }
-
-    if (i === 0) res[i].instrument = 'fxMetronome1'
-  }
-
-  return res
+function fillOrTrim(notes: Note[], beats: number, subdivision: number) {
+  return Array(beats * subdivision)
+    .fill(null)
+    .map((note, idx) => notes[idx] || { instrument: 'fxMetronome3' })
 }

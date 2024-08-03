@@ -11,7 +11,7 @@ type Options = Partial<{
   onStop: () => void
 }>
 
-export const useTrainingTime = ({ onStop }: Options = {}) => {
+export const useTraining = ({ onStop }: Options = {}) => {
   const [trainingTime, setTrainingTime] = useState('00:00')
 
   const { alternate, every, from, to, type, setFrom } = useTrainingStore(
@@ -30,6 +30,7 @@ export const useTrainingTime = ({ onStop }: Options = {}) => {
     isPlaying,
     isTraining,
     notes,
+    applyGridAlignment,
     setBeatsAction,
     setSubdivisionAction,
     setTempoAction,
@@ -42,6 +43,7 @@ export const useTrainingTime = ({ onStop }: Options = {}) => {
         isPlaying,
         isTraining,
         notes,
+        applyGridAlignment,
         setBeatsAction,
         setIsPlayingAction,
         setSubdivisionAction,
@@ -53,6 +55,7 @@ export const useTrainingTime = ({ onStop }: Options = {}) => {
         isPlaying,
         isTraining,
         notes,
+        applyGridAlignment,
         setBeatsAction,
         setIsPlayingAction,
         setSubdivisionAction,
@@ -121,6 +124,7 @@ export const useTrainingTime = ({ onStop }: Options = {}) => {
 
       if (value && !done) {
         onChange(value)
+        applyGridAlignment()
       } else {
         if (alternate) {
           if (!refIsDecrease.current) {
@@ -132,7 +136,10 @@ export const useTrainingTime = ({ onStop }: Options = {}) => {
           }
 
           const { value, done } = refTrainingGenerator.current.next()
-          if (value !== undefined && !done) onChange(value)
+          if (value !== undefined && !done) {
+            onChange(value)
+            applyGridAlignment()
+          }
         } else {
           onStop?.()
         }
@@ -140,6 +147,7 @@ export const useTrainingTime = ({ onStop }: Options = {}) => {
     }
   }, [
     alternate,
+    applyGridAlignment,
     barsPlayed,
     beat.index,
     every,
@@ -148,8 +156,8 @@ export const useTrainingTime = ({ onStop }: Options = {}) => {
     isTraining,
     notes.length,
     onChange,
-    to,
     onStop,
+    to,
   ])
 
   return {

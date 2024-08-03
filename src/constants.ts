@@ -31,6 +31,12 @@ export const DEFAULTS = {
   beats: 4,
   noteValue: 4,
   subdivision: 1,
+  notes: [
+    { instrument: 'fxMetronome1' },
+    { instrument: 'fxMetronome3' },
+    { instrument: 'fxMetronome3' },
+    { instrument: 'fxMetronome3' },
+  ],
   every: 8,
   volume: 1,
   mute: false,

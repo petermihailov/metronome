@@ -42,7 +42,7 @@ const Range = ({
   }
 
   useEffect(() => {
-    rangeRef.current?.style.setProperty('--track-fill', percentOfRange(value, min, max))
+    rangeRef.current?.style.setProperty('--track-fill', percentOfRange(value, { min, max }))
     if (decimalRef.current?.value) {
       decimalRef.current.value = String(value)
     }

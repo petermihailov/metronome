@@ -8,7 +8,7 @@ import type {
 } from 'react'
 import { memo, useEffect, useRef, useState } from 'react'
 
-import { minMax } from '../../../utils/math'
+import { inRange, minMax } from '../../../utils/math'
 import { ButtonIcon } from '../ButtonIcon'
 
 import classes from './InputNumber.module.css'
@@ -32,13 +32,19 @@ const InputNumber = ({
   onChange,
   ...restProps
 }: InputNumberProps) => {
-  const [textValue, setTextValue] = useState(String(value))
+  const [textValue, setTextValue] = useState(String(minMax(value, { min, max })))
 
   const inputRef = useRef<HTMLInputElement>(null)
   const increaseButtonRef = useRef<HTMLButtonElement>(null)
   const decreaseButtonRef = useRef<HTMLButtonElement>(null)
 
-  const setValue = (value: number) => onChange(minMax(value, { min, max }))
+  const setValue = (value: number, force?: boolean) => {
+    if (force) {
+      onChange(minMax(value, { min, max }))
+    } else if (inRange(value, { min, max })) {
+      onChange(value)
+    }
+  }
 
   const increase = () => setValue(value + 1)
   const decrease = () => setValue(value - 1)
@@ -57,26 +63,30 @@ const InputNumber = ({
     }
   }
 
-  const onKeyDownHandler: KeyboardEventHandler<HTMLInputElement> = (event) => {
-    if (['ArrowUp', 'ArrowDown'].includes(event.code)) {
-      event.stopPropagation()
+  const onKeyDownHandler: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (['ArrowUp', 'ArrowDown'].includes(e.code)) {
+      e.stopPropagation()
     }
 
-    if (event.shiftKey) {
-      if (event.code === 'ArrowUp') {
+    if (e.shiftKey) {
+      if (e.code === 'ArrowUp') {
         setValue(value + 10)
       }
 
-      if (event.code === 'ArrowDown') {
+      if (e.code === 'ArrowDown') {
         setValue(value - 10)
       }
     } else {
-      if (event.code === 'ArrowUp') {
+      if (e.code === 'ArrowUp') {
         increase()
       }
 
-      if (event.code === 'ArrowDown') {
+      if (e.code === 'ArrowDown') {
         decrease()
+      }
+
+      if (e.code === 'Enter') {
+        e.currentTarget.blur()
       }
     }
   }
@@ -86,38 +96,32 @@ const InputNumber = ({
   }
 
   const onBlurHandler = () => {
-    if (+textValue < min || +textValue > max) {
-      setValue(+textValue)
-    } else {
-      setTextValue(String(value))
-    }
+    const value: number = Number(textValue)
+    setValue(value, true)
   }
 
-  const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const maxDigit = Math.max(String(min).length, String(max).length)
+  const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const maxDigits = String(max).length
 
-    const stateValue = Number(event.target.value)
-    const inputValue =
-      event.target.value === ''
-        ? event.target.value
-        : String(Number(event.target.value.replace(/\D/, '')))
+    const targetValue = Number(e.target.value.replace(/\D/, ''))
+    const inputValue = e.target.value === '' ? '' : String(targetValue)
 
-    if (!isNaN(stateValue) && String(stateValue).length <= maxDigit) {
+    if (inputValue.length <= maxDigits) {
       setTextValue(inputValue)
-
-      if (stateValue >= min && stateValue <= max) {
-        setValue(stateValue)
-      }
+      setValue(targetValue)
     }
   }
 
   useEffect(() => {
-    if (min || max) {
-      const val = minMax(value, { min, max })
-      onChange(val)
-      setTextValue(String(val))
+    setTextValue(String(value))
+  }, [value])
+
+  useEffect(() => {
+    if (!inRange(value, { min, max })) {
+      setValue(value, true)
     }
-  }, [max, min, onChange, value])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [max, min, value])
 
   return (
     <div className={clsx(className, classes.inputNumber)}>

@@ -21,6 +21,7 @@ const Settings = () => {
     setBeatsAction,
     setSubdivisionAction,
     setTempoAction,
+    applyGridAlignment,
   } = useMetronomeStore(
     useShallow(
       ({
@@ -32,6 +33,7 @@ const Settings = () => {
         setBeatsAction,
         setSubdivisionAction,
         setTempoAction,
+        applyGridAlignment,
       }) => ({
         isTraining,
         isPlaying,
@@ -41,6 +43,7 @@ const Settings = () => {
         setBeatsAction,
         setSubdivisionAction,
         setTempoAction,
+        applyGridAlignment,
       }),
     ),
   )
@@ -66,7 +69,10 @@ const Settings = () => {
           min={MINMAX.tempo.min}
           title="tempo"
           value={tempo}
-          onChange={setTempoAction}
+          onChange={(value) => {
+            setTempoAction(value)
+            applyGridAlignment()
+          }}
         />
 
         <InputNumber
@@ -75,7 +81,10 @@ const Settings = () => {
           min={MINMAX.beats.min}
           title="beats"
           value={beats}
-          onChange={setBeatsAction}
+          onChange={(value) => {
+            setBeatsAction(value)
+            applyGridAlignment()
+          }}
         />
 
         <InputNumber
@@ -84,7 +93,10 @@ const Settings = () => {
           min={MINMAX.subdivision.min}
           title="subdivision"
           value={subdivision}
-          onChange={setSubdivisionAction}
+          onChange={(value) => {
+            setSubdivisionAction(value)
+            applyGridAlignment()
+          }}
         />
       </div>
 
