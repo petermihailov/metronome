@@ -1,3 +1,12 @@
+# [1.13.0](https://github.com/petermihailov/metronome/compare/v1.12.1...v1.13.0) (2024-08-03)
+
+
+### Features
+
+* save notes grid ([00c42fa](https://github.com/petermihailov/metronome/commit/00c42fa9a839e298ef06e2205a46cef868c63197))
+
+
+
 ## [1.12.1](https://github.com/petermihailov/metronome/compare/v1.12.0...v1.12.1) (2024-07-22)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * input value handler ([db3eb69](https://github.com/petermihailov/metronome/commit/db3eb69c0f3a46764f48c7aab1a760a30d4f4bd0))
-
-
-
-## [1.11.5](https://github.com/petermihailov/metronome/compare/v1.11.4...v1.11.5) (2023-11-04)
-
-
-### Bug Fixes
-
-* safari range ([43a88fb](https://github.com/petermihailov/metronome/commit/43a88fb668949581d33d3746e55371760e067c85))
 
 
 
