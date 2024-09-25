@@ -1,3 +1,12 @@
+## [1.13.1](https://github.com/petermihailov/metronome/compare/v1.13.0...v1.13.1) (2024-09-25)
+
+
+### Bug Fixes
+
+* range position ([d950a6c](https://github.com/petermihailov/metronome/commit/d950a6c7c97426adf60549e152c7a673959fd9c3))
+
+
+
 # [1.13.0](https://github.com/petermihailov/metronome/compare/v1.12.1...v1.13.0) (2024-08-03)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * og:url ([de31d94](https://github.com/petermihailov/metronome/commit/de31d94e180ff64365a4a5752044f7f16847202e))
-
-
-
-## [1.11.6](https://github.com/petermihailov/metronome/compare/v1.11.5...v1.11.6) (2023-11-05)
-
-
-### Bug Fixes
-
-* input value handler ([db3eb69](https://github.com/petermihailov/metronome/commit/db3eb69c0f3a46764f48c7aab1a760a30d4f4bd0))
 
 
 
