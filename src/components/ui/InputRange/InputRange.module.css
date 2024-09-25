@@ -1,4 +1,5 @@
 .input-range {
+  position: relative;
   container: input-range-container / inline-size;
 }
 
