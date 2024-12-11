@@ -1,37 +1,51 @@
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 // eslint-disable-next-line import/no-unresolved
 import { useRegisterSW } from 'virtual:pwa-register/react'
-import { useShallow } from 'zustand/react/shallow'
 
 import { useMetronomeStore } from '../../../store/useMetronomeStore'
 import { usePlayingTimeStore } from '../../../store/usePlayingTimeStore'
+import { useTrainingStore } from '../../../store/useTrainingStore'
 import { timeFormat } from '../../../utils/format'
 import { ButtonIcon } from '../../ui/ButtonIcon'
 import { ButtonPlay } from '../../ui/ButtonPlay'
 import { Checkbox } from '../../ui/Checkbox'
-import { useTraining } from '../Settings/Training/useTraining'
+import { calculateTime } from '../Settings/Training/Training.utils'
 
 import classes from './MainControl.module.css'
 
 const MainControl = () => {
   const { isPlaying, isTraining, setIsPlayingAction, setIsTrainingAction } = useMetronomeStore(
-    useShallow(({ isPlaying, isTraining, setIsPlayingAction, setIsTrainingAction }) => ({
+    ({ isPlaying, isTraining, setIsPlayingAction, setIsTrainingAction }) => ({
       isTraining,
       isPlaying,
       setIsPlayingAction,
       setIsTrainingAction,
-    })),
+    }),
   )
 
-  // const stop = useCallback(() => {
-  //   setIsPlayingAction(false);
-  // }, [setIsPlayingAction]);
+  const { every, to, step, type } = useTrainingStore(({ every, to, step, type }) => ({
+    every,
+    to,
+    step,
+    type,
+  }))
 
-  const { trainingTime } = useTraining()
+  const { beats, subdivision, tempo } = useMetronomeStore(({ beats, subdivision, tempo }) => ({
+    beats,
+    subdivision,
+    tempo,
+  }))
 
-  const { currentTime } = usePlayingTimeStore(
-    useShallow(({ time }) => ({ currentTime: timeFormat(time.current) })),
-  )
+  const [trainingTime, setTrainingTime] = useState('00:00')
+  useEffect(() => {
+    if (!isPlaying) {
+      const from = { beats, tempo, subdivision }[type]
+      const time = calculateTime({ key: type, from, to, every, tempo, beats, step })
+      setTrainingTime(timeFormat(time))
+    }
+  }, [beats, subdivision, every, isPlaying, tempo, to, type, step])
+
+  const currentTime = usePlayingTimeStore(({ time }) => timeFormat(time.current))
 
   const {
     needRefresh: [isVisibleUpdate],
@@ -66,7 +80,10 @@ const MainControl = () => {
             aria-label="update"
             className={classes.update}
             icon="icon.download"
-            onClick={() => updateServiceWorker()}
+            onClick={() => {
+              window.localStorage.clear()
+              updateServiceWorker()
+            }}
           />
         )}
       </div>

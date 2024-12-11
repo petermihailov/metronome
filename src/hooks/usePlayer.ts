@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react'
-import { useShallow } from 'zustand/react/shallow'
 
 import { useSounds } from './useSounds'
 import { Player } from '../lib/Player'
@@ -11,7 +10,7 @@ export function usePlayer() {
   const player = useRef(new Player())
 
   const { isPlaying, beats, notes, tempo, volume, mute } = useMetronomeStore(
-    useShallow(({ isPlaying, beats, notes, tempo, subdivision, volume, mute }) => ({
+    ({ isPlaying, beats, notes, tempo, subdivision, volume, mute }) => ({
       isPlaying,
       beats,
       notes,
@@ -19,12 +18,13 @@ export function usePlayer() {
       subdivision,
       volume,
       mute,
-    })),
+    }),
   )
 
-  const { setBeatAction, reset } = useBeatStore(
-    useShallow(({ setBeatAction, reset }) => ({ setBeatAction, reset })),
-  )
+  const { setBeatAction, reset } = useBeatStore(({ setBeatAction, reset }) => ({
+    setBeatAction,
+    reset,
+  }))
 
   /** Initialize */
   useEffect(() => {

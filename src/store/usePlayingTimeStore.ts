@@ -1,22 +1,12 @@
-import { produce } from 'immer'
-import { create } from 'zustand'
+import { shallow } from 'zustand/shallow'
+import { createWithEqualityFn } from 'zustand/traditional'
 
 import { Storage } from '../lib/LocalStorage'
 import { dateFormat } from '../utils/format'
 
-const TIME_DEFAULT = { current: 0, session: 0, day: 0 }
-
-const currentDate = dateFormat()
-const playingStorage = new Storage<{ [date: string]: number }>('playing')
-const storageValue = playingStorage.get()
-
-if (!storageValue) {
-  playingStorage.set({ [currentDate]: 0 })
-} else {
-  if (storageValue[currentDate]) {
-    TIME_DEFAULT.day = storageValue[currentDate]
-  }
-}
+const dayPlayingStorage = new Storage<{ [date: string]: number }>('day-playing', {
+  [dateFormat()]: 0,
+})
 
 type Seconds = number
 
@@ -31,26 +21,39 @@ interface Store {
   resetCurrentTime: () => void
 }
 
-export const usePlayingTimeStore = create<Store>((set) => {
+export const usePlayingTimeStore = createWithEqualityFn<Store>((set) => {
+  const storageValue = dayPlayingStorage.get()
+
   return {
-    time: TIME_DEFAULT,
+    time: {
+      current: 0,
+      session: 0,
+      day: storageValue[dateFormat()],
+    },
 
-    addSecond: () =>
+    addSecond: () => {
       set((state) => {
-        return produce(state, (draft) => {
-          draft.time.current++
-          draft.time.session++
-          draft.time.day++
+        dayPlayingStorage.update({ [dateFormat()]: state.time.day + 1 })
 
-          playingStorage.update({ [currentDate]: draft.time.day })
-        })
-      }),
+        return {
+          ...state,
+          time: {
+            current: state.time.current++,
+            session: state.time.session++,
+            day: state.time.day++,
+          },
+        }
+      })
+    },
 
-    resetCurrentTime: () =>
-      set((state) => {
-        return produce(state, (draft) => {
-          draft.time.current = 0
-        })
-      }),
+    resetCurrentTime: () => {
+      set((state) => ({
+        ...state,
+        time: {
+          ...state.time,
+          current: 0,
+        },
+      }))
+    },
   }
-})
+}, shallow)

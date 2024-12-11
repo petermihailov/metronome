@@ -1,6 +1,5 @@
 import clsx from 'clsx'
 import { memo } from 'react'
-import { useShallow } from 'zustand/react/shallow'
 
 import type { TrainingType } from './Training.types'
 import { MINMAX } from '../../../../constants'
@@ -17,15 +16,17 @@ interface TrainingProps {
 }
 
 const Training = ({ className }: TrainingProps) => {
-  const { every, to, type, setEvery, setTo, setType } = useTrainingStore(
-    useShallow(({ every, to, type, setEvery, setTo, setType }) => ({
+  const { step, every, to, type, setEvery, setTo, setStep, setType } = useTrainingStore(
+    ({ step, every, to, type, setEvery, setTo, setStep, setType }) => ({
       every,
       to,
       type,
+      step,
       setEvery,
+      setStep,
       setTo,
       setType,
-    })),
+    }),
   )
 
   return (
@@ -50,6 +51,7 @@ const Training = ({ className }: TrainingProps) => {
         value={every}
         onChange={setEvery}
       />
+      <InputNumber max={MINMAX[type].max} min={1} title="step" value={step} onChange={setStep} />
     </div>
   )
 }

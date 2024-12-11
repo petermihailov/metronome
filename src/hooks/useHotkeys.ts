@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { useShallow } from 'zustand/react/shallow'
 
 import { useMetronomeStore } from '../store/useMetronomeStore'
 
@@ -22,25 +21,23 @@ const tapTempo = {
 export const useHotkeys = () => {
   const { isPlaying, tempo, setIsPlayingAction, setTempoAction, resetAction, mute, setMuteAction } =
     useMetronomeStore(
-      useShallow(
-        ({
-          isPlaying,
-          tempo,
-          setIsPlayingAction,
-          setTempoAction,
-          resetAction,
-          mute,
-          setMuteAction,
-        }) => ({
-          isPlaying,
-          tempo,
-          setIsPlayingAction,
-          setTempoAction,
-          resetAction,
-          mute,
-          setMuteAction,
-        }),
-      ),
+      ({
+        isPlaying,
+        tempo,
+        setIsPlayingAction,
+        setTempoAction,
+        resetAction,
+        mute,
+        setMuteAction,
+      }) => ({
+        isPlaying,
+        tempo,
+        setIsPlayingAction,
+        setTempoAction,
+        resetAction,
+        mute,
+        setMuteAction,
+      }),
     )
 
   useEffect(() => {

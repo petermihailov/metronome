@@ -16,9 +16,11 @@ export interface IStorage<T = unknown> {
 
 export class Storage<T extends JSONValue> implements IStorage<T> {
   private readonly key: string
+  private readonly defaults: T
 
-  constructor(key: string, defaults?: T) {
+  constructor(key: string, defaults: T) {
     this.key = `${prefix}_${key}`
+    this.defaults = defaults
 
     if (!this.get() && defaults) {
       this.set(defaults)
@@ -46,7 +48,7 @@ export class Storage<T extends JSONValue> implements IStorage<T> {
       /* empty */
     }
 
-    return null
+    return this.defaults
   }
 
   public set(value: T) {

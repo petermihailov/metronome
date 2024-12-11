@@ -1,6 +1,5 @@
 import clsx from 'clsx'
 import { memo } from 'react'
-import { useShallow } from 'zustand/react/shallow'
 
 import { MINMAX } from '../../../../constants'
 import { useMetronomeStore } from '../../../../store/useMetronomeStore'
@@ -19,27 +18,25 @@ const DisplayBar = () => {
     mute,
     setMuteAction,
   } = useMetronomeStore(
-    useShallow(
-      ({
-        volume,
-        setVolumeAction,
-        inputLag,
-        setInputLagAction,
-        inputLagEnabled,
-        setInputLagEnabledAction,
-        mute,
-        setMuteAction,
-      }) => ({
-        volume,
-        setVolumeAction,
-        inputLag,
-        setInputLagAction,
-        inputLagEnabled,
-        setInputLagEnabledAction,
-        mute,
-        setMuteAction,
-      }),
-    ),
+    ({
+      volume,
+      setVolumeAction,
+      inputLag,
+      setInputLagAction,
+      inputLagEnabled,
+      setInputLagEnabledAction,
+      mute,
+      setMuteAction,
+    }) => ({
+      volume,
+      setVolumeAction,
+      inputLag,
+      setInputLagAction,
+      inputLagEnabled,
+      setInputLagEnabledAction,
+      mute,
+      setMuteAction,
+    }),
   )
 
   return (

@@ -1,5 +1,5 @@
 // import { useEffect } from 'react'
-// import { useShallow } from 'zustand/react/shallow'
+// import { shallow } from 'zustand/shallow'
 //
 // import { useMetronomeStore } from '../store/useMetronomeStore'
 // import { getQuery, modifyQuery, updateQuery } from '../utils/url'

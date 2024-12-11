@@ -1,6 +1,5 @@
 import clsx from 'clsx'
 import { memo } from 'react'
-import { useShallow } from 'zustand/react/shallow'
 
 import { Training } from './Training'
 import { MINMAX } from '../../../constants'
@@ -8,6 +7,7 @@ import { useMetronomeStore } from '../../../store/useMetronomeStore'
 import { useTrainingStore } from '../../../store/useTrainingStore'
 import { InputNumber } from '../../ui/InputNumber'
 import { InputRange } from '../../ui/InputRange'
+import { TodayTimer } from '../TodayTimer'
 
 import classes from './Settings.module.css'
 
@@ -23,36 +23,30 @@ const Settings = () => {
     setTempoAction,
     applyGridAlignment,
   } = useMetronomeStore(
-    useShallow(
-      ({
-        beats,
-        subdivision,
-        tempo,
-        isTraining,
-        isPlaying,
-        setBeatsAction,
-        setSubdivisionAction,
-        setTempoAction,
-        applyGridAlignment,
-      }) => ({
-        isTraining,
-        isPlaying,
-        beats,
-        subdivision,
-        tempo,
-        setBeatsAction,
-        setSubdivisionAction,
-        setTempoAction,
-        applyGridAlignment,
-      }),
-    ),
+    ({
+      beats,
+      subdivision,
+      tempo,
+      isTraining,
+      isPlaying,
+      setBeatsAction,
+      setSubdivisionAction,
+      setTempoAction,
+      applyGridAlignment,
+    }) => ({
+      isTraining,
+      isPlaying,
+      beats,
+      subdivision,
+      tempo,
+      setBeatsAction,
+      setSubdivisionAction,
+      setTempoAction,
+      applyGridAlignment,
+    }),
   )
 
-  const { type } = useTrainingStore(
-    useShallow(({ type }) => ({
-      type,
-    })),
-  )
+  const type = useTrainingStore(({ type }) => type)
 
   return (
     <div
@@ -98,6 +92,8 @@ const Settings = () => {
             applyGridAlignment()
           }}
         />
+
+        <TodayTimer />
       </div>
 
       {isTraining && <Training className={classes.training} />}

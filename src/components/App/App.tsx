@@ -4,19 +4,20 @@ import {
   useButtonsPreventSpacePress,
   useHotkeys,
   usePlayer,
-  useTrainingTimeUpdate,
+  usePlayingTimeUpdate,
   useWakeLock,
+  useTraining,
 } from '../../hooks'
-import { Display } from '../features/Display'
-import { MainControl } from '../features/MainControl'
-import { Settings } from '../features/Settings'
-import { TodayTimer } from '../features/TodayTimer'
+import { Display } from '../blocks/Display'
+import { MainControl } from '../blocks/MainControl'
+import { Settings } from '../blocks/Settings'
 
 import classes from './App.module.css'
 
 const App = () => {
   usePlayer()
-  useTrainingTimeUpdate()
+  usePlayingTimeUpdate()
+  useTraining()
   useHotkeys()
   useWakeLock()
   useButtonsPreventSpacePress()
@@ -26,7 +27,6 @@ const App = () => {
       <Display />
       <MainControl />
       <Settings />
-      <TodayTimer />
     </div>
   )
 }

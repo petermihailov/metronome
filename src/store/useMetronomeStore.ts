@@ -1,5 +1,6 @@
 import { produce } from 'immer'
-import { create } from 'zustand'
+import { shallow } from 'zustand/shallow'
+import { createWithEqualityFn } from 'zustand/traditional'
 
 import { DEFAULTS, MINMAX } from '../constants'
 import { Storage } from '../lib/LocalStorage'
@@ -21,7 +22,7 @@ const settingsStorage = new Storage<{
   inputLagEnabled: DEFAULTS.inputLagEnabled,
   isTraining: DEFAULTS.isTraining,
   mute: DEFAULTS.mute,
-  notes: [...DEFAULTS.notes],
+  notes: DEFAULTS.notes,
   subdivision: DEFAULTS.subdivision,
   tempo: DEFAULTS.tempo,
   volume: DEFAULTS.volume,
@@ -57,21 +58,21 @@ interface Store {
   resetAction: () => void
 }
 
-export const useMetronomeStore = create<Store>((set) => {
+export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
   return {
-    beats: storage!.beats,
-    inputLag: storage!.inputLag,
-    inputLagEnabled: storage!.inputLagEnabled,
+    beats: storage.beats,
+    inputLag: storage.inputLag,
+    inputLagEnabled: storage.inputLagEnabled,
     isPlaying: false,
-    isTraining: storage!.isTraining,
-    mute: storage!.mute,
+    isTraining: storage.isTraining,
+    mute: storage.mute,
     noteValue: DEFAULTS.noteValue,
-    notes: storage!.notes,
-    subdivision: storage!.subdivision,
-    tempo: storage!.tempo,
-    volume: storage!.volume,
+    notes: storage.notes,
+    subdivision: storage.subdivision,
+    tempo: storage.tempo,
+    volume: storage.volume,
 
-    setBeatsAction: (beats) =>
+    setBeatsAction: (beats) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.beats = MINMAX.range('beats', beats)
@@ -82,24 +83,27 @@ export const useMetronomeStore = create<Store>((set) => {
             notes: draft.notes,
           })
         })
-      }),
+      })
+    },
 
-    setIsPlayingAction: (isPlaying) =>
+    setIsPlayingAction: (isPlaying) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.isPlaying = isPlaying
         })
-      }),
+      })
+    },
 
-    setIsTrainingAction: (isTraining) =>
+    setIsTrainingAction: (isTraining) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.isTraining = isTraining
           settingsStorage.update({ isTraining: draft.isTraining })
         })
-      }),
+      })
+    },
 
-    setSubdivisionAction: (subdivision) =>
+    setSubdivisionAction: (subdivision) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.subdivision = MINMAX.range('subdivision', subdivision)
@@ -110,49 +114,55 @@ export const useMetronomeStore = create<Store>((set) => {
             notes: draft.notes,
           })
         })
-      }),
+      })
+    },
 
-    setTempoAction: (tempo) =>
+    setTempoAction: (tempo) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.tempo = MINMAX.range('tempo', tempo)
           settingsStorage.update({ tempo: draft.tempo })
         })
-      }),
+      })
+    },
 
-    setVolumeAction: (volume) =>
+    setVolumeAction: (volume) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.volume = volume
           settingsStorage.update({ volume: draft.volume })
         })
-      }),
+      })
+    },
 
-    setMuteAction: (mute) =>
+    setMuteAction: (mute) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.mute = mute
           settingsStorage.update({ mute: draft.mute })
         })
-      }),
+      })
+    },
 
-    setInputLagAction: (inputLag) =>
+    setInputLagAction: (inputLag) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.inputLag = MINMAX.range('inputLag', inputLag)
           settingsStorage.update({ inputLag: draft.inputLag })
         })
-      }),
+      })
+    },
 
-    setInputLagEnabledAction: (inputLagEnabled) =>
+    setInputLagEnabledAction: (inputLagEnabled) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.inputLagEnabled = inputLagEnabled
           settingsStorage.update({ inputLagEnabled: draft.inputLagEnabled })
         })
-      }),
+      })
+    },
 
-    switchInstrumentAction: (noteIndex: number) =>
+    switchInstrumentAction: (noteIndex: number) => {
       set((state) => {
         return produce(state, (draft) => {
           const order: Array<Instrument | null> = [
@@ -167,9 +177,10 @@ export const useMetronomeStore = create<Store>((set) => {
 
           settingsStorage.update({ notes: draft.notes })
         })
-      }),
+      })
+    },
 
-    applyGridAlignment: () =>
+    applyGridAlignment: () => {
       set((state) => {
         return produce(state, (draft) => {
           const { beats, subdivision } = draft
@@ -188,9 +199,10 @@ export const useMetronomeStore = create<Store>((set) => {
 
           settingsStorage.update({ notes: draft.notes })
         })
-      }),
+      })
+    },
 
-    resetAction: () =>
+    resetAction: () => {
       set((state) => {
         return produce(state, (draft) => {
           const { tempo, beats, subdivision, notes } = DEFAULTS
@@ -207,9 +219,10 @@ export const useMetronomeStore = create<Store>((set) => {
             notes: draft.notes,
           })
         })
-      }),
+      })
+    },
   }
-})
+}, shallow)
 
 // Utils
 

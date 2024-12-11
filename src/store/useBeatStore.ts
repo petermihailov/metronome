@@ -1,35 +1,40 @@
-import { create } from 'zustand'
+import { shallow } from 'zustand/shallow'
+import { createWithEqualityFn } from 'zustand/traditional'
 
-import { BEAT_DEFAULT } from '../constants'
+import { DEFAULTS } from '../constants'
 import type { Beat } from '../types/common'
 
 interface Store {
+  // Values
   beat: Beat
   beatsPlayed: number
   barsPlayed: number
 
+  // Actions
   setBeatAction: (beat: Beat) => void
   reset: () => void
 }
 
-export const useBeatStore = create<Store>((set) => {
+export const useBeatStore = createWithEqualityFn<Store>((set) => {
   return {
-    beat: BEAT_DEFAULT,
+    beat: DEFAULTS.beat,
     beatsPlayed: 0,
     barsPlayed: 0,
 
-    setBeatAction: (beat) =>
+    setBeatAction: (beat) => {
       set(({ beatsPlayed, barsPlayed }) => ({
         beat,
         beatsPlayed: beatsPlayed + 1,
         barsPlayed: barsPlayed + Number(beat.index === 0),
-      })),
+      }))
+    },
 
-    reset: () =>
+    reset: () => {
       set(() => ({
-        beat: BEAT_DEFAULT,
+        beat: DEFAULTS.beat,
         barsPlayed: 0,
         beatsPlayed: 0,
-      })),
+      }))
+    },
   }
-})
+}, shallow)

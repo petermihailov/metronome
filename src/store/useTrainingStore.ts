@@ -1,7 +1,8 @@
 import { produce } from 'immer'
-import { create } from 'zustand'
+import { shallow } from 'zustand/shallow'
+import { createWithEqualityFn } from 'zustand/traditional'
 
-import type { TrainingType } from '../components/features/Settings/Training/Training.types'
+import type { TrainingType } from '../components/blocks/Settings/Training/Training.types'
 import { DEFAULTS } from '../constants'
 import { Storage } from '../lib/LocalStorage'
 
@@ -10,77 +11,112 @@ const trainingStorage = new Storage<{
   from: number
   to: number
   every: number
+  step: number
+  count: number
   type: TrainingType
 }>('settings', {
   alternate: false,
-  from: 60,
-  to: 100,
-  every: 8,
+  from: DEFAULTS.tempo,
+  to: DEFAULTS.tempo + 20,
+  every: DEFAULTS.every,
+  step: DEFAULTS.step,
+  count: DEFAULTS.count,
   type: 'tempo',
 })
 
 const storage = trainingStorage.get()!
 
 interface Store {
+  // Values
   alternate: boolean
   from: number
   to: number
   every: number
+  step: number
+  count: number
   type: TrainingType
 
+  // Actions
   setAlternate: (value: boolean) => void
   setFrom: (value: number) => void
   setTo: (value: number) => void
   setEvery: (value: number) => void
+  setStep: (value: number) => void
+  setCount: (value: number) => void
   setType: (value: TrainingType) => void
 }
 
-export const useTrainingStore = create<Store>((set) => {
+export const useTrainingStore = createWithEqualityFn<Store>((set) => {
   return {
-    alternate: storage.alternate ?? false,
-    from: storage.from ?? DEFAULTS.tempo,
-    to: storage.to ?? DEFAULTS.tempo + 20,
-    every: storage.every ?? DEFAULTS.every,
-    type: storage.type ?? 'tempo',
+    alternate: storage.alternate,
+    from: storage.from,
+    to: storage.to,
+    every: storage.every,
+    step: storage.step,
+    count: storage.count,
+    type: storage.type,
 
-    setAlternate: (alternate) =>
+    setAlternate: (alternate) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.alternate = alternate
           trainingStorage.update({ alternate })
         })
-      }),
+      })
+    },
 
-    setFrom: (from) =>
+    setFrom: (from) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.from = from
           trainingStorage.update({ from })
         })
-      }),
+      })
+    },
 
-    setTo: (to) =>
+    setTo: (to) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.to = to
           trainingStorage.update({ to })
         })
-      }),
+      })
+    },
 
-    setEvery: (every) =>
+    setEvery: (every) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.every = every
           trainingStorage.update({ every })
         })
-      }),
+      })
+    },
 
-    setType: (type) =>
+    setStep: (step) => {
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.step = step
+          trainingStorage.update({ step })
+        })
+      })
+    },
+
+    setCount: (count) => {
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.count = count
+          trainingStorage.update({ count })
+        })
+      })
+    },
+
+    setType: (type) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.type = type
           trainingStorage.update({ type })
         })
-      }),
+      })
+    },
   }
-})
+}, shallow)

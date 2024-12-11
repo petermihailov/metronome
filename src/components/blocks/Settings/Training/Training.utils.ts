@@ -8,9 +8,12 @@ interface RangeGeneratorOptions {
 
 export function* rangeGenerator({ from, to, step = 1 }: RangeGeneratorOptions) {
   let iter = 0
+  const min = from < to ? from : to
+  const max = from > to ? from : to
 
-  while (Math.abs(iter) < Math.abs(Math.ceil((to - from) / step))) {
+  while (Math.abs(iter) < Math.abs(Math.ceil((max - min) / step))) {
     iter = iter + (from > to ? -1 : 1)
+    // yield minMax(from + iter * step, { max: from > to ? from : to })
     yield from + iter * step
   }
 }
@@ -22,15 +25,24 @@ interface CalculateTimeOptions {
   every: number
   from: number
   to: number
+  step: number
 }
 
-export const calculateTime = ({ key, from, to, every, tempo, beats }: CalculateTimeOptions) => {
+export const calculateTime = ({
+  key,
+  from,
+  to,
+  every,
+  tempo,
+  beats,
+  step,
+}: CalculateTimeOptions) => {
   const values = { tempo, beats, subdivision: 1 }
 
   if (from > to) [from, to] = [to, from]
 
   return Math.floor(
-    [from, ...rangeGenerator({ from, to })].reduce((elapsed, current) => {
+    [from, ...rangeGenerator({ from, to, step })].reduce((elapsed, current) => {
       values[key] = current
       elapsed += (60 / values.tempo) * values.beats * every
       return elapsed

@@ -1,5 +1,4 @@
 import { memo, useEffect, useRef } from 'react'
-import { useShallow } from 'zustand/react/shallow'
 
 import { useBeatStore } from '../../../store/useBeatStore'
 import { useMetronomeStore } from '../../../store/useMetronomeStore'
@@ -10,15 +9,15 @@ import classes from './Display.module.css'
 
 const Display = () => {
   const { notes, beats, switchInstrumentAction, isPlaying } = useMetronomeStore(
-    useShallow(({ notes, beats, switchInstrumentAction, isPlaying }) => ({
+    ({ notes, beats, switchInstrumentAction, isPlaying }) => ({
       notes,
       beats,
       switchInstrumentAction,
       isPlaying,
-    })),
+    }),
   )
 
-  const { beat } = useBeatStore(useShallow(({ beat }) => ({ beat })))
+  const { beat } = useBeatStore(({ beat }) => ({ beat }))
 
   const refIndicator = useRef<HTMLDivElement>(null)
 
