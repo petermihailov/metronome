@@ -65,7 +65,6 @@ const Settings = () => {
           value={tempo}
           onChange={(value) => {
             setTempoAction(value)
-            applyGridAlignment()
           }}
         />
 
