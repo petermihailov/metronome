@@ -11,14 +11,16 @@ const dayPlayingStorage = new Storage<{ [date: string]: number }>('day-playing',
 type Seconds = number
 
 interface Store {
+  // Values
   time: {
     current: Seconds
     session: Seconds
     day: Seconds
   }
 
-  addSecond: () => void
-  resetCurrentTime: () => void
+  // Actions
+  addSecondAction: () => void
+  resetCurrentTimeAction: () => void
 }
 
 export const usePlayingTimeStore = createWithEqualityFn<Store>((set) => {
@@ -31,22 +33,22 @@ export const usePlayingTimeStore = createWithEqualityFn<Store>((set) => {
       day: storageValue[dateFormat()],
     },
 
-    addSecond: () => {
+    addSecondAction: () => {
       set((state) => {
         dayPlayingStorage.update({ [dateFormat()]: state.time.day + 1 })
 
         return {
           ...state,
           time: {
-            current: state.time.current++,
-            session: state.time.session++,
-            day: state.time.day++,
+            current: state.time.current + 1,
+            session: state.time.session + 1,
+            day: state.time.day + 1,
           },
         }
       })
     },
 
-    resetCurrentTime: () => {
+    resetCurrentTimeAction: () => {
       set((state) => ({
         ...state,
         time: {

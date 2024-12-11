@@ -24,7 +24,6 @@ export const MINMAX = (() => {
 export const DEFAULTS = {
   tempo: 60,
   beats: 4,
-  noteValue: 4,
   subdivision: 1,
   every: 8,
   step: 1,
@@ -37,9 +36,9 @@ export const DEFAULTS = {
   get beat(): Beat {
     return {
       index: 0,
-      note: {
-        instrument: 'fxMetronome1',
-      },
+      isCounting: false,
+      isSubdivision: false,
+      isLast: false,
     }
   },
   get notes(): Note[] {

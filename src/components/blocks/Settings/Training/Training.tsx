@@ -16,18 +16,19 @@ interface TrainingProps {
 }
 
 const Training = ({ className }: TrainingProps) => {
-  const { step, every, to, type, setEvery, setTo, setStep, setType } = useTrainingStore(
-    ({ step, every, to, type, setEvery, setTo, setStep, setType }) => ({
-      every,
-      to,
-      type,
-      step,
-      setEvery,
-      setStep,
-      setTo,
-      setType,
-    }),
-  )
+  const { step, every, to, type, setEveryAction, setToAction, setStepAction, setTypeAction } =
+    useTrainingStore(
+      ({ step, every, to, type, setEveryAction, setToAction, setStepAction, setTypeAction }) => ({
+        every,
+        to,
+        type,
+        step,
+        setEveryAction,
+        setStepAction,
+        setToAction,
+        setTypeAction,
+      }),
+    )
 
   return (
     <div className={clsx(className, classes.training)}>
@@ -35,23 +36,29 @@ const Training = ({ className }: TrainingProps) => {
         options={typeValues.map((key) => ({ value: key, label: key }))}
         title="change"
         value={type}
-        onChange={setType}
+        onChange={setTypeAction}
       />
       <InputNumber
         max={MINMAX[type].max}
         min={MINMAX[type].min}
         title="to"
         value={to}
-        onChange={setTo}
+        onChange={setToAction}
+      />
+      <InputNumber
+        max={MINMAX[type].max}
+        min={1}
+        title="step"
+        value={step}
+        onChange={setStepAction}
       />
       <InputNumber
         max={MINMAX.every.max}
         min={MINMAX.every.min}
         title="every (bars)"
         value={every}
-        onChange={setEvery}
+        onChange={setEveryAction}
       />
-      <InputNumber max={MINMAX[type].max} min={1} title="step" value={step} onChange={setStep} />
     </div>
   )
 }

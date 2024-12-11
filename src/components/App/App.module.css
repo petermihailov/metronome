@@ -9,8 +9,11 @@
   padding: min(5vw, var(--size-3));
   border-radius: calc(0.18rem + min(5vw, calc(var(--size-2) + var(--size-0))));
   background-color: var(--color-background-2);
+  background-image: linear-gradient(165deg, transparent, transparent);
   box-shadow: 0 0 0 40vmax var(--color-background-2);
-  transition: box-shadow 600ms ease-in;
+  transition-property: box-shadow, background-image;
+  transition-timing-function: ease-in;
+  transition-duration: 600ms;
 }
 
 @media (min-width: 50rem) {
@@ -21,6 +24,7 @@
 
 @media (min-width: 55rem) {
   .app {
+    background-image: linear-gradient(170deg, #0001, transparent);
     box-shadow: 0 0 0 0 var(--color-background-2);
     transition-timing-function: ease-out;
   }

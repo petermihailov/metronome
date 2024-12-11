@@ -8,10 +8,9 @@ import { Note } from '../../ui/Note'
 import classes from './Display.module.css'
 
 const Display = () => {
-  const { notes, beats, switchInstrumentAction, isPlaying } = useMetronomeStore(
-    ({ notes, beats, switchInstrumentAction, isPlaying }) => ({
+  const { notes, switchInstrumentAction, isPlaying } = useMetronomeStore(
+    ({ notes, switchInstrumentAction, isPlaying }) => ({
       notes,
-      beats,
       switchInstrumentAction,
       isPlaying,
     }),
@@ -22,9 +21,7 @@ const Display = () => {
   const refIndicator = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const partIndex = beat.index % (notes.length / beats)
-
-    if (partIndex === 0) {
+    if (!beat.isSubdivision) {
       refIndicator.current?.classList.remove(classes.accent, classes.regular)
       refIndicator.current?.offsetTop
 
@@ -34,7 +31,7 @@ const Display = () => {
         refIndicator.current?.classList.add(classes.regular)
       }
     }
-  }, [beat.index, beats, notes.length])
+  }, [beat.index, beat.isSubdivision])
 
   useEffect(() => {
     refIndicator.current?.classList.remove(classes.accent, classes.regular)

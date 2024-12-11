@@ -1,8 +1,9 @@
 import clsx from 'clsx'
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 
 import { Training } from './Training'
 import { MINMAX } from '../../../constants'
+import { useBeatStore } from '../../../store/useBeatStore'
 import { useMetronomeStore } from '../../../store/useMetronomeStore'
 import { useTrainingStore } from '../../../store/useTrainingStore'
 import { InputNumber } from '../../ui/InputNumber'
@@ -21,7 +22,7 @@ const Settings = () => {
     setBeatsAction,
     setSubdivisionAction,
     setTempoAction,
-    applyGridAlignment,
+    applyGridAlignmentAction,
   } = useMetronomeStore(
     ({
       beats,
@@ -32,7 +33,7 @@ const Settings = () => {
       setBeatsAction,
       setSubdivisionAction,
       setTempoAction,
-      applyGridAlignment,
+      applyGridAlignmentAction,
     }) => ({
       isTraining,
       isPlaying,
@@ -42,11 +43,24 @@ const Settings = () => {
       setBeatsAction,
       setSubdivisionAction,
       setTempoAction,
-      applyGridAlignment,
+      applyGridAlignmentAction,
     }),
   )
 
+  const [values, setValues] = useState({
+    tempo,
+    beats,
+    subdivision,
+  })
+
+  const isFirstBeat = useBeatStore(({ beat }) => beat.isFirst)
   const type = useTrainingStore(({ type }) => type)
+
+  useEffect(() => {
+    if (!isPlaying || isFirstBeat) {
+      setValues({ tempo, beats, subdivision })
+    }
+  }, [beats, isFirstBeat, isPlaying, subdivision, tempo])
 
   return (
     <div
@@ -62,7 +76,7 @@ const Settings = () => {
           max={MINMAX.tempo.max}
           min={MINMAX.tempo.min}
           title="tempo"
-          value={tempo}
+          value={values.tempo}
           onChange={(value) => {
             setTempoAction(value)
           }}
@@ -73,10 +87,10 @@ const Settings = () => {
           max={MINMAX.beats.max}
           min={MINMAX.beats.min}
           title="beats"
-          value={beats}
+          value={values.beats}
           onChange={(value) => {
             setBeatsAction(value)
-            applyGridAlignment()
+            applyGridAlignmentAction()
           }}
         />
 
@@ -85,10 +99,10 @@ const Settings = () => {
           max={MINMAX.subdivision.max}
           min={MINMAX.subdivision.min}
           title="subdivision"
-          value={subdivision}
+          value={values.subdivision}
           onChange={(value) => {
             setSubdivisionAction(value)
-            applyGridAlignment()
+            applyGridAlignmentAction()
           }}
         />
 

@@ -12,7 +12,7 @@ interface Store {
 
   // Actions
   setBeatAction: (beat: Beat) => void
-  reset: () => void
+  resetAction: () => void
 }
 
 export const useBeatStore = createWithEqualityFn<Store>((set) => {
@@ -29,7 +29,7 @@ export const useBeatStore = createWithEqualityFn<Store>((set) => {
       }))
     },
 
-    reset: () => {
+    resetAction: () => {
       set(() => ({
         beat: DEFAULTS.beat,
         barsPlayed: 0,

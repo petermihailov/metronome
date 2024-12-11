@@ -12,7 +12,6 @@ const trainingStorage = new Storage<{
   to: number
   every: number
   step: number
-  count: number
   type: TrainingType
 }>('settings', {
   alternate: false,
@@ -20,7 +19,6 @@ const trainingStorage = new Storage<{
   to: DEFAULTS.tempo + 20,
   every: DEFAULTS.every,
   step: DEFAULTS.step,
-  count: DEFAULTS.count,
   type: 'tempo',
 })
 
@@ -33,17 +31,15 @@ interface Store {
   to: number
   every: number
   step: number
-  count: number
   type: TrainingType
 
   // Actions
-  setAlternate: (value: boolean) => void
-  setFrom: (value: number) => void
-  setTo: (value: number) => void
-  setEvery: (value: number) => void
-  setStep: (value: number) => void
-  setCount: (value: number) => void
-  setType: (value: TrainingType) => void
+  setAlternateAction: (value: boolean) => void
+  setFromAction: (value: number) => void
+  setToAction: (value: number) => void
+  setEveryAction: (value: number) => void
+  setStepAction: (value: number) => void
+  setTypeAction: (value: TrainingType) => void
 }
 
 export const useTrainingStore = createWithEqualityFn<Store>((set) => {
@@ -53,10 +49,9 @@ export const useTrainingStore = createWithEqualityFn<Store>((set) => {
     to: storage.to,
     every: storage.every,
     step: storage.step,
-    count: storage.count,
     type: storage.type,
 
-    setAlternate: (alternate) => {
+    setAlternateAction: (alternate) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.alternate = alternate
@@ -65,7 +60,7 @@ export const useTrainingStore = createWithEqualityFn<Store>((set) => {
       })
     },
 
-    setFrom: (from) => {
+    setFromAction: (from) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.from = from
@@ -74,7 +69,7 @@ export const useTrainingStore = createWithEqualityFn<Store>((set) => {
       })
     },
 
-    setTo: (to) => {
+    setToAction: (to) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.to = to
@@ -83,7 +78,7 @@ export const useTrainingStore = createWithEqualityFn<Store>((set) => {
       })
     },
 
-    setEvery: (every) => {
+    setEveryAction: (every) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.every = every
@@ -92,7 +87,7 @@ export const useTrainingStore = createWithEqualityFn<Store>((set) => {
       })
     },
 
-    setStep: (step) => {
+    setStepAction: (step) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.step = step
@@ -101,16 +96,7 @@ export const useTrainingStore = createWithEqualityFn<Store>((set) => {
       })
     },
 
-    setCount: (count) => {
-      set((state) => {
-        return produce(state, (draft) => {
-          draft.count = count
-          trainingStorage.update({ count })
-        })
-      })
-    },
-
-    setType: (type) => {
+    setTypeAction: (type) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.type = type

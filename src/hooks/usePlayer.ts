@@ -9,21 +9,24 @@ export function usePlayer() {
   const kit = useSounds()
   const player = useRef(new Player())
 
-  const { isPlaying, beats, notes, tempo, volume, mute } = useMetronomeStore(
-    ({ isPlaying, beats, notes, tempo, subdivision, volume, mute }) => ({
-      isPlaying,
-      beats,
-      notes,
-      tempo,
-      subdivision,
-      volume,
-      mute,
-    }),
-  )
+  const { isPlaying, isTraining, isCounting, beats, notes, tempo, volume, mute } =
+    useMetronomeStore(
+      ({ isPlaying, isTraining, isCounting, beats, notes, tempo, subdivision, volume, mute }) => ({
+        isCounting,
+        isPlaying,
+        isTraining,
+        beats,
+        notes,
+        tempo,
+        subdivision,
+        volume,
+        mute,
+      }),
+    )
 
-  const { setBeatAction, reset } = useBeatStore(({ setBeatAction, reset }) => ({
+  const { setBeatAction, resetAction } = useBeatStore(({ setBeatAction, resetAction }) => ({
     setBeatAction,
-    reset,
+    resetAction,
   }))
 
   /** Initialize */
@@ -37,12 +40,21 @@ export function usePlayer() {
   /** Sync playing */
   useEffect(() => {
     if (isPlaying) {
+      if (isTraining) {
+        player.current.setIsCounting(true)
+      }
+
       player.current.play()
     } else {
-      reset()
+      resetAction()
       player.current.stop()
     }
-  }, [isPlaying, reset])
+  }, [isPlaying, isTraining, resetAction])
+
+  /** Sync countinf */
+  useEffect(() => {
+    player.current.setIsCounting(isCounting)
+  }, [isCounting])
 
   /** Sync beats */
   useEffect(() => {

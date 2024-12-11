@@ -6,7 +6,15 @@ export interface Note {
 
 export interface Beat {
   index: number
-  note: Note
+  isCounting: boolean
+  isSubdivision: boolean
+  isFirst: boolean
+  isLast: boolean
+}
+
+export interface BeatInfo {
+  barsPlayed: number
+  isCounting: boolean
 }
 
 export type SoundMap = Record<Instrument, AudioBuffer>

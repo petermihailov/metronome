@@ -1,10 +1,10 @@
-type JSONValue =
-  | string
-  | number
+export type JsonValue =
+  | null
   | boolean
-  | { [x: string]: JSONValue }
-  | { [x: number]: JSONValue }
-  | Array<JSONValue>
+  | number
+  | string
+  | JsonValue[]
+  | { [key: string]: JsonValue }
 
 const prefix = 'mn'
 
@@ -14,7 +14,7 @@ export interface IStorage<T = unknown> {
   set: (value: T) => boolean
 }
 
-export class Storage<T extends JSONValue> implements IStorage<T> {
+export class Storage<T extends Record<string, unknown>> implements IStorage<T> {
   private readonly key: string
   private readonly defaults: T
 
@@ -22,7 +22,12 @@ export class Storage<T extends JSONValue> implements IStorage<T> {
     this.key = `${prefix}_${key}`
     this.defaults = defaults
 
-    if (!this.get() && defaults) {
+    const current = this.get()
+
+    if (current) {
+      // sync keys
+      this.set({ ...defaults, ...current } as T)
+    } else {
       this.set(defaults)
     }
   }
@@ -64,7 +69,7 @@ export class Storage<T extends JSONValue> implements IStorage<T> {
   }
 
   public update(value: Partial<T>) {
-    const prev = (this.get() || {}) as { [x: string]: JSONValue }
+    const prev = this.get() || {}
     return this.set({ ...prev, ...value } as T)
   }
 }

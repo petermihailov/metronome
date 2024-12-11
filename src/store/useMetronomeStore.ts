@@ -8,6 +8,7 @@ import type { Instrument, Note } from '../types/common'
 
 const settingsStorage = new Storage<{
   beats: number
+  count: number
   inputLag: number
   inputLagEnabled: boolean
   isTraining: boolean
@@ -18,6 +19,7 @@ const settingsStorage = new Storage<{
   volume: number
 }>('settings', {
   beats: DEFAULTS.beats,
+  count: DEFAULTS.count,
   inputLag: DEFAULTS.inputLag,
   inputLagEnabled: DEFAULTS.inputLagEnabled,
   isTraining: DEFAULTS.isTraining,
@@ -32,41 +34,46 @@ const storage = settingsStorage.get()
 
 interface Store {
   // Values
-  tempo: number
-  subdivision: number
   beats: number
-  notes: Note[]
-  volume: number
-  mute: boolean
+  count: number
   inputLag: number
   inputLagEnabled: boolean
+  isCounting: boolean
   isPlaying: boolean
   isTraining: boolean
+  mute: boolean
+  notes: Note[]
+  subdivision: number
+  tempo: number
+  volume: number
 
   // Actions
-  applyGridAlignment: () => void
+  applyGridAlignmentAction: () => void
+  resetAction: () => void
   setBeatsAction: (beats: number) => void
-  setIsPlayingAction: (isPlaying: boolean) => void
-  setIsTrainingAction: (isTraining: boolean) => void
-  setSubdivisionAction: (subdivision: number) => void
-  setTempoAction: (tempo: number) => void
+  setCountAction: (count: number) => void
   setInputLagAction: (value: number) => void
   setInputLagEnabledAction: (enabled: boolean) => void
-  setVolumeAction: (volume: number) => void
+  setIsCountingAction: (isCounting: boolean) => void
+  setIsPlayingAction: (isPlaying: boolean) => void
+  setIsTrainingAction: (isTraining: boolean) => void
   setMuteAction: (mute: boolean) => void
+  setSubdivisionAction: (subdivision: number) => void
+  setTempoAction: (tempo: number) => void
+  setVolumeAction: (volume: number) => void
   switchInstrumentAction: (noteIndex: number) => void
-  resetAction: () => void
 }
 
 export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
   return {
     beats: storage.beats,
+    count: storage.count,
     inputLag: storage.inputLag,
     inputLagEnabled: storage.inputLagEnabled,
+    isCounting: false,
     isPlaying: false,
     isTraining: storage.isTraining,
     mute: storage.mute,
-    noteValue: DEFAULTS.noteValue,
     notes: storage.notes,
     subdivision: storage.subdivision,
     tempo: storage.tempo,
@@ -86,6 +93,15 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
       })
     },
 
+    setCountAction: (count) => {
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.count = count
+          settingsStorage.update({ count: count })
+        })
+      })
+    },
+
     setIsPlayingAction: (isPlaying) => {
       set((state) => {
         return produce(state, (draft) => {
@@ -99,6 +115,14 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
         return produce(state, (draft) => {
           draft.isTraining = isTraining
           settingsStorage.update({ isTraining: draft.isTraining })
+        })
+      })
+    },
+
+    setIsCountingAction: (isCounting) => {
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.isCounting = isCounting
         })
       })
     },
@@ -180,7 +204,7 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
       })
     },
 
-    applyGridAlignment: () => {
+    applyGridAlignmentAction: () => {
       set((state) => {
         return produce(state, (draft) => {
           const { beats, subdivision } = draft

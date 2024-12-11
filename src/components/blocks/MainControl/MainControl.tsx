@@ -81,7 +81,6 @@ const MainControl = () => {
             className={classes.update}
             icon="icon.download"
             onClick={() => {
-              window.localStorage.clear()
               updateServiceWorker()
             }}
           />

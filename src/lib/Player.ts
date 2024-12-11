@@ -7,26 +7,28 @@ export class Player {
   private kit: SoundMap
   private tempo: number
   private beats: number
-  private noteValue: number
-  private subdivision: number
   private volume: number
   private nextBeatAt: number
   private onBeat?: (beat: Beat) => void
   private openBuffers: AudioBufferSourceNode[]
   private timeoutId: number | undefined
   private notes: Note[]
+  private counting: boolean
+
+  private isSubdivisionNote(index: number): boolean {
+    return !(index % (this.notes.length / this.beats) === 0)
+  }
 
   constructor() {
     this.kit = {} as SoundMap
     this.tempo = DEFAULTS.tempo
-    this.noteValue = DEFAULTS.noteValue
     this.beats = DEFAULTS.beats
     this.notes = []
-    this.subdivision = DEFAULTS.subdivision
     this.volume = DEFAULTS.volume
     this.nextBeatAt = 0
     this.audioCtx = getAudioContext()
     this.openBuffers = []
+    this.counting = false
   }
 
   public setKit(kit: SoundMap) {
@@ -41,10 +43,6 @@ export class Player {
     this.beats = value
   }
 
-  public setNoteValue(value: number) {
-    this.noteValue = value
-  }
-
   public setNotes(notes: Note[]) {
     this.notes = notes
   }
@@ -53,12 +51,12 @@ export class Player {
     this.volume = volume
   }
 
-  public setSubdivision(subdivision: number) {
-    this.subdivision = subdivision
-  }
-
   public setOnBeat(onBeat: (beat: Beat) => void) {
     this.onBeat = onBeat
+  }
+
+  public setIsCounting(isCounting: boolean) {
+    this.counting = isCounting
   }
 
   public play() {
@@ -68,7 +66,13 @@ export class Player {
       if (this.notes[0]?.instrument) {
         this.playNotesAtNextBeatTime(this.nextBeatAt, this.notes[0]?.instrument)
       }
-      this.onBeat?.({ index: 0, note: this.notes[0] })
+      this.onBeat?.({
+        index: 0,
+        isCounting: this.counting,
+        isFirst: true,
+        isLast: 0 === this.notes.length - 1,
+        isSubdivision: false,
+      })
     }
 
     this.schedule(0)
@@ -98,16 +102,24 @@ export class Player {
     this.nextBeatAt += 60 / ((this.tempo * this.notes.length) / this.beats)
     const nextIndex = (index + 1) % this.notes.length
     const nextNote = this.notes[nextIndex]
+    const nextIsSubdivision = this.isSubdivisionNote(nextIndex)
 
     // Schedule next beat
-    if (nextNote?.instrument) {
-      this.playNotesAtNextBeatTime(this.nextBeatAt, nextNote.instrument)
+    if (nextNote?.instrument && (!this.counting || !nextIsSubdivision)) {
+      const nextInstrument = this.counting ? 'fxMetronome1' : nextNote.instrument
+      this.playNotesAtNextBeatTime(this.nextBeatAt, nextInstrument)
     }
 
     this.timeoutId = window.setTimeout(
       () => {
         if (nextNote) {
-          this.onBeat?.({ index: nextIndex, note: nextNote })
+          this.onBeat?.({
+            index: nextIndex,
+            isCounting: this.counting,
+            isFirst: nextIndex === 0,
+            isLast: nextIndex === this.notes.length - 1,
+            isSubdivision: nextIsSubdivision,
+          })
         }
 
         this.schedule(nextIndex)

@@ -10,49 +10,51 @@ type Options = Partial<{
 }>
 
 export const useTraining = ({ onStop }: Options = {}) => {
-  const { every, from, to, step, count, type, setFrom } = useTrainingStore(
-    ({ every, from, to, step, count, type, setFrom }) => ({
+  const { every, from, to, step, type, setFromAction } = useTrainingStore(
+    ({ every, from, to, step, type, setFromAction }) => ({
       every,
       from,
       to,
       step,
-      count,
       type,
-      setFrom,
+      setFromAction,
     }),
   )
 
   const {
+    applyGridAlignmentAction,
     beats,
+    count,
     isPlaying,
     isTraining,
-    notes,
-    applyGridAlignment,
     setBeatsAction,
+    setIsCountingAction,
     setSubdivisionAction,
     setTempoAction,
     subdivision,
     tempo,
   } = useMetronomeStore(
     ({
+      applyGridAlignmentAction,
       beats,
+      count,
       isPlaying,
       isTraining,
-      notes,
-      applyGridAlignment,
       setBeatsAction,
+      setIsCountingAction,
       setIsPlayingAction,
       setSubdivisionAction,
       setTempoAction,
       subdivision,
       tempo,
     }) => ({
+      applyGridAlignmentAction,
       beats,
+      count,
       isPlaying,
       isTraining,
-      notes,
-      applyGridAlignment,
       setBeatsAction,
+      setIsCountingAction,
       setIsPlayingAction,
       setSubdivisionAction,
       setTempoAction,
@@ -92,9 +94,23 @@ export const useTraining = ({ onStop }: Options = {}) => {
   // Update 'from'
   useEffect(() => {
     if (!isPlaying && isTraining) {
-      setFrom({ beats, tempo, subdivision }[type])
+      setFromAction({ beats, tempo, subdivision }[type])
     }
-  }, [beats, tempo, subdivision, isTraining, isPlaying, type, setFrom])
+  }, [beats, tempo, subdivision, isTraining, isPlaying, type, setFromAction])
+
+  // Update counting
+  useEffect(() => {
+    if (isPlaying && isTraining) {
+      setIsCountingAction(count > 0)
+    }
+  }, [count, isPlaying, isTraining, setIsCountingAction])
+
+  useEffect(() => {
+    // нужно выключить отсчёт на последний удар
+    if (beat.isLast) {
+      setIsCountingAction(isTraining && barsPlayed < count)
+    }
+  }, [barsPlayed, beat.isLast, count, isTraining, setIsCountingAction])
 
   // Training loop
   // Изменяет значение на последнюю ноту последнего такта
@@ -103,7 +119,7 @@ export const useTraining = ({ onStop }: Options = {}) => {
       barsPlayed > count &&
       isTraining &&
       isPlaying &&
-      beat.index === notes.length - 1 &&
+      beat.isLast &&
       barsPlayed % every === 0 &&
       refTrainingGenerator.current
     ) {
@@ -111,7 +127,10 @@ export const useTraining = ({ onStop }: Options = {}) => {
 
       if (value && !done) {
         onChange(value)
-        applyGridAlignment()
+
+        if (type === 'subdivision') {
+          applyGridAlignmentAction()
+        }
       } else {
         // if (alternate) {
         //   if (!refIsDecrease.current) {
@@ -125,7 +144,7 @@ export const useTraining = ({ onStop }: Options = {}) => {
         //   const { value, done } = refTrainingGenerator.current.next()
         //   if (value !== undefined && !done) {
         //     onChange(value)
-        //     applyGridAlignment()
+        //     applyGridAlignmentAction()
         //   }
         // } else {
 
@@ -138,15 +157,15 @@ export const useTraining = ({ onStop }: Options = {}) => {
       }
     }
   }, [
-    applyGridAlignment,
+    applyGridAlignmentAction,
     barsPlayed,
-    beat.index,
+    beat.isLast,
     count,
     every,
     isPlaying,
     isTraining,
-    notes.length,
     onChange,
     onStop,
+    type,
   ])
 }
