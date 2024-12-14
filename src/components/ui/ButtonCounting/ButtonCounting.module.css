@@ -1,0 +1,11 @@
+.button-counting {
+  --size-icon: var(--font-size-5);
+
+  inline-size: var(--size-icon);
+  block-size: var(--size-icon);
+  font-weight: bold;
+  font-size: var(--font-size-3);
+  line-height: var(--font-lineheight-0);
+  border-radius: var(--radius-round);
+  outline: var(--border);
+}

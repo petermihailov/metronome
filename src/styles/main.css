@@ -2,16 +2,18 @@
   accent-color: var(--color-accent-1);
   caret-color: var(--color-accent-1);
   color: var(--color-text);
+  font-size: 16px;
   font-family: var(--font-sans);
   line-height: var(--font-lineheight-1);
 }
 
 :where([data-react-root]) {
-  block-size: inherit;
+  inline-size: 100%;
   isolation: isolate;
 }
 
 :where(body) {
+  block-size: 100%;
   background-color: var(--color-background-1);
 
   /* transition: background-color 200ms linear; */

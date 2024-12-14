@@ -6,6 +6,7 @@ import { useMetronomeStore } from '../../../store/useMetronomeStore'
 import { usePlayingTimeStore } from '../../../store/usePlayingTimeStore'
 import { useTrainingStore } from '../../../store/useTrainingStore'
 import { timeFormat } from '../../../utils/format'
+import { ButtonCounting } from '../../ui/ButtonCounting'
 import { ButtonIcon } from '../../ui/ButtonIcon'
 import { ButtonPlay } from '../../ui/ButtonPlay'
 import { Checkbox } from '../../ui/Checkbox'
@@ -30,11 +31,15 @@ const MainControl = () => {
     type,
   }))
 
-  const { beats, subdivision, tempo } = useMetronomeStore(({ beats, subdivision, tempo }) => ({
-    beats,
-    subdivision,
-    tempo,
-  }))
+  const { beats, subdivision, tempo, count, setCountAction } = useMetronomeStore(
+    ({ beats, subdivision, tempo, count, setCountAction }) => ({
+      beats,
+      subdivision,
+      tempo,
+      count,
+      setCountAction,
+    }),
+  )
 
   const [trainingTime, setTrainingTime] = useState('00:00')
   useEffect(() => {
@@ -55,17 +60,17 @@ const MainControl = () => {
   return (
     <div className={classes.mainControl}>
       <div className={classes.playing}>
-        <ButtonPlay
-          active
-          withoutHighlight
-          className={classes.playButton}
-          playing={isPlaying}
-          onClick={() => setIsPlayingAction(!isPlaying)}
-        />
+        <ButtonPlay active playing={isPlaying} onClick={() => setIsPlayingAction(!isPlaying)} />
         <span className={classes.time}>{currentTime}</span>
       </div>
 
       <div className={classes.actions}>
+        {isTraining && (
+          <ButtonCounting
+            count={count}
+            onClick={() => setCountAction(count === 4 ? 1 : count + 1)}
+          />
+        )}
         <div className={classes.training} onClick={() => setIsTrainingAction(!isTraining)}>
           <Checkbox
             checked={isTraining}

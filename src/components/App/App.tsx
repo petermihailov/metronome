@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useRef } from 'react'
 
 import {
   useButtonsPreventSpacePress,
@@ -7,6 +7,7 @@ import {
   usePlayingTimeUpdate,
   useWakeLock,
   useTraining,
+  useScale,
 } from '../../hooks'
 import { Display } from '../blocks/Display'
 import { MainControl } from '../blocks/MainControl'
@@ -22,8 +23,11 @@ const App = () => {
   useWakeLock()
   useButtonsPreventSpacePress()
 
+  const container = useRef<HTMLDivElement>(null)
+  useScale(container)
+
   return (
-    <div className={classes.app}>
+    <div ref={container} className={classes.app}>
       <Display />
       <MainControl />
       <Settings />

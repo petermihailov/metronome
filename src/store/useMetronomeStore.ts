@@ -96,8 +96,10 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
     setCountAction: (count) => {
       set((state) => {
         return produce(state, (draft) => {
-          draft.count = count
-          settingsStorage.update({ count: count })
+          if (!state.isPlaying) {
+            draft.count = count
+            settingsStorage.update({ count: count })
+          }
         })
       })
     },

@@ -1,4 +1,6 @@
 .button-icon {
+  --size-highlight: calc(var(--size-icon) * 1.25);
+
   position: relative;
   display: grid;
   place-content: center;
@@ -28,15 +30,12 @@
 }
 
 .button-icon::before {
-  --size-circle: calc(var(--size-icon) * 1.25);
-  --highlight-size: 0;
-
   position: absolute;
-  inset-block-start: calc(50% - var(--size-circle) / 2);
-  inset-inline-start: calc(50% - var(--size-circle) / 2);
+  inset-block-start: calc(50% - var(--size-highlight) / 2);
+  inset-inline-start: calc(50% - var(--size-highlight) / 2);
   content: '';
-  inline-size: var(--size-circle);
-  block-size: var(--size-circle);
+  inline-size: var(--size-highlight);
+  block-size: var(--size-highlight);
   border-radius: var(--radius-round);
   background-color: #fff2;
   transform: scale(0);

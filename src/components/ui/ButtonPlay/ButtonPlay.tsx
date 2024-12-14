@@ -1,7 +1,10 @@
+import clsx from 'clsx'
 import { memo, useEffect, useRef } from 'react'
 
 import type { ButtonIconProps } from '../ButtonIcon'
 import { ButtonIcon } from '../ButtonIcon'
+
+import classes from './ButtonPlay.module.css'
 
 export interface ButtonPlayProps extends Omit<ButtonIconProps, 'aria-label' | 'color'> {
   playing: boolean
@@ -32,6 +35,7 @@ const ButtonPlay = ({ playing, ...restProps }: ButtonPlayProps) => {
   return (
     <ButtonIcon
       aria-label={playing ? 'stop' : 'play'}
+      className={clsx(classes.buttonPlay, { [classes.isPlaying]: playing })}
       color={playing ? 'accent2' : 'accent1'}
       {...restProps}
     >

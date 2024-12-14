@@ -1,0 +1,13 @@
+.button-play {
+  --size-icon: var(--size-3);
+
+  flex: none;
+}
+
+.button-play svg {
+  transform: translateX(6%);
+}
+
+.is-playing svg {
+  transform: translateX(0);
+}

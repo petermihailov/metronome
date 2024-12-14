@@ -38,12 +38,6 @@
   content: '';
 }
 
-.play-button {
-  --size-icon: var(--font-size-5);
-
-  flex: none;
-}
-
 .time {
   font-weight: 700;
   font-size: var(--font-size-5);
