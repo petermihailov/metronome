@@ -38,6 +38,7 @@ export const DEFAULTS = {
       index: 0,
       isCounting: false,
       isSubdivision: false,
+      isFirst: true,
       isLast: false,
     }
   },
