@@ -60,7 +60,7 @@ const MainControl = () => {
   return (
     <div className={classes.mainControl}>
       <div className={classes.playing}>
-        <ButtonPlay active playing={isPlaying} onClick={() => setIsPlayingAction(!isPlaying)} />
+        <ButtonPlay playing={isPlaying} onClick={() => setIsPlayingAction(!isPlaying)} />
         <span className={classes.time}>{currentTime}</span>
       </div>
 

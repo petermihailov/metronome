@@ -34,9 +34,11 @@ const ButtonPlay = ({ playing, ...restProps }: ButtonPlayProps) => {
 
   return (
     <ButtonIcon
+      active
       aria-label={playing ? 'stop' : 'play'}
       className={clsx(classes.buttonPlay, { [classes.isPlaying]: playing })}
       color={playing ? 'accent2' : 'accent1'}
+      tabIndex={-1}
       {...restProps}
     >
       <svg fill="currentColor" height="24" stroke="currentColor" viewBox="0 0 24 24" width="24">

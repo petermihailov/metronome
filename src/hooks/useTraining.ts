@@ -67,7 +67,6 @@ export const useTraining = ({ onStop }: Options = {}) => {
 
   const refTrainingGenerator = useRef<Generator<number>>()
   const refIsDecrease = useRef(from > to)
-  const refCanStop = useRef(false)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChange = useCallback(
@@ -147,13 +146,7 @@ export const useTraining = ({ onStop }: Options = {}) => {
         //     applyGridAlignmentAction()
         //   }
         // } else {
-
-        // доигрываем такт и стопаем
-        if (refCanStop.current) {
-          onStop?.()
-        }
-        refCanStop.current = true
-        // }
+        onStop?.()
       }
     }
   }, [

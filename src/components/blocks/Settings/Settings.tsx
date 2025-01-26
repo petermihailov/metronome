@@ -57,10 +57,10 @@ const Settings = () => {
   const type = useTrainingStore(({ type }) => type)
 
   useEffect(() => {
-    if (!isPlaying || isFirstBeat) {
+    if (!isTraining || !isPlaying || isFirstBeat) {
       setValues({ tempo, beats, subdivision })
     }
-  }, [beats, isFirstBeat, isPlaying, subdivision, tempo])
+  }, [beats, isFirstBeat, isPlaying, isTraining, subdivision, tempo])
 
   return (
     <div
