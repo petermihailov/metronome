@@ -2,3 +2,8 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.center {
+  justify-content: center;
+  margin-block-start: var(--size-2);
+}
