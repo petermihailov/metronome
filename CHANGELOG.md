@@ -1,3 +1,12 @@
+## [1.14.1](https://github.com/petermihailov/metronome/compare/v1.14.0...v1.14.1) (2025-01-26)
+
+
+### Bug Fixes
+
+* type ([891a880](https://github.com/petermihailov/metronome/commit/891a880af11bb734f07436dc110537cbad8ca134))
+
+
+
 # [1.14.0](https://github.com/petermihailov/metronome/compare/v1.13.1...v1.14.0) (2025-01-26)
 
 
@@ -39,15 +48,6 @@
 ### Bug Fixes
 
 * memoize ([f665de0](https://github.com/petermihailov/metronome/commit/f665de01adb2ba10fea0b599afd69f794e2b15ca))
-
-
-
-# [1.12.0](https://github.com/petermihailov/metronome/compare/v1.11.7...v1.12.0) (2024-07-16)
-
-
-### Features
-
-* training ([81e63b8](https://github.com/petermihailov/metronome/commit/81e63b8bface50d7b74c6a852a85b39bae189020))
 
 
 
