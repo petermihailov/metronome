@@ -1,3 +1,12 @@
+## [1.14.2](https://github.com/petermihailov/metronome/compare/v1.14.1...v1.14.2) (2025-01-28)
+
+
+### Bug Fixes
+
+* fireworks ([96f537c](https://github.com/petermihailov/metronome/commit/96f537c12739566cc1f0be271480e0a5f4272789))
+
+
+
 ## [1.14.1](https://github.com/petermihailov/metronome/compare/v1.14.0...v1.14.1) (2025-01-26)
 
 
@@ -39,15 +48,6 @@
 ### Features
 
 * save notes grid ([00c42fa](https://github.com/petermihailov/metronome/commit/00c42fa9a839e298ef06e2205a46cef868c63197))
-
-
-
-## [1.12.1](https://github.com/petermihailov/metronome/compare/v1.12.0...v1.12.1) (2024-07-22)
-
-
-### Bug Fixes
-
-* memoize ([f665de0](https://github.com/petermihailov/metronome/commit/f665de01adb2ba10fea0b599afd69f794e2b15ca))
 
 
 
