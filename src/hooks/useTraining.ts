@@ -113,16 +113,18 @@ export const useTraining = ({ onStop }: Options = {}) => {
 
   // Training loop
   // Изменяет значение на последнюю ноту последнего такта
+  const doneRef = useRef<boolean | undefined>(undefined)
   useEffect(() => {
     if (
       barsPlayed > count &&
       isTraining &&
       isPlaying &&
       beat.isLast &&
-      barsPlayed % every === 0 &&
+      Math.max(1, barsPlayed - count) % every === 0 &&
       refTrainingGenerator.current
     ) {
       const { value, done } = refTrainingGenerator.current.next()
+      doneRef.current = done
 
       if (value && !done) {
         onChange(value)
@@ -146,12 +148,22 @@ export const useTraining = ({ onStop }: Options = {}) => {
         //     applyGridAlignmentAction()
         //   }
         // } else {
+      }
+    } else {
+      if (
+        beat.isFirst &&
+        isTraining &&
+        isPlaying &&
+        Math.max(1, barsPlayed - count) % every === 0 &&
+        doneRef.current
+      ) {
         onStop?.()
       }
     }
   }, [
     applyGridAlignmentAction,
     barsPlayed,
+    beat.isFirst,
     beat.isLast,
     count,
     every,
