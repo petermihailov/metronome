@@ -67,6 +67,7 @@ export const useTraining = ({ onStop }: Options = {}) => {
 
   const refTrainingGenerator = useRef<Generator<number>>()
   const refIsDecrease = useRef(from > to)
+  const refDone = useRef<boolean | undefined>(undefined)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChange = useCallback(
@@ -85,6 +86,7 @@ export const useTraining = ({ onStop }: Options = {}) => {
         refTrainingGenerator.current = rangeGenerator({ from, to, step })
       } else {
         refIsDecrease.current = false
+        refDone.current = false
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,7 +115,6 @@ export const useTraining = ({ onStop }: Options = {}) => {
 
   // Training loop
   // Изменяет значение на последнюю ноту последнего такта
-  const doneRef = useRef<boolean | undefined>(undefined)
   useEffect(() => {
     if (
       barsPlayed > count &&
@@ -124,7 +125,7 @@ export const useTraining = ({ onStop }: Options = {}) => {
       refTrainingGenerator.current
     ) {
       const { value, done } = refTrainingGenerator.current.next()
-      doneRef.current = done
+      refDone.current = done
 
       if (value && !done) {
         onChange(value)
@@ -150,13 +151,7 @@ export const useTraining = ({ onStop }: Options = {}) => {
         // } else {
       }
     } else {
-      if (
-        beat.isFirst &&
-        isTraining &&
-        isPlaying &&
-        Math.max(1, barsPlayed - count) % every === 0 &&
-        doneRef.current
-      ) {
+      if (beat.isFirst && isTraining && isPlaying && refDone.current) {
         onStop?.()
       }
     }
