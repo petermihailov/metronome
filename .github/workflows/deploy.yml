@@ -12,14 +12,13 @@ permissions:
 
 jobs:
   build:
-    name: Build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js environment
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
@@ -32,33 +31,7 @@ jobs:
         env:
           BASE_PATH: /metronome/
 
-      - name: Debug dist structure
-        run: |
-          echo "Listing dist files with details:"
-          find ./dist -ls
-          echo "Checking for symlinks in dist:"
-          find ./dist -type l
-          echo "Checking for hard links in dist:"
-          find ./dist -type f -links +1
-          echo "Total size of dist:"
-          du -sh ./dist
-
-      - name: Rebuild dist without links using rsync
-        run: |
-          mkdir clean_dist
-          rsync -a --copy-links ./dist/ clean_dist/
-          rm -rf ./dist
-          mv clean_dist dist
-
-      - name: Check total size after rebuild
-        run: du -sh ./dist
-
-      - name: Fix permissions
-        run: |
-          find ./dist -type f -exec chmod 644 {} \;
-          find ./dist -type d -exec chmod 755 {} \;
-
-      - name: Upload Pages artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: github-pages
@@ -89,12 +62,12 @@ jobs:
         with:
           name: github-pages
 
-      - name: Verify dist content after download
+      - name: Deploy to gh-pages
         run: |
-          find ./ -type l -print
-          find ./ -type f -links +1 -print
-          du -sh ./
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          rm -rf *
+          cp -r github-pages/* ./
+          git add .
+          git commit -m "Deploy production version from master branch" || echo "No changes to commit"
+          git push origin gh-pages
