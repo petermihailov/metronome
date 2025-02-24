@@ -64,6 +64,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
+      contents: write
       pages: write
       id-token: write
 
@@ -72,6 +73,11 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
       - name: Download Pages artifact
         uses: actions/download-artifact@v4
         with:
@@ -85,8 +91,10 @@ jobs:
 
       - name: Clean gh-pages branch
         run: |
+          git init
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+          git remote add origin https://github.com/${{ github.repository }}.git
           git fetch origin gh-pages
           git checkout gh-pages || git checkout --orphan gh-pages
           git rm -r * || true
