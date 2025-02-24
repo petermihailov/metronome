@@ -35,7 +35,7 @@ jobs:
       - name: Remove symlinks and hard links
         run: |
           find ./dist -type l -exec rm -f {} +
-          find ./dist -type f -exec stat --format="%h %n" {} | awk '$1>1 {print $2}' | xargs -r rm -f
+          find ./dist -type f -exec stat --format="%h %n" {} \; | awk '$1>1 {print $2}' | xargs -r rm -f
 
       - name: Check total size of dist
         run: |
@@ -43,8 +43,8 @@ jobs:
 
       - name: Fix permissions
         run: |
-          find ./dist -type f -exec chmod 644 {} \\
-          find ./dist -type d -exec chmod 755 {} \\
+          find ./dist -type f -exec chmod 644 {} \;
+          find ./dist -type d -exec chmod 755 {} \;
 
       - name: Upload Pages artifact
         uses: actions/upload-artifact@v4
