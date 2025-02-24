@@ -32,21 +32,26 @@ jobs:
         env:
           BASE_PATH: /metronome/
 
-      - name: Remove symlinks and hard links
+      - name: Debug dist structure
         run: |
-          find ./dist -type l -exec rm -f {} +
-          find ./dist -type f -links +1 -exec rm -f {} +
-
-      - name: Check total size of dist
-        run: |
+          echo "Listing dist files with details:"
+          find ./dist -ls
+          echo "Checking for symlinks in dist:"
+          find ./dist -type l
+          echo "Checking for hard links in dist:"
+          find ./dist -type f -links +1
+          echo "Total size of dist:"
           du -sh ./dist
 
-      - name: Check for symlinks before deploy
+      - name: Rebuild dist without links using rsync
         run: |
-          if find ./dist -type l | grep -q .; then
-            echo "Error: Symlinks detected in dist. Deployment aborted."
-            exit 1
-          fi
+          mkdir clean_dist
+          rsync -a --copy-links ./dist/ clean_dist/
+          rm -rf ./dist
+          mv clean_dist dist
+
+      - name: Check total size after rebuild
+        run: du -sh ./dist
 
       - name: Fix permissions
         run: |
@@ -84,21 +89,11 @@ jobs:
         with:
           name: github-pages
 
-      - name: Verify dist content
+      - name: Verify dist content after download
         run: |
           find ./ -type l -print
           find ./ -type f -links +1 -print
           du -sh ./
-
-      - name: Clean gh-pages branch
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git fetch origin gh-pages
-          git checkout gh-pages || git checkout --orphan gh-pages
-          git rm -r * || true
-          git commit -m "Clean gh-pages branch before deployment" || echo "No changes to commit"
-          git push origin gh-pages
 
       - name: Deploy to GitHub Pages
         id: deployment
