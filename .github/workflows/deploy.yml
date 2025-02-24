@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -31,6 +31,15 @@ jobs:
         run: npm run build
         env:
           BASE_PATH: /metronome/
+
+      - name: Remove symlinks and hard links
+        run: |
+          find ./dist -type l -exec rm -f {} +
+          find ./dist -type f -exec stat --format="%h %n" {} | awk '$1>1 {print $2}' | xargs -r rm -f
+
+      - name: Check total size of dist
+        run: |
+          du -sh ./dist
 
       - name: Fix permissions
         run: |
