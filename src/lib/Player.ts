@@ -1,6 +1,6 @@
 import { DEFAULTS } from '../constants'
 import type { Instrument, SoundMap, Beat, Note } from '../types/common'
-import { getAudioContext } from '../utils/audio'
+import { getAudioContext, getOutputLatency } from '../utils/audio'
 
 export class Player {
   private readonly audioCtx: AudioContext
@@ -14,6 +14,7 @@ export class Player {
   private timeoutId: number | undefined
   private notes: Note[]
   private counting: boolean
+  private outputLatency: number
 
   private isSubdivisionNote(index: number): boolean {
     return !(index % (this.notes.length / this.beats) === 0)
@@ -29,6 +30,7 @@ export class Player {
     this.audioCtx = getAudioContext()
     this.openBuffers = []
     this.counting = false
+    this.outputLatency = 0
   }
 
   public setKit(kit: SoundMap) {
@@ -60,19 +62,22 @@ export class Player {
   }
 
   public play() {
+    this.outputLatency = getOutputLatency()
     this.nextBeatAt = this.audioCtx.currentTime
 
     if (this.notes[0]) {
       if (this.notes[0]?.instrument) {
         this.playNotesAtNextBeatTime(this.nextBeatAt, this.notes[0]?.instrument)
       }
-      this.onBeat?.({
-        index: 0,
-        isCounting: this.counting,
-        isFirst: true,
-        isLast: 0 === this.notes.length - 1,
-        isSubdivision: false,
-      })
+      this.timeoutId = window.setTimeout(() => {
+        this.onBeat?.({
+          index: 0,
+          isCounting: this.counting,
+          isFirst: true,
+          isLast: 0 === this.notes.length - 1,
+          isSubdivision: false,
+        })
+      }, this.outputLatency)
     }
 
     this.schedule(0)
@@ -124,7 +129,7 @@ export class Player {
 
         this.schedule(nextIndex)
       },
-      (this.nextBeatAt - this.audioCtx.currentTime) * 1000,
+      (this.nextBeatAt - this.audioCtx.currentTime + this.outputLatency) * 1000,
     )
   }
 }
