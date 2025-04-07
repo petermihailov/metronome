@@ -1,3 +1,12 @@
+## [1.15.4](https://github.com/petermihailov/metronome/compare/v1.15.3...v1.15.4) (2025-04-07)
+
+
+### Bug Fixes
+
+* og-image ([36a69aa](https://github.com/petermihailov/metronome/commit/36a69aa0d00135836d9566c093e61a0072d769f5))
+
+
+
 ## [1.15.3](https://github.com/petermihailov/metronome/compare/v1.15.2...v1.15.3) (2025-04-07)
 
 
@@ -31,15 +40,6 @@
 ### Features
 
 * update ui, add counters, and some features ([fb9913e](https://github.com/petermihailov/metronome/commit/fb9913ec5782b7a2405515d29422b3c0aa71233e))
-
-
-
-## [1.14.3](https://github.com/petermihailov/metronome/compare/v1.14.2...v1.14.3) (2025-01-28)
-
-
-### Bug Fixes
-
-* fireworks ([e73d4b3](https://github.com/petermihailov/metronome/commit/e73d4b32fec65fe226a28f8ad763dd6f081ae417))
 
 
 
