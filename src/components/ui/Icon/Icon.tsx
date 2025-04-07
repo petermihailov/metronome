@@ -16,7 +16,7 @@ const Icon = ({
   name,
   className,
   viewBox = '0 0 24 24',
-  spritePath = '/sprite.svg',
+  spritePath = './sprite.svg',
 }: IconProps) => {
   return (
     <svg
