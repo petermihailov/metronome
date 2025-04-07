@@ -1,0 +1,8 @@
+.indicator {
+  --indicator-size: var(--size-1);
+
+  inline-size: var(--indicator-size);
+  block-size: var(--indicator-size);
+  border: 0.125rem solid #000a;
+  border-radius: var(--radius-round);
+}

@@ -8,10 +8,9 @@
   margin-inline: auto;
   padding: min(5vw, var(--size-3));
   border-radius: var(--size-3);
-  background-color: var(--color-background-2);
-  background-image: linear-gradient(165deg, transparent, transparent);
-  box-shadow: 0 0 0 40vmax var(--color-background-2);
-  transition-property: box-shadow, background-image, transform;
+  background-color: var(--color-background-app);
+  transform-origin: top;
+  transition-property: box-shadow, transform;
   transition-timing-function: ease-in;
   transition-duration: 600ms;
 }
@@ -19,14 +18,11 @@
 @media (min-width: 50rem) {
   body {
     display: grid;
-    place-items: center;
   }
 }
 
 @media (min-width: 55rem) {
   .app {
-    background-image: linear-gradient(170deg, #0001, transparent);
-    box-shadow: 0 0 0 0 var(--color-background-2);
     transition-timing-function: ease-out;
   }
 }

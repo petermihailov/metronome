@@ -1,5 +1,6 @@
 .select {
   position: relative;
+  transition: opacity 100ms ease-out;
 }
 
 .label {
@@ -25,4 +26,9 @@
   border-radius: var(--radius-1);
   background-color: transparent;
   outline: var(--border);
+}
+
+.disabled {
+  opacity: var(--alpha-disabled);
+  pointer-events: none;
 }

@@ -2,77 +2,76 @@ import { useEffect, useRef } from 'react'
 
 import { useSounds } from './useSounds'
 import { Player } from '../lib/Player'
-import { useBeatStore } from '../store/useBeatStore'
 import { useMetronomeStore } from '../store/useMetronomeStore'
+import { useTickStore } from '../store/useTickStore'
 
 export function usePlayer() {
   const kit = useSounds()
   const player = useRef(new Player())
 
-  const { isPlaying, isTraining, isCounting, beats, notes, tempo, volume, mute } =
-    useMetronomeStore(
-      ({ isPlaying, isTraining, isCounting, beats, notes, tempo, subdivision, volume, mute }) => ({
-        isCounting,
-        isPlaying,
-        isTraining,
-        beats,
-        notes,
-        tempo,
-        subdivision,
-        volume,
-        mute,
-      }),
-    )
+  const { isPlaying, beats, grid, tempo, count } = useMetronomeStore(
+    ({ isPlaying, beats, grid, tempo, count }) => ({
+      beats,
+      count,
+      isPlaying,
+      grid,
+      tempo,
+    }),
+  )
 
-  const { setBeatAction, resetAction } = useBeatStore(({ setBeatAction, resetAction }) => ({
-    setBeatAction,
-    resetAction,
-  }))
+  const { onBeforeScheduledAction, onTickAction, resetAction } = useTickStore(
+    ({ onBeforeScheduledAction, onTickAction, resetAction }) => ({
+      onBeforeScheduledAction,
+      onTickAction,
+      resetAction,
+    }),
+  )
 
   /** Initialize */
   useEffect(() => {
     if (kit) {
       player.current.setKit(kit)
-      player.current.setOnBeat(setBeatAction)
     }
-  }, [kit, setBeatAction])
+  }, [kit])
+
+  /** Sync ticks */
+  useEffect(() => {
+    player.current.setOnTick((tick) => {
+      onTickAction(tick)
+    })
+  }, [onTickAction])
+
+  useEffect(() => {
+    player.current.setBeforeTickScheduled(onBeforeScheduledAction)
+  }, [onBeforeScheduledAction])
 
   /** Sync playing */
   useEffect(() => {
     if (isPlaying) {
-      if (isTraining) {
-        player.current.setIsCounting(true)
-      }
-
       player.current.play()
     } else {
       resetAction()
       player.current.stop()
     }
-  }, [isPlaying, isTraining, resetAction])
-
-  /** Sync countinf */
-  useEffect(() => {
-    player.current.setIsCounting(isCounting)
-  }, [isCounting])
+  }, [isPlaying, resetAction])
 
   /** Sync beats */
   useEffect(() => {
     player.current.setBeats(beats)
   }, [beats])
 
-  /** Sync notes */
+  /** Sync grid */
   useEffect(() => {
-    player.current.setNotes(notes)
-  }, [notes])
+    player.current.setGrid(grid)
+  }, [grid])
 
   /** Sync tempo */
   useEffect(() => {
     player.current.setTempo(tempo)
   }, [tempo])
 
-  /** Sync volume */
+  /** Sync count */
   useEffect(() => {
-    player.current.setVolume(mute ? 0 : volume)
-  }, [volume, mute])
+    player.current.setCounting(count)
+  }, [count])
 }

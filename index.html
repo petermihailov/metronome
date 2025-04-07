@@ -12,14 +12,26 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://petermihailov.github.io/metronome/" />
     <!-- Favicon -->
-    <link href="/favicon-dark.png" rel="icon" media="(prefers-color-scheme: dark)" />
-    <link href="/favicon-light.png" rel="icon" media="(prefers-color-scheme: light)" />
-    <!-- PWA -->
+    <link href="/favicon.png" rel="icon" media="(prefers-color-scheme: dark)" />
+    <link href="/favicon.png" rel="icon" media="(prefers-color-scheme: light)" />
+    <!-- Apple Touch Icon (iOS) -->
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <!-- PWA -->
     <meta name="theme-color" content="#000" />
     <script type="module" src="/src/index.tsx"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8QNSX88M08"></script>
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+      gtag('config', 'G-8QNSX88M08')
+    </script>
   </head>
   <body>
     <div data-react-root></div>
+    <div data-modal></div>
   </body>
 </html>

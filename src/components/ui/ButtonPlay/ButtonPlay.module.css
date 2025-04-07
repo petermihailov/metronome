@@ -2,6 +2,8 @@
   --size-icon: var(--size-3);
 
   flex: none;
+  inline-size: var(--size-icon);
+  block-size: var(--size-icon);
 }
 
 .button-play svg {

@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { memo, useEffect, useRef } from 'react'
+import { forwardRef, memo, useEffect, useRef } from 'react'
 
 import type { ButtonIconProps } from '../ButtonIcon'
 import { ButtonIcon } from '../ButtonIcon'
@@ -20,7 +20,10 @@ const animationProps = {
 const playPolygon = '6 6, 18 12, 18 12, 6 18'
 const stopPolygon = '6 6, 18 6, 18 18, 6 18'
 
-const ButtonPlay = ({ playing, ...restProps }: ButtonPlayProps) => {
+const ButtonPlay = forwardRef<HTMLButtonElement, ButtonPlayProps>(function ButtonPlay(
+  { className, playing, ...restProps },
+  ref,
+) {
   const playAnimationRef = useRef<SVGAnimateElement>(null)
   const stopAnimationRef = useRef<SVGAnimateElement>(null)
 
@@ -34,11 +37,12 @@ const ButtonPlay = ({ playing, ...restProps }: ButtonPlayProps) => {
 
   return (
     <ButtonIcon
+      ref={ref}
       active
-      aria-label={playing ? 'stop' : 'play'}
-      className={clsx(classes.buttonPlay, { [classes.isPlaying]: playing })}
+      aria-label={''}
+      className={clsx(className, classes.buttonPlay, { [classes.isPlaying]: playing })}
       color={playing ? 'accent2' : 'accent1'}
-      tabIndex={-1}
+      onFocus={(n) => n.currentTarget.blur()}
       {...restProps}
     >
       <svg fill="currentColor" height="24" stroke="currentColor" viewBox="0 0 24 24" width="24">
@@ -49,6 +53,6 @@ const ButtonPlay = ({ playing, ...restProps }: ButtonPlayProps) => {
       </svg>
     </ButtonIcon>
   )
-}
+})
 
 export default memo(ButtonPlay)

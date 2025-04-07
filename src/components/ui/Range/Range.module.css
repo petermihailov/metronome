@@ -2,7 +2,10 @@
   --track-fill: 0%;
 
   display: grid;
-  gap: var(--size-0);
+  gap: var(--size-00);
+  block-size: var(--block-size-control);
+  padding-block: var(--size-00) var(--size-000);
+  border-radius: var(--radius-1);
   container: range-container / inline-size;
 }
 
@@ -12,33 +15,26 @@
   --thumb-offset: -1.25ex;
   --thumb-highlight-size: 0;
 
+  position: relative;
+  z-index: 1;
   display: block;
   inline-size: 100%;
   background: 0 0;
+  box-shadow: 0 var(--size-000) var(--size-0) #0005;
   appearance: none;
 }
 
 .input::-webkit-slider-runnable-track {
   block-size: var(--track-height);
   border-radius: var(--radius-pill);
-  background-color: #ff357faa;
-  background-image: linear-gradient(
-    to right,
-    var(--color-accent-2) var(--track-fill),
-    transparent 0%
-  );
+  background-color: var(--color-accent-2);
   appearance: none;
 }
 
 .input::-moz-range-track {
   block-size: var(--track-height);
   border-radius: var(--radius-pill);
-  background-color: #ff357faa;
-  background-image: linear-gradient(
-    to right,
-    var(--color-accent-2) var(--track-fill),
-    transparent 0%
-  );
+  background-color: var(--color-accent-2);
   appearance: none;
 }
 
@@ -75,28 +71,40 @@
 }
 
 .labels {
+  --mask: linear-gradient(to bottom, #000 30%, #0000 60%, #000 60%);
+  --size: var(--size-00000);
+  --repeat-x: 0.7rem;
+
   position: relative;
   display: flex;
   justify-content: space-between;
   background:
-    linear-gradient(to right, #fffe 2px, transparent 2px) repeat-x 11.5px 0,
-    linear-gradient(to right, #fffa 2px, transparent 2px) repeat-x 11.5px 0,
-    linear-gradient(to right, #fffa 2px, transparent 2px) repeat-x 11.5px 0;
+    linear-gradient(to right, #fff var(--size), transparent var(--size)) repeat-x var(--repeat-x) 0,
+    linear-gradient(to right, #fffa var(--size), transparent var(--size)) repeat-x var(--repeat-x) 0,
+    linear-gradient(to right, #fffa var(--size), transparent var(--size)) repeat-x var(--repeat-x) 0;
   background-size:
-    calc((100% - 25px) / 14) 6px,
-    calc((100% - 25px) / 28) 4px,
+    calc((100% - 1.55rem) / 14) 35%,
+    calc((100% - 1.55rem) / 28) 20%,
     0 0;
+  overflow: hidden;
+
+  /* маска */
+  mask-image: var(--mask);
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
 }
 
 .label {
   inline-size: var(--size-2);
-  padding-block-start: var(--size-0);
+  padding-block-start: var(--size-1);
   font-weight: 500;
-  font-size: var(--font-size-0);
+  font-size: var(--font-size-000);
+  font-family: var(--font-segment);
   font-stretch: semi-condensed;
   text-align: center;
+  text-shadow: 1px 1px #000;
   cursor: pointer;
-  opacity: var(--opacity-dimmed);
+  opacity: var(--alpha-dimmed);
   transform-origin: top;
   transition-property: transform, color, width;
   transition-delay: 400ms, 0ms, 0ms;
@@ -119,6 +127,11 @@
   transition-duration: 200ms;
 }
 
+.disabled {
+  opacity: var(--alpha-disabled);
+  pointer-events: none;
+}
+
 @media (hover: hover) {
   .input:hover {
     --thumb-highlight-size: var(--size-0);
@@ -134,6 +147,7 @@
   .label:nth-child(2n) {
     inline-size: 2px;
     color: #0000;
+    text-shadow: none;
     transform: scale(0.5);
     transition-delay: 0ms, 400ms, 600ms;
   }
@@ -150,6 +164,7 @@
   .label:nth-child(4n + 3) {
     inline-size: 2px;
     color: #0000;
+    text-shadow: none;
     transform: scale(0.75);
     transition-delay: 0ms, 400ms, 600ms;
   }

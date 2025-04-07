@@ -1,0 +1,21 @@
+.bars-counter {
+  font-weight: 500;
+  font-size: var(--font-size-5);
+  line-height: var(--font-lineheight-0);
+}
+
+.bars {
+  position: relative;
+  margin-inline-start: var(--size-1);
+  opacity: var(--alpha-disabled);
+}
+
+.bars::before {
+  position: absolute;
+  content: '';
+  inline-size: 0.06em;
+  block-size: 70%;
+  border-radius: var(--radius-pill);
+  background-color: currentcolor;
+  transform: rotate(12deg) translate(-0.23em, 0.05em);
+}

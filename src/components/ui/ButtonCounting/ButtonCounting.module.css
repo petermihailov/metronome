@@ -1,11 +1,29 @@
 .button-counting {
-  --size-icon: var(--font-size-5);
-
-  inline-size: var(--size-icon);
   block-size: var(--size-icon);
-  font-weight: bold;
-  font-size: var(--font-size-3);
-  line-height: var(--font-lineheight-0);
+  aspect-ratio: 1;
   border-radius: var(--radius-round);
-  outline: var(--border);
+}
+
+.button-counting svg {
+  overflow: visible;
+}
+
+.button-counting path {
+  transition: fill 200ms ease-out;
+}
+
+.glow-segment {
+  fill: var(--color-accent-1);
+}
+
+.count-value {
+  position: absolute;
+  inset: 0;
+  inset-block-start: 0.05em;
+  display: grid;
+  place-items: center;
+  color: var(--color-text);
+  font-weight: 1000;
+  font-size: var(--font-size-0);
+  line-height: var(--font-lineheight-1);
 }

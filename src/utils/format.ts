@@ -1,4 +1,5 @@
 export const lead0 = (n: number) => ('0' + n).slice(-2)
+const nnbsp = ' '
 
 export const timeFormat = (totalSeconds: number) => {
   const hours = Math.floor(totalSeconds / 3600)
@@ -7,9 +8,10 @@ export const timeFormat = (totalSeconds: number) => {
 
   const ss = lead0(seconds)
   const mm = lead0(minutes)
-  const hh = lead0(hours)
 
-  return hh === '00' ? `${mm}:${ss}` : `${hh}:${mm}:${ss}`
+  return hours
+    ? `${hours}${nnbsp}:${nnbsp}${mm}${nnbsp}:${nnbsp}${ss}`
+    : `${mm}${nnbsp}:${nnbsp}${ss}`
 }
 
 export const dateFormat = (date = new Date()) => {

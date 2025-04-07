@@ -1,13 +1,7 @@
-.settings {
-  transition: opacity 100ms ease-out;
-}
-
 .values,
 .training {
   display: grid;
   row-gap: var(--size-1);
-
-  /* grid-template-rows: repeat(4, 1fr); */
 }
 
 .is-training.settings {
@@ -17,15 +11,35 @@
   column-gap: var(--size-2);
 }
 
-.is-training.is-playing {
-  opacity: var(--opacity-disabled);
-  pointer-events: none;
-}
-
 .time {
   grid-column: 2 / -1;
   font-weight: 1000;
   font-size: var(--font-size-3);
   line-height: var(--block-size-control);
   text-align: center;
+}
+
+.training-time {
+  display: grid;
+  gap: var(--size-000);
+  text-align: center;
+}
+
+.training-time span {
+  font-weight: 1000;
+  font-size: var(--font-size-0);
+  letter-spacing: -0.05rem;
+  text-transform: uppercase;
+}
+
+.training-time time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  block-size: var(--block-size-control);
+  font-weight: 900;
+  font-size: var(--font-size-4);
+  line-height: var(--font-lineheight-0);
+  border-radius: var(--radius-1);
+  background-color: transparent;
 }

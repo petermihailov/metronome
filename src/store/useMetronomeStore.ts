@@ -4,30 +4,25 @@ import { createWithEqualityFn } from 'zustand/traditional'
 
 import { DEFAULTS, MINMAX } from '../constants'
 import { Storage } from '../lib/LocalStorage'
-import type { Instrument, Note } from '../types/common'
+import { createLogger } from '../lib/Logger'
+import type { Instrument, Grid } from '../types/common'
+
+const logger = createLogger('METRONOME', { enabled: false, color: '#f07' })
 
 const settingsStorage = new Storage<{
   beats: number
   count: number
-  inputLag: number
-  inputLagEnabled: boolean
   isTraining: boolean
-  mute: boolean
-  notes: Note[]
+  grid: Grid
   subdivision: number
   tempo: number
-  volume: number
 }>('settings', {
   beats: DEFAULTS.beats,
   count: DEFAULTS.count,
-  inputLag: DEFAULTS.inputLag,
-  inputLagEnabled: DEFAULTS.inputLagEnabled,
   isTraining: DEFAULTS.isTraining,
-  mute: DEFAULTS.mute,
-  notes: DEFAULTS.notes,
+  grid: DEFAULTS.grid,
   subdivision: DEFAULTS.subdivision,
   tempo: DEFAULTS.tempo,
-  volume: DEFAULTS.volume,
 })
 
 const storage = settingsStorage.get()
@@ -36,64 +31,67 @@ interface Store {
   // Values
   beats: number
   count: number
-  inputLag: number
-  inputLagEnabled: boolean
-  isCounting: boolean
   isPlaying: boolean
   isTraining: boolean
-  mute: boolean
-  notes: Note[]
+  grid: Grid
   subdivision: number
   tempo: number
-  volume: number
 
   // Actions
   applyGridAlignmentAction: () => void
+  setGridAction: (grid: Grid) => void
   resetAction: () => void
   setBeatsAction: (beats: number) => void
   setCountAction: (count: number) => void
-  setInputLagAction: (value: number) => void
-  setInputLagEnabledAction: (enabled: boolean) => void
-  setIsCountingAction: (isCounting: boolean) => void
   setIsPlayingAction: (isPlaying: boolean) => void
   setIsTrainingAction: (isTraining: boolean) => void
-  setMuteAction: (mute: boolean) => void
   setSubdivisionAction: (subdivision: number) => void
   setTempoAction: (tempo: number) => void
-  setVolumeAction: (volume: number) => void
-  switchInstrumentAction: (noteIndex: number) => void
+  switchInstrumentAction: (noteIndex: number, instrument: Instrument | null) => void
 }
 
 export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
   return {
     beats: storage.beats,
     count: storage.count,
-    inputLag: storage.inputLag,
-    inputLagEnabled: storage.inputLagEnabled,
-    isCounting: false,
     isPlaying: false,
     isTraining: storage.isTraining,
-    mute: storage.mute,
-    notes: storage.notes,
+    grid: storage.grid,
     subdivision: storage.subdivision,
     tempo: storage.tempo,
-    volume: storage.volume,
+
+    setGridAction: (grid: Grid) => {
+      logger.info('setGridAction', grid)
+      set((state) => {
+        return produce(state, (draft) => {
+          if (grid.length === state.beats * state.subdivision) {
+            draft.grid = grid
+
+            settingsStorage.update({
+              grid: draft.grid,
+            })
+          }
+        })
+      })
+    },
 
     setBeatsAction: (beats) => {
+      logger.info('setBeatsAction', beats)
       set((state) => {
         return produce(state, (draft) => {
           draft.beats = MINMAX.range('beats', beats)
-          draft.notes = fillOrTrim(draft.notes, beats, draft.subdivision)
+          draft.grid = fillOrTrim(draft.grid, beats, draft.subdivision)
 
           settingsStorage.update({
             beats: draft.beats,
-            notes: draft.notes,
+            grid: draft.grid,
           })
         })
       })
     },
 
     setCountAction: (count) => {
+      logger.info('setCountAction', count)
       set((state) => {
         return produce(state, (draft) => {
           if (!state.isPlaying) {
@@ -105,6 +103,7 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
     },
 
     setIsPlayingAction: (isPlaying) => {
+      logger.info('setIsPlayingAction', isPlaying)
       set((state) => {
         return produce(state, (draft) => {
           draft.isPlaying = isPlaying
@@ -113,6 +112,7 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
     },
 
     setIsTrainingAction: (isTraining) => {
+      logger.info('setIsTrainingAction', isTraining)
       set((state) => {
         return produce(state, (draft) => {
           draft.isTraining = isTraining
@@ -121,29 +121,23 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
       })
     },
 
-    setIsCountingAction: (isCounting) => {
-      set((state) => {
-        return produce(state, (draft) => {
-          draft.isCounting = isCounting
-        })
-      })
-    },
-
     setSubdivisionAction: (subdivision) => {
+      logger.info('setSubdivision', subdivision)
       set((state) => {
         return produce(state, (draft) => {
           draft.subdivision = MINMAX.range('subdivision', subdivision)
-          draft.notes = fillOrTrim(draft.notes, draft.beats, subdivision)
+          draft.grid = fillOrTrim(draft.grid, draft.beats, subdivision)
 
           settingsStorage.update({
             subdivision: draft.subdivision,
-            notes: draft.notes,
+            grid: draft.grid,
           })
         })
       })
     },
 
     setTempoAction: (tempo) => {
+      logger.info('setTempo', tempo)
       set((state) => {
         return produce(state, (draft) => {
           draft.tempo = MINMAX.range('tempo', tempo)
@@ -152,66 +146,23 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
       })
     },
 
-    setVolumeAction: (volume) => {
+    switchInstrumentAction: (idx, instrument) => {
+      logger.info('switchInstrument', { idx, instrument })
       set((state) => {
         return produce(state, (draft) => {
-          draft.volume = volume
-          settingsStorage.update({ volume: draft.volume })
-        })
-      })
-    },
-
-    setMuteAction: (mute) => {
-      set((state) => {
-        return produce(state, (draft) => {
-          draft.mute = mute
-          settingsStorage.update({ mute: draft.mute })
-        })
-      })
-    },
-
-    setInputLagAction: (inputLag) => {
-      set((state) => {
-        return produce(state, (draft) => {
-          draft.inputLag = MINMAX.range('inputLag', inputLag)
-          settingsStorage.update({ inputLag: draft.inputLag })
-        })
-      })
-    },
-
-    setInputLagEnabledAction: (inputLagEnabled) => {
-      set((state) => {
-        return produce(state, (draft) => {
-          draft.inputLagEnabled = inputLagEnabled
-          settingsStorage.update({ inputLagEnabled: draft.inputLagEnabled })
-        })
-      })
-    },
-
-    switchInstrumentAction: (noteIndex: number) => {
-      set((state) => {
-        return produce(state, (draft) => {
-          const order: Array<Instrument | null> = [
-            null,
-            'fxMetronome3',
-            'fxMetronome2',
-            'fxMetronome1',
-          ]
-
-          const next = order.indexOf(draft.notes[noteIndex].instrument) + 1
-          draft.notes[noteIndex].instrument = order[next % order.length]
-
-          settingsStorage.update({ notes: draft.notes })
+          draft.grid[idx].instrument = instrument
+          settingsStorage.update({ grid: draft.grid })
         })
       })
     },
 
     applyGridAlignmentAction: () => {
+      logger.info('applyGridAlignment')
       set((state) => {
         return produce(state, (draft) => {
           const { beats, subdivision } = draft
 
-          draft.notes = Array(beats * subdivision)
+          draft.grid = Array(beats * subdivision)
             .fill({ instrument: 'fxMetronome3' })
             .map((note, idx, arr) => {
               const res = { ...note }
@@ -223,26 +174,27 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
               return res
             })
 
-          settingsStorage.update({ notes: draft.notes })
+          settingsStorage.update({ grid: draft.grid })
         })
       })
     },
 
     resetAction: () => {
+      logger.info('reset')
       set((state) => {
         return produce(state, (draft) => {
-          const { tempo, beats, subdivision, notes } = DEFAULTS
+          const { tempo, beats, subdivision, grid } = DEFAULTS
 
           draft.tempo = tempo
           draft.beats = beats
           draft.subdivision = subdivision
-          draft.notes = [...notes]
+          draft.grid = [...grid]
 
           settingsStorage.update({
             tempo: draft.tempo,
             beats: draft.beats,
             subdivision: draft.subdivision,
-            notes: draft.notes,
+            grid: draft.grid,
           })
         })
       })
@@ -252,8 +204,8 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
 
 // Utils
 
-function fillOrTrim(notes: Note[], beats: number, subdivision: number) {
+function fillOrTrim(grid: Grid, beats: number, subdivision: number) {
   return Array(beats * subdivision)
     .fill(null)
-    .map((note, idx) => notes[idx] || { instrument: 'fxMetronome3' })
+    .map((note, idx) => grid[idx] || { instrument: 'fxMetronome3' })
 }

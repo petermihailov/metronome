@@ -10,6 +10,10 @@ export const inRange = (value: number, { min = -1 * Infinity, max = Infinity }: 
   return !Number.isNaN(value) && value >= min && value <= max
 }
 
+export const randomInRange = (min: number, max: number) => {
+  return Math.random() * (max - min) + min
+}
+
 export const percentOfRange = (
   value: number,
   { min = -1 * Infinity, max = Infinity }: MinMaxOptions,

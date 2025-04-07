@@ -1,13 +1,16 @@
 import { useLayoutEffect } from 'react'
 
-const APP_HEIGHT = 695
+const APP_HEIGHT = 712
 
 export const useScale = (containerRef: React.RefObject<HTMLDivElement>) => {
   useLayoutEffect(() => {
     const scale = () => {
       const windowHeight = window.innerHeight
+      const value = (windowHeight * 0.9) / APP_HEIGHT
 
-      containerRef.current!.style.transform = `scale(${(windowHeight * 0.9) / APP_HEIGHT})`
+      if (value > 1) {
+        containerRef.current!.style.transform = `scale(${value})`
+      }
     }
 
     scale()

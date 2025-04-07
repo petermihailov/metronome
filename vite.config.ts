@@ -22,34 +22,33 @@ export default defineConfig({
         'sounds/fxMetronome1.mp3',
         'sounds/fxMetronome2.mp3',
         'sounds/fxMetronome3.mp3',
+        // fonts
+        'fonts/SFNS.woff2',
+        'fonts/DSEG7Classic.woff2',
+        // images
+        'apple-touch-icon.png',
+        'favicon.png',
+        'og.jpg',
+        'pwa-192.png',
+        'pwa-512.png',
+        'sprite.svg',
+        'robots.txt',
       ],
       manifest: {
         name: 'Metronome',
         short_name: 'Metronome',
         description: 'just metronome',
-        theme_color: '#222226',
+        theme_color: '#000',
         icons: [
           {
-            src: 'pwa-64x64.png',
-            sizes: '64x64',
-            type: 'image/png',
-          },
-          {
-            src: 'pwa-192x192.png',
+            src: '/pwa-192.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: 'pwa-512x512.png',
+            src: '/pwa-512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any',
-          },
-          {
-            src: 'maskable-icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable',
           },
         ],
       },
@@ -63,6 +62,7 @@ export default defineConfig({
   ],
   define: {
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
+    APP_BUILD_TIME: JSON.stringify(new Date().getTime()),
   },
   server: {
     port: 3333,

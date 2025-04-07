@@ -13,12 +13,13 @@ import { ButtonIcon } from '../ButtonIcon'
 
 import classes from './InputNumber.module.css'
 
-const TIMEOUT = 3_000 // ms
+const TIMEOUT = 3_500 // ms
 
 export interface InputNumberProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   value: number
   onChange: (value: number) => void
   active?: boolean
+  disabled?: boolean
   title?: string
   min?: number
   max?: number
@@ -31,6 +32,7 @@ const InputNumber = ({
   min = -Infinity,
   max = +Infinity,
   active,
+  disabled,
   onChange,
   ...restProps
 }: InputNumberProps) => {
@@ -74,6 +76,8 @@ const InputNumber = ({
   }
 
   const onKeyDownHandler: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    resetTimer()
+
     if (['ArrowUp', 'ArrowDown'].includes(e.code)) {
       e.stopPropagation()
     }
@@ -149,12 +153,19 @@ const InputNumber = ({
   }, [])
 
   return (
-    <div className={clsx(className, classes.inputNumber)} onClick={resetTimer}>
+    <div
+      className={clsx(className, classes.inputNumber, {
+        [classes.disabled]: disabled,
+        [classes.active]: active,
+      })}
+      onClick={resetTimer}
+    >
       <label className={classes.label}>
         {title && <span className={classes.title}>{title}</span>}
         <input
           ref={inputRef}
-          className={clsx(classes.input, { [classes.active]: active })}
+          className={classes.input}
+          disabled={disabled}
           inputMode="decimal"
           type="text"
           value={textValue}
@@ -168,19 +179,19 @@ const InputNumber = ({
       <div className={classes.buttons} onClick={(e) => e.stopPropagation()}>
         <ButtonIcon
           ref={decreaseButtonRef}
-          aria-label="decrease"
-          className={clsx(classes.button, { [classes.disabled]: value === min })}
-          disabled={value === min}
-          icon="icon.minus"
+          aria-label="decrease (Arrow Down)"
+          className={classes.button}
+          disabled={disabled || value === min}
+          icon="minus"
           tabIndex={-1}
           onClick={decreaseHandler}
         />
         <ButtonIcon
           ref={increaseButtonRef}
-          aria-label="increase"
-          className={clsx(classes.button, { [classes.disabled]: value === max })}
-          disabled={value === max}
-          icon="icon.plus"
+          aria-label="increase (Arrow Up)"
+          className={classes.button}
+          disabled={disabled || value === max}
+          icon="plus"
           tabIndex={-1}
           onClick={increaseHandler}
         />

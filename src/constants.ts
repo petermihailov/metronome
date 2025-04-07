@@ -1,4 +1,4 @@
-import type { Beat, Instrument, Note } from './types/common'
+import type { Instrument, Grid } from './types/common'
 import { minMax } from './utils/math'
 
 export const INSTRUMENTS: Instrument[] = ['fxMetronome1', 'fxMetronome2', 'fxMetronome3']
@@ -9,7 +9,6 @@ export const MINMAX = (() => {
     beats: { min: 1, max: 16 },
     every: { min: 1, max: 16 },
     subdivision: { min: 1, max: 16 },
-    inputLag: { min: 50, max: 250 },
   } as const
 
   return {
@@ -28,21 +27,8 @@ export const DEFAULTS = {
   every: 8,
   step: 1,
   count: 2,
-  volume: 1,
-  mute: false,
-  inputLag: 150,
-  inputLagEnabled: false,
   isTraining: false,
-  get beat(): Beat {
-    return {
-      index: 0,
-      isCounting: false,
-      isSubdivision: false,
-      isFirst: true,
-      isLast: false,
-    }
-  },
-  get notes(): Note[] {
+  get grid(): Grid {
     return [
       { instrument: 'fxMetronome1' },
       { instrument: 'fxMetronome3' },

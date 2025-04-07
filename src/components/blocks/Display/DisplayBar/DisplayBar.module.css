@@ -1,9 +1,0 @@
-.display-bar {
-  display: flex;
-  gap: var(--size-1);
-  justify-content: end;
-}
-
-.disabled {
-  filter: grayscale(1);
-}
