@@ -15,6 +15,7 @@ export interface SelectProps<T>
   extends Omit<HTMLAttributes<HTMLSelectElement>, 'onChange' | 'children'> {
   value: T
   title?: string
+  disabled?: boolean
   options: SelectOption<T>[]
   onChange?: (value: T) => void
 }
@@ -24,6 +25,7 @@ const Select = <T,>({
   value,
   title,
   options,
+  disabled,
   onChange,
   ...restProps
 }: SelectProps<T>) => {
@@ -36,7 +38,7 @@ const Select = <T,>({
   }
 
   return (
-    <div className={clsx(className, classes.select)}>
+    <div className={clsx(className, classes.select, { [classes.disabled]: disabled })}>
       <label className={classes.label}>
         {title && <span className={classes.title}>{title}</span>}
 

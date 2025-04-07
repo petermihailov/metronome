@@ -1,3 +1,5 @@
+/* ToDo: вынеси хайлайт отдельно */
+
 .button-icon {
   --size-highlight: calc(var(--size-icon) * 1.25);
 
@@ -9,7 +11,7 @@
 .button-icon svg {
   inline-size: var(--size-icon);
   block-size: var(--size-icon);
-  transition: transform 400ms ease-out;
+  transition: transform 200ms ease-out;
 }
 
 .button-icon:not(:where([disabled], .disabled)):active svg {
@@ -26,7 +28,7 @@
 }
 
 .button-icon:is([disabled], .disabled) {
-  opacity: var(--opacity-disabled);
+  opacity: var(--alpha-disabled);
 }
 
 .button-icon::before {
@@ -40,6 +42,11 @@
   background-color: #fff2;
   transform: scale(0);
   transition: transform 100ms ease-out;
+}
+
+.button-icon-content {
+  position: absolute;
+  inset: 0;
 }
 
 @media (hover: hover) {

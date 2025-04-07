@@ -19,24 +19,15 @@ const tapTempo = {
 }
 
 export const useHotkeys = () => {
-  const { isPlaying, tempo, setIsPlayingAction, setTempoAction, resetAction, mute, setMuteAction } =
+  const { isPlaying, isTraining, tempo, setIsPlayingAction, setTempoAction, resetAction } =
     useMetronomeStore(
-      ({
+      ({ isPlaying, isTraining, tempo, setIsPlayingAction, setTempoAction, resetAction }) => ({
         isPlaying,
+        isTraining,
         tempo,
         setIsPlayingAction,
         setTempoAction,
         resetAction,
-        mute,
-        setMuteAction,
-      }) => ({
-        isPlaying,
-        tempo,
-        setIsPlayingAction,
-        setTempoAction,
-        resetAction,
-        mute,
-        setMuteAction,
       }),
     )
 
@@ -46,42 +37,42 @@ export const useHotkeys = () => {
         setIsPlayingAction(!isPlaying)
       }
 
-      if (event.code === 'KeyT') {
-        const tap = tapTempo.tap()
-        if (tap) setTempoAction(tap)
-      }
+      if (!(isTraining && isPlaying)) {
+        const noModifiers = !event.shiftKey && !event.metaKey && !event.altKey && !event.ctrlKey
 
-      if (event.code === 'KeyR') {
-        resetAction()
-      }
-
-      if (event.code === 'KeyM') {
-        setMuteAction(!mute)
-      }
-
-      if (event.shiftKey) {
-        if (event.code === 'ArrowUp') {
-          setTempoAction(tempo + 10)
+        if (event.code === 'KeyT') {
+          const tap = tapTempo.tap()
+          if (tap) setTempoAction(tap)
         }
 
-        if (event.code === 'ArrowDown') {
-          setTempoAction(tempo - 10)
-        }
-      } else {
-        if (event.code === 'ArrowUp') {
-          setTempoAction(tempo + 1)
+        if (noModifiers && event.code === 'KeyR') {
+          resetAction()
         }
 
-        if (event.code === 'ArrowDown') {
-          setTempoAction(tempo - 1)
+        if (event.shiftKey) {
+          if (event.code === 'ArrowUp') {
+            setTempoAction(tempo + 10)
+          }
+
+          if (event.code === 'ArrowDown') {
+            setTempoAction(tempo - 10)
+          }
+        } else {
+          if (event.code === 'ArrowUp') {
+            setTempoAction(tempo + 1)
+          }
+
+          if (event.code === 'ArrowDown') {
+            setTempoAction(tempo - 1)
+          }
         }
       }
     }
-    // event = keyup or keydown
+
     document.addEventListener('keydown', callback)
 
     return () => {
       document.removeEventListener('keydown', callback)
     }
-  }, [isPlaying, mute, resetAction, setIsPlayingAction, setMuteAction, setTempoAction, tempo])
+  }, [isPlaying, isTraining, resetAction, setIsPlayingAction, setTempoAction, tempo])
 }

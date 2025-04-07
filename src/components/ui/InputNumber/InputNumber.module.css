@@ -1,15 +1,19 @@
 .input-number {
+  --anim-duration: 150ms;
+
   position: relative;
 }
 
 .label {
   display: grid;
-  gap: var(--size-000);
+  gap: var(--size-0);
+  transition: color var(--anim-duration) ease-out;
 }
 
 .title {
-  font-weight: 1000;
+  font-weight: 800;
   font-size: var(--font-size-1);
+  line-height: var(--font-lineheight-0);
   letter-spacing: -0.05rem;
   text-transform: uppercase;
 }
@@ -19,12 +23,16 @@
   inline-size: 100%;
   block-size: var(--block-size-control);
   padding-inline: var(--size-0);
-  font-weight: 900;
+  font-weight: 800;
   font-size: var(--font-size-4);
   line-height: var(--font-lineheight-0);
   border-radius: var(--radius-1);
   background-color: transparent;
   outline: var(--border);
+  box-shadow: inset 0 0 var(--size-1) #0008;
+  transition-property: outline-color, color;
+  transition-timing-function: ease-out;
+  transition-duration: var(--anim-duration);
 }
 
 .input:where(::-webkit-outer-spin-button, ::-webkit-inner-spin-button) {
@@ -32,11 +40,18 @@
   appearance: none;
 }
 
+.input:focus-within {
+  outline-color: var(--color-border-2);
+}
+
+.input[disabled] {
+  color: var(--color-dimmed);
+}
+
 .buttons {
   position: absolute;
   inset-block-end: 0;
   inset-inline-end: 0;
-  z-index: 1;
   display: flex;
   gap: var(--size-0);
   block-size: var(--block-size-control);
@@ -44,19 +59,25 @@
 }
 
 .button {
-  opacity: var(--opacity-dimmed);
+  opacity: var(--alpha-dimmed);
+  transition: opacity var(--anim-duration) ease-out;
 }
 
-.disabled {
-  /* empty */
+.disabled .label {
+  color: var(--color-dimmed);
 }
 
-.active {
+.active .label {
+  color: var(--color-text);
+}
+
+.active .input {
+  color: var(--color-text);
   outline-color: var(--color-accent-2);
 }
 
 @media (hover: hover) {
-  .button:not(:where([disabled], .disabled)):hover {
+  :not(.disabled) .button:hover {
     opacity: 1;
   }
 }

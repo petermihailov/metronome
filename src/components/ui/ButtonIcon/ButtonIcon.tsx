@@ -14,11 +14,23 @@ export interface ButtonIconProps extends HTMLAttributes<HTMLButtonElement> {
   icon?: IconName
   color?: 'accent1' | 'accent2'
   withoutHighlight?: boolean
+  withoutDisabledOpacity?: boolean
 }
 
 const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
   (
-    { className, active, icon, children, color, withoutHighlight, disabled, onClick, ...restProps },
+    {
+      className,
+      active,
+      icon,
+      children,
+      color,
+      withoutHighlight,
+      withoutDisabledOpacity,
+      disabled,
+      onClick,
+      ...restProps
+    },
     ref,
   ) => {
     const title = restProps['aria-label']
@@ -28,8 +40,10 @@ const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
 
       if (disabled) {
         button.classList.remove(classes.headShake)
-        button.offsetTop // force reflow hack
-        button.classList.add(classes.headShake)
+
+        window.requestAnimationFrame(() => {
+          button.classList.add(classes.headShake)
+        })
       } else {
         onClick?.(e)
       }
@@ -38,8 +52,9 @@ const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
     return (
       <button
         ref={ref}
+        aria-disabled={disabled}
         className={clsx(className, classes.buttonIcon, {
-          [classes.disabled]: disabled,
+          [classes.disabled]: disabled && !withoutDisabledOpacity,
           [classes.highlight]: !withoutHighlight,
           [classes.active]: active,
           [classes[color || '']]: color,
@@ -49,7 +64,8 @@ const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
         onClick={clickHandler}
         {...restProps}
       >
-        {icon ? <Icon name={icon} /> : children}
+        {icon ? <Icon name={icon} /> : null}
+        <span className={classes.buttonIconContent}>{children}</span>
       </button>
     )
   },

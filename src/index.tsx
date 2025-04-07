@@ -8,7 +8,6 @@ import './styles/helpers.css'
 
 import { App } from './components/App'
 import { ErrorBoundary } from './components/ErrorBoundary'
-import { Sprite } from './components/icons'
 import { BadBrowser } from './components/ui/BadBrowser'
 import env from './env'
 import checkBrowser from './utils/checkBrowser'
@@ -19,10 +18,5 @@ if (container) {
   const root = createRoot(container)
   const isBadBrowser = !checkBrowser.test(navigator.userAgent)
 
-  root.render(
-    <ErrorBoundary>
-      <Sprite />
-      {!env.DEV && isBadBrowser ? <BadBrowser /> : <App />}
-    </ErrorBoundary>,
-  )
+  root.render(<ErrorBoundary>{!env.DEV && isBadBrowser ? <BadBrowser /> : <App />}</ErrorBoundary>)
 }

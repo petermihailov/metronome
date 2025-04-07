@@ -11,6 +11,8 @@ const dayPlayingStorage = new Storage<{ [date: string]: number }>('day-playing',
 type Seconds = number
 
 interface Store {
+  currentDay: string
+
   // Values
   time: {
     current: Seconds
@@ -27,6 +29,8 @@ export const usePlayingTimeStore = createWithEqualityFn<Store>((set) => {
   const storageValue = dayPlayingStorage.get()
 
   return {
+    currentDay: dateFormat(),
+
     time: {
       current: 0,
       session: 0,
@@ -35,14 +39,22 @@ export const usePlayingTimeStore = createWithEqualityFn<Store>((set) => {
 
     addSecondAction: () => {
       set((state) => {
-        dayPlayingStorage.update({ [dateFormat()]: state.time.day + 1 })
+        const currentDay = dateFormat()
+        let dayTime = state.time.day + 1
+
+        if (dateFormat() !== state.currentDay) {
+          dayTime = 1
+        }
+
+        dayPlayingStorage.update({ [currentDay]: dayTime })
 
         return {
           ...state,
+          currentDay,
           time: {
             current: state.time.current + 1,
             session: state.time.session + 1,
-            day: state.time.day + 1,
+            day: dayTime,
           },
         }
       })

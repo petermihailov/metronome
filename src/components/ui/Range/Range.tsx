@@ -10,6 +10,7 @@ export interface RangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 'onCh
   min?: number
   max?: number
   value: number
+  disabled?: boolean
   labels?: boolean
   popover?: boolean
   onChange: (value: number) => void
@@ -21,6 +22,7 @@ const Range = ({
   max = 100,
   value,
   labels,
+  disabled,
   popover,
   onChange,
   ...restInputProps
@@ -66,7 +68,10 @@ const Range = ({
   }, [value])
 
   return (
-    <div ref={rangeRef} className={clsx(className, classes.range)}>
+    <div
+      ref={rangeRef}
+      className={clsx(className, classes.range, { [classes.disabled]: disabled })}
+    >
       {popover && (
         <div ref={popoverRef} className={classes.popover}>
           {Math.round(value)}

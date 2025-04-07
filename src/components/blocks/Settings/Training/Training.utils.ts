@@ -13,7 +13,6 @@ export function* rangeGenerator({ from, to, step = 1 }: RangeGeneratorOptions) {
 
   while (Math.abs(iter) < Math.abs(Math.ceil((max - min) / step))) {
     iter = iter + (from > to ? -1 : 1)
-    // yield minMax(from + iter * step, { max: from > to ? from : to })
     yield from + iter * step
   }
 }

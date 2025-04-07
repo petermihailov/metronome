@@ -1,10 +1,29 @@
 :where(html[data-theme='dark']) {
-  --color-accent-1: #00eaff;
-  --color-accent-2: #ff357f;
-  --color-background-1: #000;
-  --color-background-2: #212126;
-  --color-border: #fff2;
-  --color-text: #fffe;
+  /* HSL-colors */
+  --hsl-accent-1: 185 100% 50%;
+  --hsl-accent-2: 333 100% 50%;
+  --hsl-background: 240 0% 0%;
+  --hsl-background-app: 240 15 15%;
+  --hsl-border: 240 15% 50%;
+  --hsl-text: 0 100% 100%;
+
+  /* tints */
+  --hsl-tint: 0 0% 100%;
+  --hsl-tint-opposite: 0 0% 0%;
+
+  /* a3aa2 */
+  --tint-1: hsl(var(--hsl-tint) / 40%);
+  --tint-2: hsl(var(--hsl-tint) / 40%);
+
+  /* colors */
+  --color-accent-1: hsl(var(--hsl-accent-1));
+  --color-accent-2: hsl(var(--hsl-accent-2));
+  --color-background: hsl(var(--hsl-background));
+  --color-background-app: hsl(var(--hsl-background-app));
+  --color-border-1: hsl(var(--hsl-border) / 40%);
+  --color-border-2: hsl(var(--hsl-border) / 80%);
+  --color-text: hsl(var(--hsl-text) / 90%);
+  --color-dimmed: #fff5;
 
   color-scheme: dark;
 }
@@ -13,10 +32,13 @@
   /* fonts */
   --font-sans: sfns, system-ui, -apple-system, segoe ui, roboto, ubuntu, sans-serif;
   --font-mono: dank mono, operator mono, fira mono, sf mono, monospace;
-  --font-lineheight-0: 0.8;
+  --font-segment: dseg7, sf mono, monospace;
+  --font-lineheight-0: 0.78;
   --font-lineheight-1: 1.4;
 
   /* font scale: 1.25 */
+  --font-size-0000: 0.4096rem;
+  --font-size-000: 0.512rem;
   --font-size-00: 0.64rem;
   --font-size-0: 0.8rem;
   --font-size-1: 1rem;
@@ -36,6 +58,8 @@
   --radius-round: 50%;
 
   /* sizes scale: 1.618 */
+  --size-00000: 0.0917rem;
+  --size-0000: 0.1483rem;
   --size-000: 0.24rem;
   --size-00: 0.382rem;
   --size-0: 0.6181rem;
@@ -50,8 +74,10 @@
   --size-icon: var(--font-size-4);
   --block-size-control: var(--font-size-6);
 
+  /* alpha */
+  --alpha-disabled: 0.48;
+  --alpha-dimmed: 0.8;
+
   /* misc */
-  --border: 0.18rem solid var(--color-border);
-  --opacity-disabled: 0.48;
-  --opacity-dimmed: 0.8;
+  --border: var(--size-000) solid var(--color-border-1);
 }

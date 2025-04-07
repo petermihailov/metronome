@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react'
 
 import { rangeGenerator } from '../components/blocks/Settings/Training/Training.utils'
-import { useBeatStore } from '../store/useBeatStore'
 import { useMetronomeStore } from '../store/useMetronomeStore'
+import { useTickStore } from '../store/useTickStore'
 import { useTrainingStore } from '../store/useTrainingStore'
 
 type Options = Partial<{
@@ -24,11 +24,9 @@ export const useTraining = ({ onStop }: Options = {}) => {
   const {
     applyGridAlignmentAction,
     beats,
-    count,
     isPlaying,
     isTraining,
     setBeatsAction,
-    setIsCountingAction,
     setSubdivisionAction,
     setTempoAction,
     subdivision,
@@ -37,11 +35,9 @@ export const useTraining = ({ onStop }: Options = {}) => {
     ({
       applyGridAlignmentAction,
       beats,
-      count,
       isPlaying,
       isTraining,
       setBeatsAction,
-      setIsCountingAction,
       setIsPlayingAction,
       setSubdivisionAction,
       setTempoAction,
@@ -50,11 +46,9 @@ export const useTraining = ({ onStop }: Options = {}) => {
     }) => ({
       applyGridAlignmentAction,
       beats,
-      count,
       isPlaying,
       isTraining,
       setBeatsAction,
-      setIsCountingAction,
       setIsPlayingAction,
       setSubdivisionAction,
       setTempoAction,
@@ -63,7 +57,14 @@ export const useTraining = ({ onStop }: Options = {}) => {
     }),
   )
 
-  const { beat, barsPlayed } = useBeatStore(({ beat, barsPlayed }) => ({ beat, barsPlayed }))
+  const { isFirst, isSecond, isCounting, barsPlayed } = useTickStore(
+    ({ counting, willBeScheduled }) => ({
+      isFirst: willBeScheduled?.position.first || false,
+      isSecond: willBeScheduled?.position.idx === 1 || false,
+      isCounting: willBeScheduled?.counting || counting,
+      barsPlayed: willBeScheduled?.played.bars || 0,
+    }),
+  )
 
   const refTrainingGenerator = useRef<Generator<number>>()
   const refIsDecrease = useRef(from > to)
@@ -99,73 +100,44 @@ export const useTraining = ({ onStop }: Options = {}) => {
     }
   }, [beats, tempo, subdivision, isTraining, isPlaying, type, setFromAction])
 
-  // Update counting
-  useEffect(() => {
-    if (isPlaying && isTraining) {
-      setIsCountingAction(count > 0)
-    }
-  }, [count, isPlaying, isTraining, setIsCountingAction])
-
-  useEffect(() => {
-    // нужно выключить отсчёт на последний удар
-    if (beat.isLast) {
-      setIsCountingAction(isTraining && barsPlayed < count)
-    }
-  }, [barsPlayed, beat.isLast, count, isTraining, setIsCountingAction])
-
   // Training loop
   // Изменяет значение на последнюю ноту последнего такта
   useEffect(() => {
     if (
-      barsPlayed > count &&
+      !isCounting &&
       isTraining &&
       isPlaying &&
-      beat.isLast &&
-      Math.max(1, barsPlayed - count) % every === 0 &&
+      isFirst &&
+      barsPlayed % every === 0 &&
       refTrainingGenerator.current
     ) {
       const { value, done } = refTrainingGenerator.current.next()
       refDone.current = done
 
-      if (value && !done) {
+      if (!done && value) {
         onChange(value)
 
         if (type === 'subdivision') {
           applyGridAlignmentAction()
         }
-      } else {
-        // if (alternate) {
-        //   if (!refIsDecrease.current) {
-        //     refTrainingGenerator.current = rangeGenerator({ from: to, to: from })
-        //     refIsDecrease.current = true
-        //   } else {
-        //     refTrainingGenerator.current = rangeGenerator({ from, to })
-        //     refIsDecrease.current = false
-        //   }
-        //
-        //   const { value, done } = refTrainingGenerator.current.next()
-        //   if (value !== undefined && !done) {
-        //     onChange(value)
-        //     applyGridAlignmentAction()
-        //   }
-        // } else {
-      }
-    } else {
-      if (beat.isFirst && isTraining && isPlaying && refDone.current) {
-        onStop?.()
       }
     }
   }, [
     applyGridAlignmentAction,
     barsPlayed,
-    beat.isFirst,
-    beat.isLast,
-    count,
     every,
+    isCounting,
+    isFirst,
     isPlaying,
     isTraining,
     onChange,
-    onStop,
     type,
   ])
+
+  // stop callback
+  useEffect(() => {
+    if (!isCounting && isTraining && isPlaying && isSecond && refDone.current) {
+      onStop?.()
+    }
+  }, [isCounting, isSecond, isPlaying, isTraining, onStop])
 }

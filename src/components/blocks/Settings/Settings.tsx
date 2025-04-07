@@ -3,12 +3,11 @@ import { memo, useEffect, useState } from 'react'
 
 import { Training } from './Training'
 import { MINMAX } from '../../../constants'
-import { useBeatStore } from '../../../store/useBeatStore'
 import { useMetronomeStore } from '../../../store/useMetronomeStore'
+import { useTickStore } from '../../../store/useTickStore'
 import { useTrainingStore } from '../../../store/useTrainingStore'
 import { InputNumber } from '../../ui/InputNumber'
 import { InputRange } from '../../ui/InputRange'
-import { TodayTimer } from '../TodayTimer'
 
 import classes from './Settings.module.css'
 
@@ -53,25 +52,26 @@ const Settings = () => {
     subdivision,
   })
 
-  const isFirstBeat = useBeatStore(({ beat }) => beat.isFirst)
+  const disabled = isTraining && isPlaying
+  const isFirst = useTickStore(({ position }) => position.first)
   const type = useTrainingStore(({ type }) => type)
 
   useEffect(() => {
-    if (!isTraining || !isPlaying || isFirstBeat) {
+    if (!isTraining || !isPlaying || isFirst) {
       setValues({ tempo, beats, subdivision })
     }
-  }, [beats, isFirstBeat, isPlaying, isTraining, subdivision, tempo])
+  }, [beats, isFirst, isPlaying, isTraining, subdivision, tempo])
 
   return (
     <div
       className={clsx(classes.settings, {
         [classes.isTraining]: isTraining,
-        [classes.isPlaying]: isPlaying,
       })}
     >
       <div className={classes.values}>
         <InputRange
           active={isTraining && type === 'tempo'}
+          disabled={disabled}
           inputOnly={isTraining}
           max={MINMAX.tempo.max}
           min={MINMAX.tempo.min}
@@ -84,6 +84,7 @@ const Settings = () => {
 
         <InputNumber
           active={isTraining && type === 'beats'}
+          disabled={disabled}
           max={MINMAX.beats.max}
           min={MINMAX.beats.min}
           title="beats"
@@ -96,6 +97,7 @@ const Settings = () => {
 
         <InputNumber
           active={isTraining && type === 'subdivision'}
+          disabled={disabled}
           max={MINMAX.subdivision.max}
           min={MINMAX.subdivision.min}
           title="subdivision"
@@ -105,11 +107,9 @@ const Settings = () => {
             applyGridAlignmentAction()
           }}
         />
-
-        <TodayTimer />
       </div>
 
-      {isTraining && <Training className={classes.training} />}
+      {isTraining && <Training className={classes.training} disabled={disabled} />}
     </div>
   )
 }

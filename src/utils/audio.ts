@@ -1,6 +1,10 @@
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+const audioCtx = new AudioContext({ latencyHint: 'interactive' })
 
 export function getAudioContext(): AudioContext {
+  if (!audioCtx) {
+    throw new Error('AudioContext not implemented')
+  }
+
   return audioCtx
 }
 

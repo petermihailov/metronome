@@ -17,7 +17,13 @@
 }
 
 .actions {
-  align-items: start;
+  /* empty */
+}
+
+.counter {
+  display: flex;
+  gap: var(--size-1);
+  align-items: center;
 }
 
 .training {
@@ -27,28 +33,10 @@
   cursor: pointer;
 }
 
-.training-button {
-  position: relative;
-}
-
-.training-button::before {
-  position: absolute;
-  inset: 0;
-  inset-block-end: -1rem;
-  content: '';
-}
-
 .time {
   font-weight: 700;
   font-size: var(--font-size-5);
   line-height: var(--font-lineheight-0);
-}
-
-.training-time {
-  font-weight: 700;
-  font-size: var(--font-size-2);
-  line-height: var(--font-lineheight-0);
-  opacity: var(--opacity-dimmed);
 }
 
 .update {
