@@ -1,3 +1,12 @@
+## [1.15.2](https://github.com/petermihailov/metronome/compare/v1.15.1...v1.15.2) (2025-04-07)
+
+
+### Bug Fixes
+
+* og-image ([6254c3a](https://github.com/petermihailov/metronome/commit/6254c3a3727ecbbf982e4cd39577f5f0a02c772d))
+
+
+
 ## [1.15.1](https://github.com/petermihailov/metronome/compare/v1.15.0...v1.15.1) (2025-04-07)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * fireworks ([96f537c](https://github.com/petermihailov/metronome/commit/96f537c12739566cc1f0be271480e0a5f4272789))
-
-
-
-## [1.14.1](https://github.com/petermihailov/metronome/compare/v1.14.0...v1.14.1) (2025-01-26)
-
-
-### Bug Fixes
-
-* type ([891a880](https://github.com/petermihailov/metronome/commit/891a880af11bb734f07436dc110537cbad8ca134))
 
 
 
