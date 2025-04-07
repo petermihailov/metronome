@@ -1,3 +1,12 @@
+# [1.15.0](https://github.com/petermihailov/metronome/compare/v1.14.3...v1.15.0) (2025-04-07)
+
+
+### Features
+
+* update ui, add counters, and some features ([fb9913e](https://github.com/petermihailov/metronome/commit/fb9913ec5782b7a2405515d29422b3c0aa71233e))
+
+
+
 ## [1.14.3](https://github.com/petermihailov/metronome/compare/v1.14.2...v1.14.3) (2025-01-28)
 
 
@@ -39,15 +48,6 @@
 * counting ([86a3316](https://github.com/petermihailov/metronome/commit/86a33161642ad9d937504debd288bc0503a18a16))
 * fireworks ([f5991aa](https://github.com/petermihailov/metronome/commit/f5991aa5c270897999b3d414a13d620b97ddefca))
 * timer position ([dbe0c12](https://github.com/petermihailov/metronome/commit/dbe0c1279f924c748351c87a3ad98c3b5bdaa114))
-
-
-
-## [1.13.1](https://github.com/petermihailov/metronome/compare/v1.13.0...v1.13.1) (2024-09-25)
-
-
-### Bug Fixes
-
-* range position ([d950a6c](https://github.com/petermihailov/metronome/commit/d950a6c7c97426adf60549e152c7a673959fd9c3))
 
 
 
