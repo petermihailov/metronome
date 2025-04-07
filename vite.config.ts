@@ -28,7 +28,6 @@ export default defineConfig({
         // images
         'apple-touch-icon.png',
         'favicon.png',
-        'og.jpg',
         'pwa-192.png',
         'pwa-512.png',
         'sprite.svg',
