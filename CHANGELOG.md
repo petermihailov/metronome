@@ -1,3 +1,12 @@
+## [1.16.1](https://github.com/petermihailov/metronome/compare/v1.16.0...v1.16.1) (2025-04-13)
+
+
+### Bug Fixes
+
+* ts ([22f5d73](https://github.com/petermihailov/metronome/commit/22f5d73e1dbc78ec7ac7c50dd94a2e64302f2d1e))
+
+
+
 # [1.16.0](https://github.com/petermihailov/metronome/compare/v1.15.4...v1.16.0) (2025-04-13)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * og-image ([6254c3a](https://github.com/petermihailov/metronome/commit/6254c3a3727ecbbf982e4cd39577f5f0a02c772d))
-
-
-
-## [1.15.1](https://github.com/petermihailov/metronome/compare/v1.15.0...v1.15.1) (2025-04-07)
-
-
-### Bug Fixes
-
-* try to fix icons ([ccac0ee](https://github.com/petermihailov/metronome/commit/ccac0ee7b3ff48aafead96e78fef9e4463d7d190))
 
 
 
