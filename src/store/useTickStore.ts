@@ -6,6 +6,7 @@ import type { Tick } from '../types/common'
 const zeroTick: Tick = {
   counting: true,
   note: null,
+  time: 0,
   played: {
     notes: 0,
     beats: 0,
