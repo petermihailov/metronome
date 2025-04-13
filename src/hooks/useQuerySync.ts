@@ -8,7 +8,7 @@ import type { Grid, Instrument } from '../types/common'
 import { debounce } from '../utils/throttling'
 import { getQuery, stringifyQuery, updateQuery } from '../utils/url'
 
-const logger = createLogger('QUERY', { enabled: false, color: '#92b' })
+const logger = createLogger('QUERY', { color: '#92b' })
 
 const gridMap: Record<number, Instrument | null> = {
   '0': null,

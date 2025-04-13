@@ -1,4 +1,4 @@
-import type { Player } from './lib/Player'
+import type { Logger } from './lib/Logger'
 
 export {}
 
@@ -9,7 +9,6 @@ interface Debug {
 declare global {
   interface Window {
     webkitAudioContext: typeof AudioContext
-    webkitOfflineAudioContext: typeof OfflineAudioContext
-    DEBUG: Partial<Debug>
+    logs: Record<string, Logger>
   }
 }

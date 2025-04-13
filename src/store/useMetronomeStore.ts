@@ -7,7 +7,7 @@ import { Storage } from '../lib/LocalStorage'
 import { createLogger } from '../lib/Logger'
 import type { Instrument, Grid } from '../types/common'
 
-const logger = createLogger('METRONOME', { enabled: false, color: '#f07' })
+const logger = createLogger('METRONOME', { color: '#f07' })
 
 const settingsStorage = new Storage<{
   beats: number

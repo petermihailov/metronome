@@ -1,13 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { Storage } from './LocalStorage'
 import { dateFormat } from '../utils/format'
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error'
+type LogFn = (title: string, ...args: any[]) => void
+
+export type Logger = Record<LogLevel, LogFn> & { on: () => void; off: () => void }
 
 interface LoggerOptions {
-  enabled: boolean
   color?: string
 }
+
+window.logs = {}
+const loggerStorage = new Storage<{ [namespace: string]: LogLevel[] }>('logger', {})
 
 const emoji: Record<LogLevel, string> = {
   info: '',
@@ -25,9 +31,16 @@ console.log(
   '',
 )
 
-export const createLogger = (namespace: string, { enabled, color }: LoggerOptions) => {
+export const createLogger = (namespace: string, { color }: LoggerOptions): Logger => {
+  if (loggerStorage.get()[namespace] === undefined) {
+    loggerStorage.update({ [namespace]: ['error'] })
+  }
+
   const log = (level: LogLevel, logNamespace: string, title: string, ...args: any[]) => {
-    if (!enabled) return
+    const enabled = loggerStorage.get()[namespace] || []
+    if (!enabled.includes(level)) return
+
+    console.log(title)
 
     if (args.length === 1 && typeof args[0] !== 'object') {
       const label = `${emoji[level]}[%c${logNamespace.toUpperCase()}%c]:${title} = %c${args[0]}`
@@ -40,16 +53,23 @@ export const createLogger = (namespace: string, { enabled, color }: LoggerOption
     } else {
       const label = `${emoji[level]}[%c${logNamespace.toUpperCase()}%c]:${title}`
       console.log(label, `font-weight:bold;${color ? 'color:' + color : ''}`, '', ...args)
-      // console.log(...args)
-      // console.groupEnd()
     }
   }
 
-  return {
-    log,
+  window.logs[namespace] = {
     debug: log.bind(null, 'debug', namespace),
     info: log.bind(null, 'info', namespace),
     warn: log.bind(null, 'warn', namespace),
     error: log.bind(null, 'error', namespace),
+    on: (...levels: LogLevel[]) => {
+      loggerStorage.update({
+        [namespace]: levels.length ? levels : ['info', 'debug', 'warn', 'error'],
+      })
+    },
+    off: () => {
+      loggerStorage.update({ [namespace]: [] })
+    },
   }
+
+  return window.logs[namespace]
 }

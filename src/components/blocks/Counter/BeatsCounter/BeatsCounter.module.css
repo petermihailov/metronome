@@ -4,7 +4,6 @@
   font-weight: 500;
   font-size: var(--font-size-5);
   line-height: var(--font-lineheight-0);
-  cursor: pointer;
 }
 
 .playing {
@@ -14,23 +13,7 @@
 .value {
   position: relative;
   opacity: var(--alpha-disabled);
-}
-
-.value::before {
-  position: absolute;
-  inset-block-start: calc(50% - var(--size-highlight) / 2);
-  inset-inline-start: calc(50% - var(--size-highlight) / 2);
-  content: '';
-  inline-size: var(--size-highlight);
-  block-size: var(--size-highlight);
-  border-radius: var(--radius-round);
-  background-color: #fff2;
-  transform: scale(0);
-  transition: transform 100ms ease-out;
-}
-
-.value:hover::before {
-  transform: scale(1);
+  transition: opacity 100ms ease-out;
 }
 
 .playing .value,
@@ -55,7 +38,7 @@
 }
 
 .length-two {
-  margin-inline-start: 15%;
+  margin-inline-end: 15%;
 }
 
 .segment-placeholder {

@@ -9,6 +9,7 @@ import {
   useWakeLock,
   useTraining,
 } from '../../hooks'
+import { useAutoHideCursor } from '../../hooks/useAutoHideCursor'
 import { useQuerySync } from '../../hooks/useQuerySync'
 import { Display } from '../blocks/Display'
 import { MainControl } from '../blocks/MainControl'
@@ -19,6 +20,7 @@ import classes from './App.module.css'
 const App = () => {
   usePlayer()
   usePlayingTimeUpdate()
+  useAutoHideCursor()
   useTraining({ onStop: firework })
   useHotkeys()
   useWakeLock()

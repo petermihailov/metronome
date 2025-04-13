@@ -35,9 +35,9 @@ const BeatsCounter = ({ className, playing, value, beats }: BeatsCounterProps) =
           { opacity: 0.8, transform: 'scale(0.9)' },
         ],
         {
-          duration: 5_000,
-          easing: 'cubic-bezier(0, 0.3, 0.3, 1)',
-          fill: 'forwards',
+          duration: 4_000,
+          easing: 'cubic-bezier(0, 0.5, 0.8 , 1)',
+          fill: 'backwards',
         },
       )
     }

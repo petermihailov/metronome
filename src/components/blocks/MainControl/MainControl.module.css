@@ -26,13 +26,6 @@
   align-items: center;
 }
 
-.training {
-  display: grid;
-  gap: var(--size-0);
-  justify-items: end;
-  cursor: pointer;
-}
-
 .time {
   font-weight: 700;
   font-size: var(--font-size-5);

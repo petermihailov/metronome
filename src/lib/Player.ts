@@ -1,6 +1,12 @@
+import { createLogger } from './Logger'
+import { TimeoutManager } from './TimeoutManager'
 import { DEFAULTS } from '../constants'
 import type { Instrument, SoundMap, Tick, Grid } from '../types/common'
 import { getAudioContext } from '../utils/audio'
+
+const logger = createLogger('PLAYER', { color: '#2af' })
+
+const frameMs = 1000 / 60
 
 const zeroScheduledCount = {
   notes: 0,
@@ -10,6 +16,7 @@ const zeroScheduledCount = {
 
 export class Player {
   private readonly audioCtx: AudioContext = getAudioContext()
+  private readonly timeoutManager = new TimeoutManager()
   private playing: boolean = false
   private kit: SoundMap = {} as SoundMap
   private tempo: number = DEFAULTS.tempo
@@ -18,7 +25,6 @@ export class Player {
   private grid: Grid = []
   private counting: number = 0
   private nextBeatAt: number = 0
-  private timeoutId?: number
   private scheduledTick: Tick | null = null
   private scheduledBufferSource: AudioBufferSourceNode | null = null
   private onTick?: (tick: Tick) => void
@@ -28,7 +34,7 @@ export class Player {
     return !(index % (this.grid.length / this.beats) === 0)
   }
 
-  private getTick(idx: number, isNext: boolean = false): Tick {
+  private getTick(idx: number, time: number, isNext: boolean = false): Tick {
     const sub = this.grid.length / this.beats
     const note = this.grid[idx]
 
@@ -54,7 +60,7 @@ export class Player {
       counting = false
     }
 
-    return { counting, note, played, position }
+    return { counting, note, played, position, time }
   }
 
   private playNotesAtNextBeatTime(when: number, instrument: Instrument) {
@@ -75,12 +81,13 @@ export class Player {
   }
 
   private schedule(idx: number) {
+    this.nextBeatAt += 60 / ((this.tempo * this.grid.length) / this.beats)
+
     const nextIdx = (idx + 1) % this.grid.length
-    const nextScheduledTick = this.getTick(nextIdx, true)
+    const nextScheduledTick = this.getTick(nextIdx, this.nextBeatAt, true)
     this.beforeTickScheduled?.(nextScheduledTick, this.scheduledTick)
 
     // Schedule next
-    this.nextBeatAt += 60 / ((this.tempo * this.grid.length) / this.beats)
     const nextNote = this.grid[nextIdx]
 
     if (nextScheduledTick.counting || nextNote.instrument) {
@@ -91,9 +98,9 @@ export class Player {
       } else if (nextNote.instrument) {
         this.playNotesAtNextBeatTime(this.nextBeatAt, nextNote.instrument)
       }
-
-      this.scheduledTick = nextScheduledTick
     }
+
+    this.scheduledTick = nextScheduledTick
 
     this.scheduledCount = {
       notes: this.scheduledCount.notes + 1,
@@ -103,33 +110,44 @@ export class Player {
       bars: this.scheduledCount.bars + Number(nextScheduledTick.position.first),
     }
 
-    this.timeoutId = window.setTimeout(
+    this.timeoutManager.set(
       () => {
-        this.onTick?.(nextScheduledTick)
+        const outputLatency = this.audioCtx.outputLatency * 1000
         this.schedule(nextIdx)
+
+        outputLatency < frameMs * 5
+          ? this.onTick?.(nextScheduledTick)
+          : this.timeoutManager.set(() => this.onTick?.(nextScheduledTick), outputLatency)
       },
       (this.nextBeatAt - this.audioCtx.currentTime) * 1000,
     )
   }
 
   public setKit(kit: SoundMap) {
+    logger.info('setKit', kit)
     this.kit = kit
   }
 
   public setTempo(bpm: number) {
+    logger.info('setTempo', bpm)
     this.tempo = bpm
   }
 
-  public setBeats(value: number) {
-    this.beats = value
+  public setBeats(beats: number) {
+    logger.info('setBeats', beats)
+    this.beats = beats
   }
 
   public setGrid(grid: Grid) {
+    logger.info('setGrid', grid)
     this.grid = grid
   }
 
   public setOnTick(onTick: (tick: Tick) => void) {
-    this.onTick = onTick
+    this.onTick = (tick) => {
+      logger.info('onTick', tick)
+      onTick(tick)
+    }
   }
 
   public setBeforeTickScheduled(beforeTickScheduled: (tick: Tick) => void) {
@@ -137,17 +155,24 @@ export class Player {
   }
 
   public setCounting(count: number) {
+    logger.info('setCounting', count)
     this.counting = count
   }
 
-  public play() {
+  public async play() {
     if (this.playing) {
       return
     }
 
+    if (this.audioCtx.state === 'suspended') {
+      await this.audioCtx.resume()
+      logger.info('audioCtx.resume()')
+    }
+
+    logger.info('play')
     this.playing = true
-    this.nextBeatAt = this.audioCtx.currentTime
-    const tick = this.getTick(0)
+    this.nextBeatAt = this.audioCtx.currentTime + 0.05
+    const tick = this.getTick(0, this.nextBeatAt)
 
     if (this.grid[0]) {
       const instrument = tick.counting ? 'fxMetronome1' : this.grid[0].instrument
@@ -161,8 +186,10 @@ export class Player {
   }
 
   public stop() {
+    logger.info('stop')
     this.playing = false
-    window.clearTimeout(this.timeoutId)
+    this.timeoutManager.clearAll()
+    this.scheduledTick = null
     this.scheduledCount = { ...zeroScheduledCount }
     this.scheduledBufferSource?.stop()
     this.scheduledBufferSource = null

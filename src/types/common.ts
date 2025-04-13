@@ -7,6 +7,7 @@ export interface Tick {
   counting: boolean
   position: NotePosition
   played: Played
+  time: number
 }
 
 export interface Note {
