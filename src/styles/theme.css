@@ -58,7 +58,7 @@
   --radius-round: 50%;
 
   /* sizes scale: 1.618 */
-  --size-00000: 0.0917rem;
+  --size-00000: 0.092rem;
   --size-0000: 0.1483rem;
   --size-000: 0.24rem;
   --size-00: 0.382rem;
@@ -75,7 +75,7 @@
   --block-size-control: var(--font-size-6);
 
   /* alpha */
-  --alpha-disabled: 0.48;
+  --alpha-disabled: 0.6;
   --alpha-dimmed: 0.8;
 
   /* misc */

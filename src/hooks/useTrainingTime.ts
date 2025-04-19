@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
-import { calculateTime } from '../components/blocks/Settings/Training/Training.utils'
 import { useMetronomeStore } from '../store/useMetronomeStore'
 import { useTrainingStore } from '../store/useTrainingStore'
+import { calculateTime } from '../utils/training'
 
 export const useTrainingTime = (formatter: (time: number) => string) => {
   const [trainingTime, setTrainingTime] = useState(0)
@@ -13,20 +13,18 @@ export const useTrainingTime = (formatter: (time: number) => string) => {
     subdivision,
     tempo,
   }))
-  const { every, to, step, type } = useTrainingStore(({ every, to, step, type }) => ({
+  const { every, to, step } = useTrainingStore(({ every, to, step }) => ({
     every,
     to,
     step,
-    type,
   }))
 
   useEffect(() => {
     if (!isPlaying) {
-      const from = { beats, tempo, subdivision }[type]
-      const time = calculateTime({ key: type, from, to, every, tempo, beats, step })
+      const time = calculateTime({ from: tempo, to, every, tempo, beats, step })
       setTrainingTime(time)
     }
-  }, [beats, subdivision, every, isPlaying, tempo, to, type, step])
+  }, [beats, subdivision, every, isPlaying, tempo, to, step])
 
   return formatter ? formatter(trainingTime) : trainingTime
 }

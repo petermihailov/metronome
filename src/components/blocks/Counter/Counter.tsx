@@ -4,6 +4,7 @@ import { memo } from 'react'
 import { BarsCounter } from './BarsCounter'
 import { BeatsCounter } from './BeatsCounter'
 import { useMetronomeStore } from '../../../store/useMetronomeStore'
+import { useScreenStore } from '../../../store/useScreenStore'
 import { useTickStore } from '../../../store/useTickStore'
 import { useTrainingStore } from '../../../store/useTrainingStore'
 
@@ -18,13 +19,12 @@ const Counter = ({ className }: CounterProps) => {
     beat: position.beat,
     isCounting: counting,
   }))
-  const { isTraining, isPlaying, beats } = useMetronomeStore(
-    ({ isTraining, isPlaying, beats }) => ({
-      beats,
-      isTraining,
-      isPlaying,
-    }),
-  )
+
+  const screen = useScreenStore((state) => state.screen)
+  const { isPlaying, beats } = useMetronomeStore(({ isPlaying, beats }) => ({
+    beats,
+    isPlaying,
+  }))
 
   let currentBar = isCounting ? 0 : (barsPlayed % every) + 1
   if (!isPlaying) {
@@ -33,7 +33,7 @@ const Counter = ({ className }: CounterProps) => {
 
   return (
     <div className={clsx(className)}>
-      {isTraining ? (
+      {screen === 'training' ? (
         <BarsCounter bar={currentBar} bars={every} />
       ) : (
         <BeatsCounter beats={beats} playing={isPlaying} value={beat || beats} />

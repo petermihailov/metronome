@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 
 import { useMetronomeStore } from '../../../store/useMetronomeStore'
 import { useTickStore } from '../../../store/useTickStore'
-import type { Instrument } from '../../../types/common'
+import type { Instrument } from '../../../types/metronome'
 import { Note } from '../../ui/Note'
 import { DisplayBar } from '../DisplayBar'
 

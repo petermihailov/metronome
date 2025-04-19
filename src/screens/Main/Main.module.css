@@ -1,0 +1,4 @@
+.main {
+  display: grid;
+  gap: var(--size-2);
+}

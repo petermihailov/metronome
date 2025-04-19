@@ -1,5 +1,3 @@
-import type { TrainingType } from './Training.types'
-
 interface RangeGeneratorOptions {
   from: number
   to: number
@@ -18,7 +16,6 @@ export function* rangeGenerator({ from, to, step = 1 }: RangeGeneratorOptions) {
 }
 
 interface CalculateTimeOptions {
-  key: TrainingType
   tempo: number
   beats: number
   every: number
@@ -27,22 +24,14 @@ interface CalculateTimeOptions {
   step: number
 }
 
-export const calculateTime = ({
-  key,
-  from,
-  to,
-  every,
-  tempo,
-  beats,
-  step,
-}: CalculateTimeOptions) => {
+export const calculateTime = ({ from, to, every, tempo, beats, step }: CalculateTimeOptions) => {
   const values = { tempo, beats, subdivision: 1 }
 
   if (from > to) [from, to] = [to, from]
 
   return Math.floor(
     [from, ...rangeGenerator({ from, to, step })].reduce((elapsed, current) => {
-      values[key] = current
+      tempo = current
       elapsed += (60 / values.tempo) * values.beats * every
       return elapsed
     }, 0),

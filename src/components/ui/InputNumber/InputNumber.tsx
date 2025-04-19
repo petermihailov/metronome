@@ -10,6 +10,7 @@ import { useCallback, memo, useEffect, useRef, useState } from 'react'
 
 import { inRange, minMax } from '../../../utils/math'
 import { ButtonIcon } from '../ButtonIcon'
+import { FormRow } from '../FormRow'
 
 import classes from './InputNumber.module.css'
 
@@ -153,50 +154,48 @@ const InputNumber = ({
   }, [])
 
   return (
-    <div
-      className={clsx(className, classes.inputNumber, {
-        [classes.disabled]: disabled,
-        [classes.active]: active,
-      })}
-      onClick={resetTimer}
+    <FormRow
+      active={active}
+      after={
+        <>
+          <ButtonIcon
+            ref={decreaseButtonRef}
+            aria-label="decrease (Arrow Down)"
+            className={classes.button}
+            disabled={disabled || value === min}
+            icon="minus"
+            tabIndex={-1}
+            onClick={decreaseHandler}
+          />
+          <ButtonIcon
+            ref={increaseButtonRef}
+            aria-label="increase (Arrow Up)"
+            className={classes.button}
+            disabled={disabled || value === max}
+            icon="plus"
+            tabIndex={-1}
+            onClick={increaseHandler}
+          />
+        </>
+      }
+      className={className}
+      disabled={disabled}
+      title={title}
     >
-      <label className={classes.label}>
-        {title && <span className={classes.title}>{title}</span>}
-        <input
-          ref={inputRef}
-          className={classes.input}
-          disabled={disabled}
-          inputMode="decimal"
-          type="text"
-          value={textValue}
-          onBlur={onBlurHandler}
-          onChange={onChangeHandler}
-          onFocus={onFocusHandler}
-          onKeyDown={onKeyDownHandler}
-          {...restProps}
-        />
-      </label>
-      <div className={classes.buttons} onClick={(e) => e.stopPropagation()}>
-        <ButtonIcon
-          ref={decreaseButtonRef}
-          aria-label="decrease (Arrow Down)"
-          className={classes.button}
-          disabled={disabled || value === min}
-          icon="minus"
-          tabIndex={-1}
-          onClick={decreaseHandler}
-        />
-        <ButtonIcon
-          ref={increaseButtonRef}
-          aria-label="increase (Arrow Up)"
-          className={classes.button}
-          disabled={disabled || value === max}
-          icon="plus"
-          tabIndex={-1}
-          onClick={increaseHandler}
-        />
-      </div>
-    </div>
+      <input
+        ref={inputRef}
+        className={clsx(classes.input, { [classes.active]: active })}
+        disabled={disabled}
+        inputMode="decimal"
+        type="text"
+        value={textValue}
+        onBlur={onBlurHandler}
+        onChange={onChangeHandler}
+        onFocus={onFocusHandler}
+        onKeyDown={onKeyDownHandler}
+        {...restProps}
+      />
+    </FormRow>
   )
 }
 

@@ -39,7 +39,7 @@
 @media (min-width: 800px) {
   :root {
     padding-block-start: 7.5vh;
-    font-size: min(2.45vh, 1.85vw);
+    font-size: min(2.35vh, 1.85vw);
   }
 
   :where(body) {

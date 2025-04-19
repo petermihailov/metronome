@@ -1,7 +1,7 @@
 import { createLogger } from './Logger'
 import { TimeoutManager } from './TimeoutManager'
 import { DEFAULTS } from '../constants'
-import type { Instrument, SoundMap, Tick, Grid } from '../types/common'
+import type { Instrument, SoundMap, Tick, Grid } from '../types/metronome'
 import { getAudioContext } from '../utils/audio'
 
 const logger = createLogger('PLAYER', { color: '#2af' })
@@ -51,7 +51,7 @@ export class Player {
       idx: idx,
       beat: Math.floor(idx / sub) + 1,
       subdivision: (idx % sub) + 1,
-      first: idx === 0,
+      downbeat: idx === 0,
       last: idx === this.grid.length - 1,
     }
 
@@ -107,7 +107,7 @@ export class Player {
       beats: !this.isSubdivisionNote(nextScheduledTick.position.idx)
         ? this.scheduledCount.beats + 1
         : this.scheduledCount.beats,
-      bars: this.scheduledCount.bars + Number(nextScheduledTick.position.first),
+      bars: this.scheduledCount.bars + Number(nextScheduledTick.position.downbeat),
     }
 
     this.timeoutManager.set(

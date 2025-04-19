@@ -1,0 +1,50 @@
+.form-row {
+  position: relative;
+  transition: opacity 200ms ease-out;
+}
+
+.label {
+  display: grid;
+  grid-template-rows: auto var(--block-size-control);
+  gap: var(--size-0);
+}
+
+.title {
+  font-weight: 800;
+  font-size: var(--font-size-1);
+  line-height: var(--font-lineheight-0);
+  letter-spacing: -0.05rem;
+  text-transform: uppercase;
+}
+
+.control {
+  /* empty */
+}
+
+.before,
+.after {
+  position: absolute;
+  inset-block-end: 0;
+  display: flex;
+  gap: var(--size-0);
+  block-size: var(--block-size-control);
+}
+
+.before {
+  inset-inline-start: 0;
+  padding-inline: var(--size-0) 0;
+}
+
+.after {
+  inset-inline-end: 0;
+  padding-inline: 0 var(--size-0);
+}
+
+/* disabled */
+.disabled {
+  opacity: var(--alpha-disabled);
+}
+
+.active {
+  opacity: 1;
+}

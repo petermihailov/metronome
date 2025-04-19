@@ -39,8 +39,8 @@ export default defineConfig({
         description: 'just metronome',
         display: 'standalone',
         theme_color: '#000',
-        start_url: '/',
-        scope: '/',
+        start_url: '/metronome/',
+        scope: '/metronome/',
         icons: [
           {
             src: 'pwa-192.png',

@@ -1,65 +1,37 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
-import { rangeGenerator } from '../components/blocks/Settings/Training/Training.utils'
 import { useMetronomeStore } from '../store/useMetronomeStore'
 import { useTickStore } from '../store/useTickStore'
 import { useTrainingStore } from '../store/useTrainingStore'
+import { rangeGenerator } from '../utils/training'
 
 type Options = Partial<{
   onStop: () => void
 }>
 
 export const useTraining = ({ onStop }: Options = {}) => {
-  const { every, from, to, step, type, setFromAction } = useTrainingStore(
-    ({ every, from, to, step, type, setFromAction }) => ({
+  const { every, from, to, step, setFromAction } = useTrainingStore(
+    ({ every, from, to, step, setFromAction }) => ({
       every,
       from,
       to,
       step,
-      type,
       setFromAction,
     }),
   )
 
-  const {
-    applyGridAlignmentAction,
-    beats,
-    isPlaying,
-    isTraining,
-    setBeatsAction,
-    setSubdivisionAction,
-    setTempoAction,
-    subdivision,
-    tempo,
-  } = useMetronomeStore(
-    ({
-      applyGridAlignmentAction,
-      beats,
+  const { isPlaying, setTempoAction, tempo } = useMetronomeStore(
+    ({ isPlaying, setIsPlayingAction, setTempoAction, tempo }) => ({
       isPlaying,
-      isTraining,
-      setBeatsAction,
       setIsPlayingAction,
-      setSubdivisionAction,
       setTempoAction,
-      subdivision,
-      tempo,
-    }) => ({
-      applyGridAlignmentAction,
-      beats,
-      isPlaying,
-      isTraining,
-      setBeatsAction,
-      setIsPlayingAction,
-      setSubdivisionAction,
-      setTempoAction,
-      subdivision,
       tempo,
     }),
   )
 
-  const { isFirst, isSecond, isCounting, barsPlayed } = useTickStore(
+  const { isDownbeat, isSecond, isCounting, barsPlayed } = useTickStore(
     ({ counting, willBeScheduled }) => ({
-      isFirst: willBeScheduled?.position.first || false,
+      isDownbeat: willBeScheduled?.position.downbeat || false,
       isSecond: willBeScheduled?.position.idx === 1 || false,
       isCounting: willBeScheduled?.counting || counting,
       barsPlayed: willBeScheduled?.played.bars || 0,
@@ -70,44 +42,31 @@ export const useTraining = ({ onStop }: Options = {}) => {
   const refIsDecrease = useRef(from > to)
   const refDone = useRef<boolean | undefined>(undefined)
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const onChange = useCallback(
-    {
-      tempo: setTempoAction,
-      subdivision: setSubdivisionAction,
-      beats: setBeatsAction,
-    }[type],
-    [type],
-  )
-
   // Handle play/stop
   useEffect(() => {
-    if (isTraining) {
-      if (isPlaying) {
-        refTrainingGenerator.current = rangeGenerator({ from, to, step })
-      } else {
-        refIsDecrease.current = false
-        refDone.current = false
-      }
+    if (isPlaying) {
+      refTrainingGenerator.current = rangeGenerator({ from, to, step })
+    } else {
+      refIsDecrease.current = false
+      refDone.current = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPlaying, isTraining])
+  }, [isPlaying])
 
   // Update 'from'
   useEffect(() => {
-    if (!isPlaying && isTraining) {
-      setFromAction({ beats, tempo, subdivision }[type])
+    if (!isPlaying) {
+      setFromAction(tempo)
     }
-  }, [beats, tempo, subdivision, isTraining, isPlaying, type, setFromAction])
+  }, [isPlaying, setFromAction, tempo])
 
   // Training loop
   // Изменяет значение на последнюю ноту последнего такта
   useEffect(() => {
     if (
       !isCounting &&
-      isTraining &&
       isPlaying &&
-      isFirst &&
+      isDownbeat &&
       barsPlayed % every === 0 &&
       refTrainingGenerator.current
     ) {
@@ -115,29 +74,15 @@ export const useTraining = ({ onStop }: Options = {}) => {
       refDone.current = done
 
       if (!done && value) {
-        onChange(value)
-
-        if (type === 'subdivision') {
-          applyGridAlignmentAction()
-        }
+        setTempoAction(value)
       }
     }
-  }, [
-    applyGridAlignmentAction,
-    barsPlayed,
-    every,
-    isCounting,
-    isFirst,
-    isPlaying,
-    isTraining,
-    onChange,
-    type,
-  ])
+  }, [barsPlayed, every, isCounting, isDownbeat, isPlaying, setTempoAction])
 
   // stop callback
   useEffect(() => {
-    if (!isCounting && isTraining && isPlaying && isSecond && refDone.current) {
+    if (!isCounting && isPlaying && isSecond && refDone.current) {
       onStop?.()
     }
-  }, [isCounting, isSecond, isPlaying, isTraining, onStop])
+  }, [isCounting, isSecond, isPlaying, onStop])
 }

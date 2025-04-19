@@ -4,6 +4,7 @@ import { memo, useEffect, useRef, useState } from 'react'
 import { useTrainingTime } from '../../../hooks/useTrainingTime'
 import { useMetronomeStore } from '../../../store/useMetronomeStore'
 import { usePlayingTimeStore } from '../../../store/usePlayingTimeStore'
+import { useScreenStore } from '../../../store/useScreenStore'
 import { useTickStore } from '../../../store/useTickStore'
 import { timeFormat } from '../../../utils/format'
 import { ButtonCounting } from '../../ui/ButtonCounting'
@@ -20,16 +21,17 @@ const DisplayBar = () => {
 
   const [messageIsVisible, setMessageIsVisible] = useState(false)
 
-  const { count, isPlaying, isTraining, setCountAction, setIsTrainingAction } = useMetronomeStore(
-    ({ count, isPlaying, isTraining, setCountAction, setIsTrainingAction }) => ({
+  const { screen, setScreenAction } = useScreenStore((state) => state)
+
+  const { count, isPlaying, setCountAction } = useMetronomeStore(
+    ({ count, isPlaying, setCountAction }) => ({
       count,
       isPlaying,
-      isTraining,
       setCountAction,
-      setIsTrainingAction,
     }),
   )
 
+  const isTraining = screen === 'training'
   const time = isTraining ? trainingTime : dayTime
   const timeLabel = isTraining ? 'training time' : 'total today'
   const displayText = messageIsVisible ? 'copied' : time
@@ -106,7 +108,7 @@ const DisplayBar = () => {
           className={clsx(classes.icon, { [classes.iconActive]: isTraining })}
           disabled={isPlaying}
           icon="training"
-          onClick={() => setIsTrainingAction(!isTraining)}
+          onClick={() => setScreenAction(screen === 'training' ? 'main' : 'training')}
         />
       </div>
     </div>

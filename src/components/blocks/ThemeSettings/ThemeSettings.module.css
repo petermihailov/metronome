@@ -1,0 +1,11 @@
+.theme-settings {
+  /* empty */
+}
+
+.input-color {
+  inline-size: var(--block-size-control);
+  block-size: var(--block-size-control);
+  border: none;
+  outline: none;
+  overflow: hidden;
+}

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
 import { useMetronomeStore } from '../store/useMetronomeStore'
+import { useScreenStore } from '../store/useScreenStore'
 
 const tapTempo = {
   prev: 0,
@@ -19,17 +20,16 @@ const tapTempo = {
 }
 
 export const useHotkeys = () => {
-  const { isPlaying, isTraining, tempo, setIsPlayingAction, setTempoAction, resetAction } =
-    useMetronomeStore(
-      ({ isPlaying, isTraining, tempo, setIsPlayingAction, setTempoAction, resetAction }) => ({
-        isPlaying,
-        isTraining,
-        tempo,
-        setIsPlayingAction,
-        setTempoAction,
-        resetAction,
-      }),
-    )
+  const screen = useScreenStore((state) => state.screen)
+  const { isPlaying, tempo, setIsPlayingAction, setTempoAction, resetAction } = useMetronomeStore(
+    ({ isPlaying, tempo, setIsPlayingAction, setTempoAction, resetAction }) => ({
+      isPlaying,
+      tempo,
+      setIsPlayingAction,
+      setTempoAction,
+      resetAction,
+    }),
+  )
 
   useEffect(() => {
     const callback = (event: KeyboardEvent) => {
@@ -37,7 +37,7 @@ export const useHotkeys = () => {
         setIsPlayingAction(!isPlaying)
       }
 
-      if (!(isTraining && isPlaying)) {
+      if (!(screen === 'training' && isPlaying)) {
         const noModifiers = !event.shiftKey && !event.metaKey && !event.altKey && !event.ctrlKey
 
         if (event.code === 'KeyT') {
@@ -49,7 +49,15 @@ export const useHotkeys = () => {
           resetAction()
         }
 
-        if (event.shiftKey) {
+        if (event.altKey) {
+          if (event.code === 'ArrowUp') {
+            setTempoAction(tempo + 5)
+          }
+
+          if (event.code === 'ArrowDown') {
+            setTempoAction(tempo - 5)
+          }
+        } else if (event.shiftKey) {
           if (event.code === 'ArrowUp') {
             setTempoAction(tempo + 10)
           }
@@ -74,5 +82,5 @@ export const useHotkeys = () => {
     return () => {
       document.removeEventListener('keydown', callback)
     }
-  }, [isPlaying, isTraining, resetAction, setIsPlayingAction, setTempoAction, tempo])
+  }, [isPlaying, resetAction, screen, setIsPlayingAction, setTempoAction, tempo])
 }

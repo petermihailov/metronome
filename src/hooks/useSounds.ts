@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { INSTRUMENTS } from '../constants'
-import type { SoundMap } from '../types/common'
+import type { SoundMap } from '../types/metronome'
 import { fetchAndDecodeAudio } from '../utils/audio'
 
 export function useSounds() {

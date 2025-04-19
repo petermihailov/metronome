@@ -3,8 +3,9 @@ import { useEffect } from 'react'
 import { MINMAX } from '../constants'
 import { createLogger } from '../lib/Logger'
 import { useMetronomeStore } from '../store/useMetronomeStore'
+import { useScreenStore } from '../store/useScreenStore'
 import { useTrainingStore } from '../store/useTrainingStore'
-import type { Grid, Instrument } from '../types/common'
+import type { Grid, Instrument } from '../types/metronome'
 import { debounce } from '../utils/throttling'
 import { getQuery, stringifyQuery, updateQuery } from '../utils/url'
 
@@ -47,14 +48,13 @@ const parseGridValue = (
 }
 
 export function useQuerySync() {
+  const screenStore = useScreenStore((state) => state)
   const metronomeStore = useMetronomeStore(
     ({
       beats,
       grid,
-      isTraining,
       setBeatsAction,
       setGridAction,
-      setIsTrainingAction,
       setSubdivisionAction,
       setTempoAction,
       subdivision,
@@ -62,10 +62,8 @@ export function useQuerySync() {
     }) => ({
       beats,
       grid,
-      isTraining,
       setBeatsAction,
       setGridAction,
-      setIsTrainingAction,
       setSubdivisionAction,
       setTempoAction,
       subdivision,
@@ -110,7 +108,7 @@ export function useQuerySync() {
       grid,
     })
 
-    metronomeStore.setIsTrainingAction(training === 1)
+    screenStore.setScreenAction(training === 1 ? 'training' : 'main')
 
     if (training === 1) {
       if (every) {
@@ -147,7 +145,8 @@ export function useQuerySync() {
 
   // Update query
   useEffect(() => {
-    const { isTraining: training, beats, subdivision, tempo } = metronomeStore
+    const { screen } = screenStore
+    const { beats, subdivision, tempo } = metronomeStore
     const { every, from, to, step } = trainingStore
 
     const grid = metronomeStore.grid.reduce((qs, note) => {
@@ -167,6 +166,7 @@ export function useQuerySync() {
       }
     }, '')
 
+    const training = screen === 'training'
     const metronomeQuery = { tempo, beats, subdivision, grid }
     const trainingQuery = { training, every, from, to, step }
     const query = training
@@ -174,5 +174,5 @@ export function useQuerySync() {
       : stringifyQuery(metronomeQuery)
 
     updateQueryDebounced(query)
-  }, [metronomeStore, trainingStore])
+  }, [metronomeStore, screenStore, trainingStore])
 }

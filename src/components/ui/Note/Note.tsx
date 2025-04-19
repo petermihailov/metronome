@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { memo } from 'react'
 
-import type { Note as NoteType } from '../../../types/common'
+import type { Note as NoteType } from '../../../types/metronome'
 
 import classes from './Note.module.css'
 

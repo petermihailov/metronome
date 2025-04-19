@@ -20,7 +20,7 @@ export interface NotePosition {
   idx: number // id ноты в массиве такта
   beat: number // какая доля (воровская?) такта
   subdivision: number // на каком месте в доле
-  first: boolean // первая ли нота
+  downbeat: boolean // первая ли нота
   last: boolean // последняя ли нота
 }
 

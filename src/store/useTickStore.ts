@@ -1,7 +1,7 @@
 import { shallow } from 'zustand/shallow'
 import { createWithEqualityFn } from 'zustand/traditional'
 
-import type { Tick } from '../types/common'
+import type { Tick } from '../types/metronome'
 
 const zeroTick: Tick = {
   counting: true,
@@ -16,7 +16,7 @@ const zeroTick: Tick = {
     idx: 0,
     beat: 0,
     subdivision: 0,
-    first: true,
+    downbeat: true,
     last: false,
   },
 }
