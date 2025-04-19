@@ -5,13 +5,13 @@ import { createLogger } from '../lib/Logger'
 import { useMetronomeStore } from '../store/useMetronomeStore'
 import { useScreenStore } from '../store/useScreenStore'
 import { useTrainingStore } from '../store/useTrainingStore'
-import type { Grid, Instrument } from '../types/metronome'
+import type { Bar, Instrument } from '../types/metronome'
 import { debounce } from '../utils/throttling'
 import { getQuery, stringifyQuery, updateQuery } from '../utils/url'
 
 const logger = createLogger('QUERY', { color: '#92b' })
 
-const gridMap: Record<number, Instrument | null> = {
+const notesMap: Record<number, Instrument | null> = {
   '0': null,
   '1': 'fxMetronome1',
   '2': 'fxMetronome2',
@@ -28,20 +28,20 @@ const parseNumberValue = (value: string) => {
   return Number.isFinite(num) ? num : null
 }
 
-const parseGridValue = (
+const parseBarValue = (
   value: string,
   beats: number | null,
   subdivision: number | null,
-): Grid | null => {
+): Bar | null => {
   try {
-    const grid = value.split('').map((num) => {
+    const bar = value.split('').map((num) => {
       const value = parseNumberValue(num)
       if (value === null) throw 'invalid range'
 
-      return { instrument: gridMap[value] }
+      return { instrument: notesMap[value] }
     })
 
-    return beats && subdivision && grid.length === beats * subdivision ? grid : null
+    return beats && subdivision && bar.length === beats * subdivision ? bar : null
   } catch (_e) {
     return null
   }
@@ -52,18 +52,18 @@ export function useQuerySync() {
   const metronomeStore = useMetronomeStore(
     ({
       beats,
-      grid,
+      bar,
       setBeatsAction,
-      setGridAction,
+      setBarAction,
       setSubdivisionAction,
       setTempoAction,
       subdivision,
       tempo,
     }) => ({
       beats,
-      grid,
+      bar,
       setBeatsAction,
-      setGridAction,
+      setBarAction,
       setSubdivisionAction,
       setTempoAction,
       subdivision,
@@ -95,7 +95,7 @@ export function useQuerySync() {
     const from = parseNumberValue(query.from)
     const to = parseNumberValue(query.to)
     const every = parseNumberValue(query.every)
-    const grid = parseGridValue(query.grid, beats, subdivision)
+    const bar = parseBarValue(query.bar, beats, subdivision)
 
     logger.info('setFromQuery', {
       tempo,
@@ -105,7 +105,7 @@ export function useQuerySync() {
       from,
       to,
       every,
-      grid,
+      bar,
     })
 
     screenStore.setScreenAction(training === 1 ? 'training' : 'main')
@@ -136,9 +136,9 @@ export function useQuerySync() {
       metronomeStore.setSubdivisionAction(MINMAX.range('subdivision', subdivision))
     }
 
-    if (grid) {
-      // Beats и Subdivision меняют grid, так что его задаем последним
-      metronomeStore.setGridAction(grid)
+    if (bar) {
+      // Beats и Subdivision меняют bar, так что его задаем последним
+      metronomeStore.setBarAction(bar)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -149,7 +149,7 @@ export function useQuerySync() {
     const { beats, subdivision, tempo } = metronomeStore
     const { every, from, to, step } = trainingStore
 
-    const grid = metronomeStore.grid.reduce((qs, note) => {
+    const bar = metronomeStore.bar.reduce((qs, note) => {
       if (note.instrument === null) {
         return (qs += '0')
       }
@@ -167,7 +167,7 @@ export function useQuerySync() {
     }, '')
 
     const training = screen === 'training'
-    const metronomeQuery = { tempo, beats, subdivision, grid }
+    const metronomeQuery = { tempo, beats, subdivision, bar }
     const trainingQuery = { training, every, from, to, step }
     const query = training
       ? stringifyQuery({ ...metronomeQuery, ...trainingQuery, training: Number(training) })

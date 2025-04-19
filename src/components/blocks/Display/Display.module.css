@@ -11,7 +11,7 @@
   overflow: hidden;
 }
 
-.grid {
+.bar {
   display: flex;
   align-items: flex-end;
   margin: min(5vw, var(--size-2));

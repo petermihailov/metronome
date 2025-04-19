@@ -1,7 +1,7 @@
 import { createLogger } from './Logger'
 import { TimeoutManager } from './TimeoutManager'
 import { DEFAULTS } from '../constants'
-import type { Instrument, SoundMap, Tick, Grid } from '../types/metronome'
+import type { Instrument, SoundMap, Tick, Bar } from '../types/metronome'
 import { getAudioContext } from '../utils/audio'
 
 const logger = createLogger('PLAYER', { color: '#2af' })
@@ -22,7 +22,7 @@ export class Player {
   private tempo: number = DEFAULTS.tempo
   private beats: number = DEFAULTS.beats
   private scheduledCount = { ...zeroScheduledCount }
-  private grid: Grid = []
+  private bar: Bar = []
   private counting: number = 0
   private nextBeatAt: number = 0
   private scheduledTick: Tick | null = null
@@ -31,12 +31,12 @@ export class Player {
   private beforeTickScheduled?: (next: Tick, prev: Tick | null) => void
 
   private isSubdivisionNote(index: number): boolean {
-    return !(index % (this.grid.length / this.beats) === 0)
+    return !(index % (this.bar.length / this.beats) === 0)
   }
 
   private getTick(idx: number, time: number, isNext: boolean = false): Tick {
-    const sub = this.grid.length / this.beats
-    const note = this.grid[idx]
+    const sub = this.bar.length / this.beats
+    const note = this.bar[idx]
 
     const { notes, beats, bars } = this.scheduledCount
     const playedBars = bars - this.counting
@@ -52,7 +52,7 @@ export class Player {
       beat: Math.floor(idx / sub) + 1,
       subdivision: (idx % sub) + 1,
       downbeat: idx === 0,
-      last: idx === this.grid.length - 1,
+      last: idx === this.bar.length - 1,
     }
 
     let counting = this.counting > 0 && bars < this.counting
@@ -81,14 +81,14 @@ export class Player {
   }
 
   private schedule(idx: number) {
-    this.nextBeatAt += 60 / ((this.tempo * this.grid.length) / this.beats)
+    this.nextBeatAt += 60 / ((this.tempo * this.bar.length) / this.beats)
 
-    const nextIdx = (idx + 1) % this.grid.length
+    const nextIdx = (idx + 1) % this.bar.length
     const nextScheduledTick = this.getTick(nextIdx, this.nextBeatAt, true)
     this.beforeTickScheduled?.(nextScheduledTick, this.scheduledTick)
 
     // Schedule next
-    const nextNote = this.grid[nextIdx]
+    const nextNote = this.bar[nextIdx]
 
     if (nextScheduledTick.counting || nextNote.instrument) {
       if (nextScheduledTick.counting) {
@@ -138,9 +138,9 @@ export class Player {
     this.beats = beats
   }
 
-  public setGrid(grid: Grid) {
-    logger.info('setGrid', grid)
-    this.grid = grid
+  public setBar(bar: Bar) {
+    logger.info('setBar', bar)
+    this.bar = bar
   }
 
   public setOnTick(onTick: (tick: Tick) => void) {
@@ -174,8 +174,8 @@ export class Player {
     this.nextBeatAt = this.audioCtx.currentTime + 0.05
     const tick = this.getTick(0, this.nextBeatAt)
 
-    if (this.grid[0]) {
-      const instrument = tick.counting ? 'fxMetronome1' : this.grid[0].instrument
+    if (this.bar[0]) {
+      const instrument = tick.counting ? 'fxMetronome1' : this.bar[0].instrument
       if (instrument) {
         this.playNotesAtNextBeatTime(this.nextBeatAt, instrument)
       }

@@ -9,12 +9,12 @@ export function usePlayer() {
   const kit = useSounds()
   const player = useRef(new Player())
 
-  const { isPlaying, beats, grid, tempo, count } = useMetronomeStore(
-    ({ isPlaying, beats, grid, tempo, count }) => ({
+  const { isPlaying, beats, bar, tempo, count } = useMetronomeStore(
+    ({ isPlaying, beats, bar, tempo, count }) => ({
       beats,
       count,
       isPlaying,
-      grid,
+      bar,
       tempo,
     }),
   )
@@ -60,10 +60,10 @@ export function usePlayer() {
     player.current.setBeats(beats)
   }, [beats])
 
-  /** Sync grid */
+  /** Sync bar */
   useEffect(() => {
-    player.current.setGrid(grid)
-  }, [grid])
+    player.current.setBar(bar)
+  }, [bar])
 
   /** Sync tempo */
   useEffect(() => {

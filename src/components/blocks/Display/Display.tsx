@@ -15,18 +15,16 @@ const disabledMap: Record<Instrument, Instrument | null> = {
 }
 
 const Display = () => {
-  const { grid, switchInstrumentAction } = useMetronomeStore(
-    ({ grid, switchInstrumentAction }) => ({
-      grid,
-      switchInstrumentAction,
-    }),
-  )
+  const { bar, switchInstrumentAction } = useMetronomeStore(({ bar, switchInstrumentAction }) => ({
+    bar,
+    switchInstrumentAction,
+  }))
 
   const clickHandler: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       const target = e.target as HTMLElement
       const index = Number(target.dataset.index)
-      const currentInstrument = grid[index].instrument
+      const currentInstrument = bar[index].instrument
 
       if (Number.isFinite(index)) {
         const { top, bottom } = target.getBoundingClientRect()
@@ -44,7 +42,7 @@ const Display = () => {
         switchInstrumentAction(index, nextInstrument)
       }
     },
-    [grid, switchInstrumentAction],
+    [bar, switchInstrumentAction],
   )
 
   const { activeId } = useTickStore(({ position }) => ({ activeId: position.idx }))
@@ -52,13 +50,13 @@ const Display = () => {
   return (
     <div className={classes.display}>
       <div
-        className={classes.grid}
+        className={classes.bar}
         style={{
-          gap: `min(var(--size-1), calc(var(--size-1) / ${0.2 * grid.length}))`,
+          gap: `min(var(--size-1), calc(var(--size-1) / ${0.2 * bar.length}))`,
         }}
         onClick={clickHandler}
       >
-        {grid.map((note, idx) => (
+        {bar.map((note, idx) => (
           <Note
             key={idx}
             active={activeId === idx}

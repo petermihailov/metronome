@@ -14,7 +14,7 @@ export interface Note {
   instrument: Instrument | null
 }
 
-export type Grid = Note[]
+export type Bar = Note[]
 
 export interface NotePosition {
   idx: number // id ноты в массиве такта

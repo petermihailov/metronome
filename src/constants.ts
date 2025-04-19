@@ -1,4 +1,4 @@
-import type { Instrument, Grid } from './types/metronome'
+import type { Instrument, Bar } from './types/metronome'
 import { minMax } from './utils/math'
 
 export const INSTRUMENTS: Instrument[] = ['fxMetronome1', 'fxMetronome2', 'fxMetronome3']
@@ -28,7 +28,7 @@ export const DEFAULTS = {
   every: 8,
   step: 1,
   count: 2,
-  get grid(): Grid {
+  get bar(): Bar {
     return [
       { instrument: 'fxMetronome1' },
       { instrument: 'fxMetronome3' },

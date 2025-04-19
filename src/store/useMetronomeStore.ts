@@ -5,20 +5,20 @@ import { createWithEqualityFn } from 'zustand/traditional'
 import { DEFAULTS, MINMAX } from '../constants'
 import { Storage } from '../lib/LocalStorage'
 import { createLogger } from '../lib/Logger'
-import type { Instrument, Grid } from '../types/metronome'
+import type { Instrument, Bar } from '../types/metronome'
 
 const logger = createLogger('METRONOME', { color: '#f07' })
 
 const settingsStorage = new Storage<{
   beats: number
   count: number
-  grid: Grid
+  bar: Bar
   subdivision: number
   tempo: number
 }>('settings', {
   beats: DEFAULTS.beats,
   count: DEFAULTS.count,
-  grid: DEFAULTS.grid,
+  bar: DEFAULTS.bar,
   subdivision: DEFAULTS.subdivision,
   tempo: DEFAULTS.tempo,
 })
@@ -30,12 +30,12 @@ interface Store {
   beats: number
   count: number
   isPlaying: boolean
-  grid: Grid
+  bar: Bar
   subdivision: number
   tempo: number
 
   // Actions
-  setGridAction: (grid: Grid) => void
+  setBarAction: (bar: Bar) => void
   resetAction: () => void
   setBeatsAction: (beats: number) => void
   setCountAction: (count: number) => void
@@ -50,19 +50,19 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
     beats: storage.beats,
     count: storage.count,
     isPlaying: false,
-    grid: storage.grid,
+    bar: storage.bar,
     subdivision: storage.subdivision,
     tempo: storage.tempo,
 
-    setGridAction: (grid: Grid) => {
-      logger.info('setGridAction', grid)
+    setBarAction: (bar) => {
+      logger.info('setBarAction', bar)
       set((state) => {
         return produce(state, (draft) => {
-          if (grid.length === state.beats * state.subdivision) {
-            draft.grid = grid
+          if (bar.length === state.beats * state.subdivision) {
+            draft.bar = bar
 
             settingsStorage.update({
-              grid: draft.grid,
+              bar: draft.bar,
             })
           }
         })
@@ -78,20 +78,20 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
           draft.beats = beats
 
           if (state.beats > beats) {
-            draft.grid = state.grid.slice(0, beats * state.subdivision)
+            draft.bar = state.bar.slice(0, beats * state.subdivision)
           } else {
             // скопируем все удары с последней доли и повторяем столько,
             // сколько битов мы прибавили
             const count = beats - state.beats
-            const part = state.grid.slice(-1 * state.subdivision)
+            const part = state.bar.slice(-1 * state.subdivision)
             const additions = Array.from({ length: count }, () => part).flat()
 
-            draft.grid = [...state.grid, ...additions]
+            draft.bar = [...state.bar, ...additions]
           }
 
           settingsStorage.update({
             beats: draft.beats,
-            grid: draft.grid,
+            bar: draft.bar,
           })
         })
       })
@@ -125,7 +125,7 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           draft.subdivision = subdivision
-          draft.grid = Array(state.beats * subdivision)
+          draft.bar = Array(state.beats * subdivision)
             .fill(null)
             .map((_, idx) => {
               const isBeat = idx % subdivision === 0
@@ -148,7 +148,7 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
 
           settingsStorage.update({
             subdivision: draft.subdivision,
-            grid: draft.grid,
+            bar: draft.bar,
           })
         })
       })
@@ -168,8 +168,8 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
       logger.info('switchInstrument', { idx, instrument })
       set((state) => {
         return produce(state, (draft) => {
-          draft.grid[idx].instrument = instrument
-          settingsStorage.update({ grid: draft.grid })
+          draft.bar[idx].instrument = instrument
+          settingsStorage.update({ bar: draft.bar })
         })
       })
     },
@@ -178,18 +178,18 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
       logger.info('reset')
       set((state) => {
         return produce(state, (draft) => {
-          const { tempo, beats, subdivision, grid } = DEFAULTS
+          const { tempo, beats, subdivision, bar } = DEFAULTS
 
           draft.tempo = tempo
           draft.beats = beats
           draft.subdivision = subdivision
-          draft.grid = [...grid]
+          draft.bar = [...bar]
 
           settingsStorage.update({
             tempo: draft.tempo,
             beats: draft.beats,
             subdivision: draft.subdivision,
-            grid: draft.grid,
+            bar: draft.bar,
           })
         })
       })
