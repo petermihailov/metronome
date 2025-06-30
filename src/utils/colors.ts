@@ -1,10 +1,16 @@
-export const hslStrToObj = (hsl: string): { h: number; s: number; l: number } => {
+import type { HslColor } from 'react-colorful'
+
+export const hslStrToObj = (hsl: string): HslColor => {
   const [h, s, l] = hsl
     .trim()
     .split(/[\s,%]+/)
     .map(Number)
 
   return { h, s, l }
+}
+
+export const hslObjToStr = ({ h, s, l }: HslColor): string => {
+  return `${h} ${s}% ${l}%`
 }
 
 export const hsl2hex = (hsl: { h: number; s: number; l: number }): string => {

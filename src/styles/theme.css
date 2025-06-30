@@ -3,9 +3,9 @@
   --hsl-accent-1: 185 100% 50%;
   --hsl-accent-2: 333 100% 50%;
   --hsl-background: 240 0% 0%;
-  --hsl-background-app: 240 15 15%;
+  --hsl-background-app: 240 15% 15%;
   --hsl-border: 240 15% 50%;
-  --hsl-text: 0 100% 100%;
+  --hsl-text: 0 0% 100%;
 
   /* tints */
   --hsl-tint: 0 0% 100%;
@@ -51,9 +51,9 @@
   --font-size-8: 4.7684rem;
 
   /* radius */
-  --radius-1: var(--font-size-0);
-  --radius-2: var(--font-size-2);
-  --radius-3: var(--font-size-4);
+  --radius-1: var(--size-0);
+  --radius-2: var(--size-1);
+  --radius-3: var(--size-2);
   --radius-pill: 1e4px;
   --radius-round: 50%;
 
@@ -71,6 +71,17 @@
   --size-6: 11.089rem;
   --size-7: 17.942rem;
   --size-8: 29.031rem;
+
+  /* Half-steps */
+  --size-1-5: 1.309rem;
+  --size-2-5: 2.118rem;
+  --size-3-5: 3.4269rem;
+  --size-4-5: 5.5447rem;
+  --size-5-5: 8.9713rem;
+  --size-6-5: 14.5155rem;
+  --size-7-5: 23.4865rem;
+
+  /* sizes */
   --size-icon: var(--font-size-4);
   --block-size-control: var(--font-size-6);
 

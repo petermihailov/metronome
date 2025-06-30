@@ -1,9 +1,11 @@
-import { produce } from 'immer'
 import { shallow } from 'zustand/shallow'
 import { createWithEqualityFn } from 'zustand/traditional'
 
-import { DEFAULTS } from '../constants'
+import { DEFAULTS, MINMAX } from '../constants'
 import { Storage } from '../lib/LocalStorage'
+import { createLogger } from '../lib/Logger'
+
+const logger = createLogger('training', { color: '#f07' })
 
 const trainingStorage = new Storage<{
   alternate: boolean
@@ -14,7 +16,7 @@ const trainingStorage = new Storage<{
 }>('settings', {
   alternate: false,
   from: DEFAULTS.tempo,
-  to: DEFAULTS.tempo + 20,
+  to: DEFAULTS.tempo + 10,
   every: DEFAULTS.every,
   step: DEFAULTS.step,
 })
@@ -46,47 +48,46 @@ export const useTrainingStore = createWithEqualityFn<Store>((set) => {
     step: storage.step,
 
     setAlternateAction: (alternate) => {
+      logger.info('setAlternateAction', alternate)
       set((state) => {
-        return produce(state, (draft) => {
-          draft.alternate = alternate
-          trainingStorage.update({ alternate })
-        })
+        trainingStorage.update({ alternate })
+        return { ...state, alternate }
       })
     },
 
     setFromAction: (from) => {
+      from = MINMAX.range('tempo', from)
+      logger.info('setFromAction', from)
       set((state) => {
-        return produce(state, (draft) => {
-          draft.from = from
-          trainingStorage.update({ from })
-        })
+        trainingStorage.update({ from })
+        return { ...state, from }
       })
     },
 
     setToAction: (to) => {
+      to = MINMAX.range('tempo', to)
+      logger.info('setToAction', to)
       set((state) => {
-        return produce(state, (draft) => {
-          draft.to = to
-          trainingStorage.update({ to })
-        })
+        trainingStorage.update({ to })
+        return { ...state, to }
       })
     },
 
     setEveryAction: (every) => {
+      every = MINMAX.range('every', every)
+      logger.info('setEveryAction', every)
       set((state) => {
-        return produce(state, (draft) => {
-          draft.every = every
-          trainingStorage.update({ every })
-        })
+        trainingStorage.update({ every })
+        return { ...state, every }
       })
     },
 
     setStepAction: (step) => {
+      step = MINMAX.range('step', step)
+      logger.info('setStepAction', step)
       set((state) => {
-        return produce(state, (draft) => {
-          draft.step = step
-          trainingStorage.update({ step })
-        })
+        trainingStorage.update({ step })
+        return { ...state, step }
       })
     },
   }

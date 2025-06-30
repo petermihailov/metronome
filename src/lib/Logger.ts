@@ -26,7 +26,7 @@ declare const APP_VERSION: string
 declare const APP_BUILD_TIME: string
 
 console.log(
-  `%cMetronome  🥁%c\nversion: ${APP_VERSION}\nrelease date: ${dateFormat(new Date(Number(APP_BUILD_TIME)))}`,
+  `%cMetronome  🥁%c\nversion: ${APP_VERSION}\nlast release: ${dateFormat(new Date(Number(APP_BUILD_TIME)))}`,
   'color:#f07; background:#012; font-size:1.5rem; padding:0.5rem 0.5rem 0rem; margin: 1rem auto; font-family: Rockwell; border: 0.1rem solid #0ef; border-radius: 0.5rem;font-weight: bold; text-shadow: 2px 2px 0 #000;',
   '',
 )

@@ -25,14 +25,14 @@ interface CalculateTimeOptions {
 }
 
 export const calculateTime = ({ from, to, every, tempo, beats, step }: CalculateTimeOptions) => {
-  const values = { tempo, beats, subdivision: 1 }
+  let value = tempo
 
   if (from > to) [from, to] = [to, from]
 
   return Math.floor(
     [from, ...rangeGenerator({ from, to, step })].reduce((elapsed, current) => {
-      tempo = current
-      elapsed += (60 / values.tempo) * values.beats * every
+      value = current
+      elapsed += (60 / value) * beats * every
       return elapsed
     }, 0),
   )

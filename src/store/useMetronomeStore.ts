@@ -7,7 +7,9 @@ import { Storage } from '../lib/LocalStorage'
 import { createLogger } from '../lib/Logger'
 import type { Instrument, Bar } from '../types/metronome'
 
-const logger = createLogger('METRONOME', { color: '#f07' })
+const logger = createLogger('metronome', { color: '#f07' })
+
+// type ValueOrUpdater<T = never> = T | ((prev: T) => T)
 
 const settingsStorage = new Storage<{
   beats: number
@@ -77,16 +79,22 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
         return produce(state, (draft) => {
           draft.beats = beats
 
-          if (state.beats > beats) {
-            draft.bar = state.bar.slice(0, beats * state.subdivision)
+          if (state.subdivision === 1) {
+            draft.bar = Array.from({ length: beats }).map((_, idx) => {
+              return idx === 0 ? { instrument: 'fxMetronome1' } : { instrument: 'fxMetronome3' }
+            })
           } else {
-            // скопируем все удары с последней доли и повторяем столько,
-            // сколько битов мы прибавили
-            const count = beats - state.beats
-            const part = state.bar.slice(-1 * state.subdivision)
-            const additions = Array.from({ length: count }, () => part).flat()
+            if (state.beats > beats) {
+              draft.bar = state.bar.slice(0, beats * state.subdivision)
+            } else {
+              // скопируем все удары с последней доли и повторяем столько,
+              // сколько битов мы прибавили
+              const count = beats - state.beats
+              const part = state.bar.slice(-1 * state.subdivision)
+              const additions = Array.from({ length: count }, () => part).flat()
 
-            draft.bar = [...state.bar, ...additions]
+              draft.bar = [...state.bar, ...additions]
+            }
           }
 
           settingsStorage.update({

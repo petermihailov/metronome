@@ -1,19 +1,14 @@
 import React, { memo } from 'react'
 
-import {
-  useButtonsPreventSpacePress,
-  useHotkeys,
-  usePlayer,
-  usePlayingTimeUpdate,
-  useWakeLock,
-} from '../../hooks'
 import { useAutoHideCursor } from '../../hooks/useAutoHideCursor'
+import { useButtonsPreventSpacePress } from '../../hooks/useButtonsPreventSpacePress'
+import { usePlayer } from '../../hooks/usePlayer'
+import { usePlayingTimeUpdate } from '../../hooks/usePlayingTimeUpdate'
 import { useQuerySync } from '../../hooks/useQuerySync'
+import { useWakeLock } from '../../hooks/useWakeLock'
 import type { Screen as ScreenType } from '../../screens'
 import { Main, Readme, Training, Polyrhythms, Colors, Preferences, Patterns } from '../../screens'
 import { useScreenStore } from '../../store/useScreenStore'
-import { Display } from '../blocks/Display'
-import { MainControl } from '../blocks/MainControl'
 
 import classes from './App.module.css'
 
@@ -31,7 +26,6 @@ const App = () => {
   usePlayer()
   usePlayingTimeUpdate()
   useAutoHideCursor()
-  useHotkeys()
   useWakeLock()
   useButtonsPreventSpacePress()
   useQuerySync()
@@ -41,8 +35,6 @@ const App = () => {
 
   return (
     <div className={classes.app}>
-      <Display />
-      <MainControl />
       <Screen />
     </div>
   )

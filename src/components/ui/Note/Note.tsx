@@ -17,6 +17,7 @@ export interface NoteProps {
 const Note = ({ className, note, beat, active, ...restProps }: NoteProps) => {
   return (
     <button
+      aria-label=""
       className={clsx(className, classes.note, {
         [classes.beat]: beat,
         [classes.active]: active,

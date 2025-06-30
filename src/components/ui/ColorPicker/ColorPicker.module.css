@@ -1,0 +1,26 @@
+/* stylelint-disable selector-class-pattern */
+
+.color-picker:global(.react-colorful) {
+  display: grid;
+  row-gap: var(--size-1);
+  inline-size: unset;
+  block-size: unset;
+}
+
+.color-picker :global(.react-colorful__saturation) {
+  grid-row: 1;
+  block-size: var(--size-6);
+  border: unset;
+  border-radius: var(--radius-2);
+  box-shadow: unset;
+}
+
+.color-picker :global(.react-colorful__hue) {
+  grid-row: 2;
+  block-size: var(--size-00);
+  border-radius: var(--radius-pill);
+}
+
+.color-picker :global(.react-colorful__last-control) {
+  /* empty */
+}

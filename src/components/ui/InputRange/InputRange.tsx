@@ -13,6 +13,7 @@ export interface InputRangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 
   max?: number
   value: number
   title?: string
+  name?: string
   active?: boolean
   disabled?: boolean
   onChange: (value: number) => void
@@ -21,6 +22,7 @@ export interface InputRangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 
 const InputRange = ({
   className,
   title,
+  name,
   max = 100,
   min = 0,
   value,
@@ -37,6 +39,7 @@ const InputRange = ({
         disabled={disabled}
         max={max}
         min={min}
+        name={name}
         title={title}
         value={value}
         onChange={onChange}

@@ -1,5 +1,8 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 
+import { useMainHotkeys } from './useMainHotkeys'
+import { Display } from '../../components/blocks/Display'
+import { MainControl } from '../../components/blocks/MainControl'
 import { InputNumber } from '../../components/ui/InputNumber'
 import { InputRange } from '../../components/ui/InputRange'
 import { MINMAX } from '../../constants'
@@ -8,6 +11,8 @@ import { useMetronomeStore } from '../../store/useMetronomeStore'
 import classes from './Main.module.css'
 
 const Main = () => {
+  useMainHotkeys()
+
   const { beats, subdivision, tempo, setBeatsAction, setSubdivisionAction, setTempoAction } =
     useMetronomeStore(
       ({
@@ -30,31 +35,38 @@ const Main = () => {
     )
 
   return (
-    <div className={classes.main}>
-      <InputRange
-        max={MINMAX.tempo.max}
-        min={MINMAX.tempo.min}
-        title="tempo"
-        value={tempo}
-        onChange={setTempoAction}
-      />
+    <>
+      <Display />
+      <MainControl />
+      <div className={classes.main}>
+        <InputRange
+          max={MINMAX.tempo.max}
+          min={MINMAX.tempo.min}
+          name="tempo"
+          title="tempo"
+          value={tempo}
+          onChange={setTempoAction}
+        />
 
-      <InputNumber
-        max={MINMAX.beats.max}
-        min={MINMAX.beats.min}
-        title="beats"
-        value={beats}
-        onChange={setBeatsAction}
-      />
+        <InputNumber
+          max={MINMAX.beats.max}
+          min={MINMAX.beats.min}
+          name="beats"
+          title="beats"
+          value={beats}
+          onChange={setBeatsAction}
+        />
 
-      <InputNumber
-        max={MINMAX.subdivision.max}
-        min={MINMAX.subdivision.min}
-        title="subdivision"
-        value={subdivision}
-        onChange={setSubdivisionAction}
-      />
-    </div>
+        <InputNumber
+          max={MINMAX.subdivision.max}
+          min={MINMAX.subdivision.min}
+          name="subdivision"
+          title="subdivision"
+          value={subdivision}
+          onChange={setSubdivisionAction}
+        />
+      </div>
+    </>
   )
 }
 

@@ -1,4 +1,14 @@
-export type IconUI = 'plus' | 'minus' | 'download' | 'training' | 'share' | 'library' | 'settings'
+export type IconUI =
+  | 'plus'
+  | 'minus'
+  | 'download'
+  | 'training'
+  | 'share'
+  | 'library'
+  | 'settings'
+  | 'chevron-left'
+  | 'chevron-right'
+  | 'draft'
 
 export type IconNumber =
   | 'number-0'

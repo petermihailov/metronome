@@ -26,7 +26,7 @@
   inset: 0;
   display: grid;
   place-items: center;
-  background-color: #000;
+  background-color: var(--color-background);
 }
 
 .segment {

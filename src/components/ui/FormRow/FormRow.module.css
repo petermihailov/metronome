@@ -5,6 +5,10 @@
 
 .label {
   display: grid;
+  grid-template-rows: var(--block-size-control);
+}
+
+.label:has(.title) {
   grid-template-rows: auto var(--block-size-control);
   gap: var(--size-0);
 }

@@ -76,34 +76,8 @@ const InputNumber = ({
     }
   }
 
-  const onKeyDownHandler: KeyboardEventHandler<HTMLInputElement> = (e) => {
+  const onKeyDownHandler: KeyboardEventHandler<HTMLInputElement> = () => {
     resetTimer()
-
-    if (['ArrowUp', 'ArrowDown'].includes(e.code)) {
-      e.stopPropagation()
-    }
-
-    if (e.shiftKey) {
-      if (e.code === 'ArrowUp') {
-        setValue(value + 10)
-      }
-
-      if (e.code === 'ArrowDown') {
-        setValue(value - 10)
-      }
-    } else {
-      if (e.code === 'ArrowUp') {
-        increase()
-      }
-
-      if (e.code === 'ArrowDown') {
-        decrease()
-      }
-
-      if (e.code === 'Enter') {
-        e.currentTarget.blur()
-      }
-    }
   }
 
   const onFocusHandler: FocusEventHandler<HTMLInputElement> = (e) => {
@@ -122,7 +96,6 @@ const InputNumber = ({
 
   const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
     const maxDigits = String(max).length
-
     const targetValue = Number(e.target.value.replace(/\D/, ''))
     const inputValue = e.target.value === '' ? '' : String(targetValue)
 

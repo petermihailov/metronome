@@ -27,7 +27,7 @@ export const DEFAULTS = {
   subdivision: 1,
   every: 8,
   step: 1,
-  count: 2,
+  count: 1,
   get bar(): Bar {
     return [
       { instrument: 'fxMetronome1' },
@@ -38,11 +38,11 @@ export const DEFAULTS = {
   },
 } as const
 
-export const THEME_DEFAULTS = {
+export const COLORS_DEFAULTS = {
   accent1: '185 100% 50%',
   accent2: '333 100% 50%',
   background: '240 0% 0%',
   backgroundApp: '240 15 15%',
   border: '240 15% 50%',
-  text: '0 100% 100%',
+  text: '0 0% 100%',
 }
