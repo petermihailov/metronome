@@ -1,11 +1,13 @@
 import React, { memo } from 'react'
 
-import { useAutoHideCursor } from '../../hooks/useAutoHideCursor'
-import { useButtonsPreventSpacePress } from '../../hooks/useButtonsPreventSpacePress'
-import { usePlayer } from '../../hooks/usePlayer'
-import { usePlayingTimeUpdate } from '../../hooks/usePlayingTimeUpdate'
-import { useQuerySync } from '../../hooks/useQuerySync'
-import { useWakeLock } from '../../hooks/useWakeLock'
+import {
+  useAutoHideCursor,
+  useButtonsPreventSpacePress,
+  usePlayingTimeUpdate,
+  useQuerySync,
+  useWakeLock,
+  usePlayer,
+} from '../../hooks'
 import type { Screen as ScreenType } from '../../screens'
 import { Main, Readme, Training, Polyrhythms, Colors, Preferences, Patterns } from '../../screens'
 import { useScreenStore } from '../../store/useScreenStore'

@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import type { HslColor } from 'react-colorful'
 
-import type { HotkeysMap } from '../../hooks/useHotkeys'
-import { useHotkeys } from '../../hooks/useHotkeys'
+import type { HotkeysMap } from '../../hooks'
+import { useHotkeys } from '../../hooks'
 import { minMax } from '../../utils/math'
 
 const stayInRange = (value: number, range: number) => {

@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { memo, useEffect, useRef, useState } from 'react'
 
-import { useTrainingTime } from '../../../hooks/useTrainingTime'
+import { useTrainingTime } from '../../../hooks'
 import { useMetronomeStore } from '../../../store/useMetronomeStore'
 import { usePlayingTimeStore } from '../../../store/usePlayingTimeStore'
 import { useScreenStore } from '../../../store/useScreenStore'
