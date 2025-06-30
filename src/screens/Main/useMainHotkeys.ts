@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
-import type { HotkeysMap } from '../../hooks/useHotkeys'
-import { useHotkeys } from '../../hooks/useHotkeys'
+import type { HotkeysMap } from '../../hooks'
+import { useHotkeys } from '../../hooks'
 import { useMetronomeStore } from '../../store/useMetronomeStore'
 import { tapTempo } from '../../utils/metronome'
 

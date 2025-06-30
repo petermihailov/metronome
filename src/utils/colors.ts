@@ -55,7 +55,6 @@ export const hex2hsl = (hex: string): { h: number; s: number; l: number; hsl: st
 
   if (max === min) {
     // Achromatic
-    console.log('Achromatic')
     return { h: 0, s: 0, l, hsl: `0 0% ${Math.round(l * 100)}%` }
   }
 

@@ -10,9 +10,12 @@ export const useWakeLock = () => {
   useEffect(() => {
     if ('wakeLock' in navigator) {
       if (isPlaying) {
-        navigator.wakeLock.request('screen').then((res) => (refLockWindow.current = res))
+        navigator.wakeLock
+          .request('screen')
+          .then((res) => (refLockWindow.current = res))
+          .catch()
       } else {
-        refLockWindow.current?.release().then()
+        refLockWindow.current?.release().then().catch()
       }
     }
   }, [isPlaying])

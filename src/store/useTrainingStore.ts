@@ -13,7 +13,7 @@ const trainingStorage = new Storage<{
   to: number
   every: number
   step: number
-}>('settings', {
+}>('training', {
   alternate: false,
   from: DEFAULTS.tempo,
   to: DEFAULTS.tempo + 10,

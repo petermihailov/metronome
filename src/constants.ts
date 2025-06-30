@@ -42,7 +42,7 @@ export const COLORS_DEFAULTS = {
   accent1: '185 100% 50%',
   accent2: '333 100% 50%',
   background: '240 0% 0%',
-  backgroundApp: '240 15 15%',
+  backgroundApp: '240 15% 15%',
   border: '240 15% 50%',
   text: '0 0% 100%',
 }
