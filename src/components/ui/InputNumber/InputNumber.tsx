@@ -91,6 +91,16 @@ const InputNumber = ({
       if (e.code === 'ArrowDown') {
         setValue(value - 10)
       }
+    } else if (e.altKey) {
+      if (e.code === 'ArrowUp') {
+        e.preventDefault()
+        setValue(value + 5)
+      }
+
+      if (e.code === 'ArrowDown') {
+        e.preventDefault()
+        setValue(value - 5)
+      }
     } else {
       if (e.code === 'ArrowUp') {
         increase()
