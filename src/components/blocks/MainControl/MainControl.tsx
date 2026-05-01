@@ -1,11 +1,8 @@
 import { memo } from 'react'
-// eslint-disable-next-line import/no-unresolved
-import { useRegisterSW } from 'virtual:pwa-register/react'
 
 import { useMetronomeStore } from '../../../store/useMetronomeStore'
 import { usePlayingTimeStore } from '../../../store/usePlayingTimeStore'
 import { timeFormat } from '../../../utils/format'
-import { ButtonIcon } from '../../ui/ButtonIcon'
 import { ButtonPlay } from '../../ui/ButtonPlay'
 import { Counter } from '../Counter'
 import { Indicator } from '../Indicator'
@@ -22,11 +19,6 @@ const MainControl = () => {
 
   const currentTime = usePlayingTimeStore(({ time }) => timeFormat(time.current))
 
-  const {
-    needRefresh: [isVisibleUpdate],
-    updateServiceWorker,
-  } = useRegisterSW()
-
   return (
     <div className={classes.mainControl}>
       <div className={classes.playing}>
@@ -39,17 +31,6 @@ const MainControl = () => {
           <Counter />
           <Indicator />
         </div>
-
-        {isVisibleUpdate && (
-          <ButtonIcon
-            aria-label="update"
-            className={classes.update}
-            icon="download"
-            onClick={() => {
-              updateServiceWorker()
-            }}
-          />
-        )}
       </div>
     </div>
   )

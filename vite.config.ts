@@ -17,7 +17,7 @@ export default defineConfig({
   plugins: [
     /** @see https://vite-pwa-org.netlify.app/ */
     VitePWA({
-      registerType: 'prompt',
+      registerType: 'autoUpdate',
       includeAssets: [
         // sounds
         'sounds/fxMetronome1.mp3',

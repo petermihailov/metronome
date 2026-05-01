@@ -10,6 +10,11 @@ permissions:
   pages: write
   id-token: write
 
+# Не даём двум деплоям толкаться на gh-pages одновременно.
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build Metronome
@@ -23,9 +28,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         run: npm run build

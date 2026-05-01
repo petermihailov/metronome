@@ -31,18 +31,3 @@
   font-size: var(--font-size-5);
   line-height: var(--font-lineheight-0);
 }
-
-.update {
-  position: relative;
-}
-
-.update::after {
-  position: absolute;
-  inset-block-start: -1px;
-  inset-inline-end: -1px;
-  content: '';
-  inline-size: var(--size-00);
-  block-size: var(--size-00);
-  border-radius: var(--radius-round);
-  background-color: var(--color-accent-2);
-}
