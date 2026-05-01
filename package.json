@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "vite --host",
-    "build": "tsc && vite build --base=./",
+    "build": "tsc && vite build",
     "build:sounds": "src/sounds/wav2mp3",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal public/logo-512x512.png",
     "preview": "vite preview",

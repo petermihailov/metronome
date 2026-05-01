@@ -7,6 +7,7 @@ import { VitePWA } from 'vite-plugin-pwa'
  */
 
 export default defineConfig({
+  base: '/metronome/',
   css: {
     modules: {
       generateScopedName: '[local]--[hash:4]',
