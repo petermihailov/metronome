@@ -1,3 +1,12 @@
+## [1.17.2](https://github.com/petermihailov/metronome/compare/v1.17.1...v1.17.2) (2026-05-01)
+
+
+### Bug Fixes
+
+* some fixes ([6e09d55](https://github.com/petermihailov/metronome/commit/6e09d554378ffe5e92f5c08936aaa94522adeb66))
+
+
+
 ## [1.17.1](https://github.com/petermihailov/metronome/compare/v1.17.0...v1.17.1) (2026-05-01)
 
 
@@ -36,15 +45,6 @@
 ### Features
 
 * output latency, hide cursor, og-image ([0c97642](https://github.com/petermihailov/metronome/commit/0c97642a0d238dd063665e900e3d13fe6e2ec82e))
-
-
-
-## [1.15.4](https://github.com/petermihailov/metronome/compare/v1.15.3...v1.15.4) (2025-04-07)
-
-
-### Bug Fixes
-
-* og-image ([36a69aa](https://github.com/petermihailov/metronome/commit/36a69aa0d00135836d9566c093e61a0072d769f5))
 
 
 
