@@ -18,6 +18,7 @@
     "types": [
       "vite/client",
       "vite-plugin-pwa/react",
+      "vitest/globals",
       "./vite-env.d.ts"
     ]
   },

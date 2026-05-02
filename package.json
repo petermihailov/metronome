@@ -6,6 +6,8 @@
   "scripts": {
     "start": "vite --host",
     "build": "tsc && vite build",
+    "test": "vitest",
+    "test:run": "vitest run",
     "build:sounds": "src/sounds/wav2mp3",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal public/logo-512x512.png",
     "preview": "vite preview",
@@ -52,6 +54,7 @@
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",
     "vite": "^4.5.3",
-    "vite-plugin-pwa": "^0.20.0"
+    "vite-plugin-pwa": "^0.20.0",
+    "vitest": "^4.1.5"
   }
 }

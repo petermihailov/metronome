@@ -9,7 +9,8 @@ export function* rangeGenerator({ from, to, step = 1 }: RangeGeneratorOptions) {
   const min = from < to ? from : to
   const max = from > to ? from : to
 
-  while (Math.abs(iter) < Math.abs(Math.ceil((max - min) / step))) {
+  // Используем floor, чтобы не перешагнуть `to`, когда (to - from) не делится нацело на step
+  while (Math.abs(iter) < Math.abs(Math.floor((max - min) / step))) {
     iter = iter + (from > to ? -1 : 1)
     yield from + iter * step
   }
@@ -24,16 +25,15 @@ interface CalculateTimeOptions {
   step: number
 }
 
-export const calculateTime = ({ from, to, every, tempo, beats, step }: CalculateTimeOptions) => {
-  const values = { tempo, beats, subdivision: 1 }
-
+export const calculateTime = ({ from, to, every, beats, step }: CalculateTimeOptions) => {
   if (from > to) [from, to] = [to, from]
 
+  // На каждом темпе из последовательности играется `every` тактов по `beats` долей.
+  // Длительность одной доли = 60 / current (секунд). Темп меняется на каждом блоке.
   return Math.floor(
-    [from, ...rangeGenerator({ from, to, step })].reduce((elapsed, current) => {
-      tempo = current
-      elapsed += (60 / values.tempo) * values.beats * every
-      return elapsed
-    }, 0),
+    [from, ...rangeGenerator({ from, to, step })].reduce(
+      (elapsed, current) => elapsed + (60 / current) * beats * every,
+      0,
+    ),
   )
 }
