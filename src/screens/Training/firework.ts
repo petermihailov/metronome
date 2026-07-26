@@ -8,7 +8,7 @@ const defaults = {
   gravity: 0.9,
   decay: 0.95,
   origin: { x: 0.5, y: 0.45 },
-  colors: ['0ef', 'f07'],
+  colors: ['0ef', 'f07', '0f0'],
   disableForReducedMotion: true,
 }
 

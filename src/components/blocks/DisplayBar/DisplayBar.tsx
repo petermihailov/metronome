@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { memo, useEffect, useRef, useState } from 'react'
 
+import { DisplayProgress } from './DisplayProgress'
 import { useTrainingTime } from '../../../hooks/useTrainingTime'
 import { useMetronomeStore } from '../../../store/useMetronomeStore'
 import { usePlayingTimeStore } from '../../../store/usePlayingTimeStore'
@@ -61,6 +62,7 @@ const DisplayBar = () => {
         [classes.isTraining]: isTraining,
       })}
     >
+      {screen === 'training' && <DisplayProgress className={classes.progress} />}
       <div className={classes.left}>
         <ButtonIcon
           withoutDisabledOpacity

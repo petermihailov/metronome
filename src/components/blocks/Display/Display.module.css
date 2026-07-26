@@ -1,6 +1,7 @@
 .display {
   --shadow-distance: var(--size-000);
 
+  position: relative;
   display: grid;
   border-radius: var(--radius-2);
   outline: var(--border);

@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 
 import { useMetronomeStore } from '../store/useMetronomeStore'
 import { useTrainingStore } from '../store/useTrainingStore'
-import { calculateTime } from '../utils/training'
+import { calculateExactTime } from '../utils/training'
 
-export const useTrainingTime = (formatter: (time: number) => string) => {
+export const useTrainingTime = (formatter?: (time: number) => string) => {
   const [trainingTime, setTrainingTime] = useState(0)
 
   const { isPlaying } = useMetronomeStore(({ isPlaying }) => ({ isPlaying }))
@@ -21,10 +21,11 @@ export const useTrainingTime = (formatter: (time: number) => string) => {
 
   useEffect(() => {
     if (!isPlaying) {
-      const time = calculateTime({ from: tempo, to, every, tempo, beats, step })
+      const time = calculateExactTime({ from: tempo, to, every, tempo, beats, step })
       setTrainingTime(time)
     }
   }, [beats, subdivision, every, isPlaying, tempo, to, step])
 
-  return formatter ? formatter(trainingTime) : trainingTime
+  // формату нужны целые секунды (`timeFormat` использует `lead0`, которому дробное число сломает вывод)
+  return formatter ? formatter(Math.floor(trainingTime)) : trainingTime
 }

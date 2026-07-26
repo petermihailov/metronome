@@ -1,6 +1,7 @@
 .display-bar {
   --size-icon: var(--font-size-3);
 
+  position: relative;
   display: flex;
   gap: var(--size-1);
   justify-content: space-between;
@@ -67,4 +68,10 @@
 
 .is-playing:not(.is-training) .segment {
   color: var(--color-border-1);
+}
+
+.progress {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
 }
