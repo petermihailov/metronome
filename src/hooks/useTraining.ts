@@ -38,7 +38,7 @@ export const useTraining = ({ onStop }: Options = {}) => {
     }),
   )
 
-  const refTrainingGenerator = useRef<Generator<number>>()
+  const refTrainingGenerator = useRef<Generator<number> | undefined>(undefined)
   const refIsDecrease = useRef(from > to)
   const refDone = useRef<boolean | undefined>(undefined)
 

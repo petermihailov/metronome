@@ -1,8 +1,2 @@
 export type Screen =
-  | 'colors'
-  | 'main'
-  | 'patterns'
-  | 'polyrhythms'
-  | 'preferences'
-  | 'readme'
-  | 'training'
+  'colors' | 'main' | 'patterns' | 'polyrhythms' | 'preferences' | 'readme' | 'training'

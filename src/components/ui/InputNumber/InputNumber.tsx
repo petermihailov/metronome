@@ -42,7 +42,7 @@ const InputNumber = ({
   const inputRef = useRef<HTMLInputElement>(null)
   const increaseButtonRef = useRef<HTMLButtonElement>(null)
   const decreaseButtonRef = useRef<HTMLButtonElement>(null)
-  const timeoutRef = useRef<number>()
+  const timeoutRef = useRef<number | undefined>(undefined)
 
   const resetTimer = useCallback(() => {
     window.clearTimeout(timeoutRef.current)

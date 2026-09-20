@@ -15,13 +15,13 @@
   transition-duration: 600ms;
 }
 
-@media (min-width: 50rem) {
+@media (width >= 50rem) {
   body {
     display: grid;
   }
 }
 
-@media (min-width: 55rem) {
+@media (width >= 55rem) {
   .app {
     transition-timing-function: ease-out;
   }

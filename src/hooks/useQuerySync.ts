@@ -42,7 +42,7 @@ const parseBarValue = (
     })
 
     return beats && subdivision && bar.length === beats * subdivision ? bar : null
-  } catch (_e) {
+  } catch {
     return null
   }
 }

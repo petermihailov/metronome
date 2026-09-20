@@ -5,7 +5,7 @@ import { usePlayingTimeStore } from '../store/usePlayingTimeStore'
 import { useTickStore } from '../store/useTickStore'
 
 export const usePlayingTimeUpdate = () => {
-  const refInterval = useRef<number>()
+  const refInterval = useRef<number | undefined>(undefined)
 
   const isCounting = useTickStore(({ counting }) => counting)
   const isPlaying = useMetronomeStore(({ isPlaying }) => isPlaying)

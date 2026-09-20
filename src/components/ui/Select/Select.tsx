@@ -11,8 +11,10 @@ export interface SelectOption<T> {
   disabled?: boolean
 }
 
-export interface SelectProps<T>
-  extends Omit<HTMLAttributes<HTMLSelectElement>, 'onChange' | 'children'> {
+export interface SelectProps<T> extends Omit<
+  HTMLAttributes<HTMLSelectElement>,
+  'onChange' | 'children'
+> {
   value: T
   title?: string
   disabled?: boolean

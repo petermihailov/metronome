@@ -1,10 +1,5 @@
 export type JsonValue =
-  | null
-  | boolean
-  | number
-  | string
-  | JsonValue[]
-  | { [key: string]: JsonValue }
+  null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue }
 
 const prefix = 'mn'
 
@@ -37,7 +32,7 @@ export class Storage<T extends Record<string, unknown>> implements IStorage<T> {
       window.localStorage.removeItem(this.key)
 
       return true
-    } catch (e) {
+    } catch {
       return false
     }
   }
@@ -49,7 +44,7 @@ export class Storage<T extends Record<string, unknown>> implements IStorage<T> {
       if (json) {
         return JSON.parse(json) as T
       }
-    } catch (e) {
+    } catch {
       /* empty */
     }
 
@@ -63,7 +58,7 @@ export class Storage<T extends Record<string, unknown>> implements IStorage<T> {
       window.localStorage.setItem(this.key, json)
 
       return true
-    } catch (e) {
+    } catch {
       return false
     }
   }

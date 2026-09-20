@@ -6,7 +6,7 @@ import { minMax, percentOfRange } from '../../../utils/math'
 
 import classes from './Range.module.css'
 
-export interface RangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 'onChange'> {
+export interface RangeProps extends Omit<HTMLAttributes<HTMLInputElement>, 'onChange' | 'popover'> {
   min?: number
   max?: number
   value: number

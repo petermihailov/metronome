@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 import { useMetronomeStore } from '../store/useMetronomeStore'
 
 export const useWakeLock = () => {
-  const refLockWindow = useRef<WakeLockSentinel>()
+  const refLockWindow = useRef<WakeLockSentinel | undefined>(undefined)
 
   const isPlaying = useMetronomeStore(({ isPlaying }) => isPlaying)
 

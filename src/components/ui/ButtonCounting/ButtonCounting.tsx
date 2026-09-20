@@ -29,7 +29,7 @@ const isGlow = ({
 const ButtonCounting = ({ count, played = 0, isPlaying, ...restProps }: ButtonCountingProps) => {
   const svgRef = useRef<SVGSVGElement>(null)
   const valueRef = useRef<HTMLSpanElement>(null)
-  const animationRef = useRef<Animation>()
+  const animationRef = useRef<Animation | undefined>(undefined)
 
   useEffect(() => {
     if (svgRef.current) {

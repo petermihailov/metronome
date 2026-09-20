@@ -14,7 +14,7 @@ export interface BeatsCounterProps {
 
 const BeatsCounter = ({ className, playing, value, beats }: BeatsCounterProps) => {
   const valueRef = useRef<HTMLDivElement>(null)
-  const animationRef = useRef<Animation>()
+  const animationRef = useRef<Animation | undefined>(undefined)
   const [fullscreen, setFullscreen] = useState(false)
 
   const clickHandler = () => {

@@ -115,9 +115,11 @@ export class Player {
         const outputLatency = this.audioCtx.outputLatency * 1000
         this.schedule(nextIdx)
 
-        outputLatency < frameMs * 5
-          ? this.onTick?.(nextScheduledTick)
-          : this.timeoutManager.set(() => this.onTick?.(nextScheduledTick), outputLatency)
+        if (outputLatency < frameMs * 5) {
+          this.onTick?.(nextScheduledTick)
+        } else {
+          this.timeoutManager.set(() => this.onTick?.(nextScheduledTick), outputLatency)
+        }
       },
       (this.nextBeatAt - this.audioCtx.currentTime) * 1000,
     )
