@@ -9,11 +9,11 @@ export function usePlayer() {
   const kit = useSounds()
   const player = useRef(new Player())
 
-  const { isPlaying, beats, bar, tempo, count } = useMetronomeStore(
-    ({ isPlaying, beats, bar, tempo, count }) => ({
-      beats,
+  const { isPlaying, subdivisions, bar, tempo, count } = useMetronomeStore(
+    ({ isPlaying, subdivisions, bar, tempo, count }) => ({
       count,
       isPlaying,
+      subdivisions,
       bar,
       tempo,
     }),
@@ -55,15 +55,10 @@ export function usePlayer() {
     }
   }, [isPlaying, resetAction])
 
-  /** Sync beats */
+  /** Sync layout: раскладка и такт меняются в сторе одним действием, передаём их вместе */
   useEffect(() => {
-    player.current.setBeats(beats)
-  }, [beats])
-
-  /** Sync bar */
-  useEffect(() => {
-    player.current.setBar(bar)
-  }, [bar])
+    player.current.setLayout(subdivisions, bar)
+  }, [subdivisions, bar])
 
   /** Sync tempo */
   useEffect(() => {

@@ -21,8 +21,8 @@ const Counter = ({ className }: CounterProps) => {
   }))
 
   const screen = useScreenStore((state) => state.screen)
-  const { isPlaying, beats } = useMetronomeStore(({ isPlaying, beats }) => ({
-    beats,
+  const { isPlaying, beats } = useMetronomeStore(({ isPlaying, subdivisions }) => ({
+    beats: subdivisions.length,
     isPlaying,
   }))
 

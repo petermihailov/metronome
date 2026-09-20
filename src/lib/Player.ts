@@ -3,6 +3,8 @@ import { TimeoutManager } from './TimeoutManager'
 import { DEFAULTS } from '../constants'
 import type { Instrument, SoundMap, Tick, Bar } from '../types/metronome'
 import { getAudioContext } from '../utils/audio'
+import { getBarMap, noteDuration } from '../utils/barLayout'
+import type { BarMap } from '../utils/barLayout'
 
 const logger = createLogger('PLAYER', { color: '#2af' })
 
@@ -20,7 +22,8 @@ export class Player {
   private playing: boolean = false
   private kit: SoundMap = {} as SoundMap
   private tempo: number = DEFAULTS.tempo
-  private beats: number = DEFAULTS.beats
+  private subdivisions: number[] = Array(DEFAULTS.beats).fill(DEFAULTS.subdivision)
+  private barMap: BarMap = getBarMap(this.subdivisions)
   private scheduledCount = { ...zeroScheduledCount }
   private bar: Bar = []
   private counting: number = 0
@@ -30,12 +33,20 @@ export class Player {
   private onTick?: (tick: Tick) => void
   private beforeTickScheduled?: (next: Tick, prev: Tick | null) => void
 
+  // Нота не первая в своей доле
   private isSubdivisionNote(index: number): boolean {
-    return !(index % (this.bar.length / this.beats) === 0)
+    const { beatOf, beatStart } = this.barMap
+    return index !== beatStart[beatOf[index]]
+  }
+
+  // Сколько нот в доле, которой принадлежит нота с индексом idx.
+  // Запасное значение нужно на случай, если раскладка сменилась на лету и idx вышел за такт.
+  private getSubdivision(idx: number): number {
+    return this.subdivisions[this.barMap.beatOf[idx]] ?? 1
   }
 
   private getTick(idx: number, time: number, isNext: boolean = false): Tick {
-    const sub = this.bar.length / this.beats
+    const { beatOf, beatStart } = this.barMap
     const note = this.bar[idx]
 
     const { notes, beats, bars } = this.scheduledCount
@@ -49,8 +60,8 @@ export class Player {
 
     const position = {
       idx: idx,
-      beat: Math.floor(idx / sub) + 1,
-      subdivision: (idx % sub) + 1,
+      beat: beatOf[idx] + 1,
+      subdivision: idx - beatStart[beatOf[idx]] + 1,
       downbeat: idx === 0,
       last: idx === this.bar.length - 1,
     }
@@ -81,7 +92,8 @@ export class Player {
   }
 
   private schedule(idx: number) {
-    this.nextBeatAt += 60 / ((this.tempo * this.bar.length) / this.beats)
+    // Интервал до следующей ноты — это длительность текущей ноты idx
+    this.nextBeatAt += noteDuration(this.tempo, this.getSubdivision(idx))
 
     const nextIdx = (idx + 1) % this.bar.length
     const nextScheduledTick = this.getTick(nextIdx, this.nextBeatAt, true)
@@ -135,13 +147,18 @@ export class Player {
     this.tempo = bpm
   }
 
-  public setBeats(beats: number) {
-    logger.info('setBeats', beats)
-    this.beats = beats
-  }
+  // Раскладка и такт меняются только вместе: bar.length обязан равняться сумме subdivisions
+  public setLayout(subdivisions: number[], bar: Bar) {
+    const total = subdivisions.reduce((sum, sub) => sum + sub, 0)
 
-  public setBar(bar: Bar) {
-    logger.info('setBar', bar)
+    if (bar.length !== total) {
+      logger.warn('setLayout: bar не сходится с subdivisions, пропускаем', { subdivisions, bar })
+      return
+    }
+
+    logger.info('setLayout', { subdivisions, bar })
+    this.subdivisions = subdivisions
+    this.barMap = getBarMap(subdivisions)
     this.bar = bar
   }
 

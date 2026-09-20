@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 
 import { useMetronomeStore } from '../../../store/useMetronomeStore'
 import { useTickStore } from '../../../store/useTickStore'
@@ -15,18 +15,37 @@ const disabledMap: Record<Instrument, Instrument | null> = {
 }
 
 const Display = () => {
-  const { bar, switchInstrumentAction } = useMetronomeStore(({ bar, switchInstrumentAction }) => ({
-    bar,
-    switchInstrumentAction,
-  }))
+  const { bar, subdivisions, switchInstrumentAction } = useMetronomeStore(
+    ({ bar, subdivisions, switchInstrumentAction }) => ({
+      bar,
+      subdivisions,
+      switchInstrumentAction,
+    }),
+  )
+
+  // Ноты по долям: у каждой доли одинаковая ширина, а ноты делят её поровну,
+  // так что доля из 6 нот не растягивается шире доли из 3
+  const beats = useMemo(() => {
+    let start = 0
+
+    return subdivisions.map((subdivision) => {
+      const notes = bar
+        .slice(start, start + subdivision)
+        .map((note, i) => ({ note, idx: start + i }))
+      start += subdivision
+
+      return notes
+    })
+  }, [bar, subdivisions])
 
   const clickHandler: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       const target = e.target as HTMLElement
       const index = Number(target.dataset.index)
-      const currentInstrument = bar[index].instrument
 
+      // Клик мимо ноты (например, в зазор между нотами) игнорируем
       if (Number.isFinite(index)) {
+        const currentInstrument = bar[index].instrument
         const { top, bottom } = target.getBoundingClientRect()
 
         const y = e.clientY - top
@@ -47,23 +66,24 @@ const Display = () => {
 
   const { activeId } = useTickStore(({ position }) => ({ activeId: position.idx }))
 
+  // Один зазор и между долями, и между нотами: для равномерной раскладки вид не меняется
+  const gapStyle = { gap: `min(var(--size-1), calc(var(--size-1) / ${0.2 * bar.length}))` }
+
   return (
     <div className={classes.display}>
-      <div
-        className={classes.bar}
-        style={{
-          gap: `min(var(--size-1), calc(var(--size-1) / ${0.2 * bar.length}))`,
-        }}
-        onClick={clickHandler}
-      >
-        {bar.map((note, idx) => (
-          <Note
-            key={idx}
-            active={activeId === idx}
-            className={classes.note}
-            data-index={idx}
-            note={note}
-          />
+      <div className={classes.bar} style={gapStyle} onClick={clickHandler}>
+        {beats.map((notes, beat) => (
+          <div key={beat} className={classes.beat} style={gapStyle}>
+            {notes.map(({ note, idx }) => (
+              <Note
+                key={idx}
+                active={activeId === idx}
+                className={classes.note}
+                data-index={idx}
+                note={note}
+              />
+            ))}
+          </div>
         ))}
       </div>
 

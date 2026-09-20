@@ -11,8 +11,7 @@ const Main = () => {
   const { beats, subdivision, tempo, setBeatsAction, setSubdivisionAction, setTempoAction } =
     useMetronomeStore(
       ({
-        beats,
-        subdivision,
+        subdivisions,
         tempo,
         isPlaying,
         setBeatsAction,
@@ -20,8 +19,10 @@ const Main = () => {
         setTempoAction,
       }) => ({
         isPlaying,
-        beats,
-        subdivision,
+        beats: subdivisions.length,
+        // При неравномерной раскладке показываем subdivision первой доли,
+        // а изменение выставляет выбранное значение всем долям
+        subdivision: subdivisions[0],
         tempo,
         setBeatsAction,
         setSubdivisionAction,

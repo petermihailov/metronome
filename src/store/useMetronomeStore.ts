@@ -6,59 +6,73 @@ import { DEFAULTS, MINMAX } from '../constants'
 import { Storage } from '../lib/LocalStorage'
 import { createLogger } from '../lib/Logger'
 import type { Instrument, Bar } from '../types/metronome'
+import {
+  defaultBar,
+  isValidSubdivisions,
+  resizeBeats,
+  restoreLayout,
+  totalNotes,
+  uniformSubdivisions,
+} from '../utils/barLayout'
 
 const logger = createLogger('METRONOME', { color: '#f07' })
 
 const settingsStorage = new Storage<{
-  beats: number
   count: number
   bar: Bar
-  subdivision: number
+  subdivisions?: number[]
   tempo: number
+  // Устаревшие поля: остались только ради миграции старых сохранений (см. restoreLayout).
+  // Новые данные пишутся в subdivisions, а эти два больше не обновляются.
+  beats: number
+  subdivision: number
 }>('settings', {
-  beats: DEFAULTS.beats,
   count: DEFAULTS.count,
   bar: DEFAULTS.bar,
-  subdivision: DEFAULTS.subdivision,
   tempo: DEFAULTS.tempo,
+  beats: DEFAULTS.beats,
+  subdivision: DEFAULTS.subdivision,
 })
 
 const storage = settingsStorage.get()
+const layout = restoreLayout(storage)
 
 interface Store {
   // Values
-  beats: number
   count: number
   isPlaying: boolean
+  // Сколько нот в каждой доле; число долей — subdivisions.length
+  subdivisions: number[]
+  // Плоский такт, bar.length === сумма subdivisions
   bar: Bar
-  subdivision: number
   tempo: number
 
   // Actions
   setBarAction: (bar: Bar) => void
-  resetAction: () => void
   setBeatsAction: (beats: number) => void
   setCountAction: (count: number) => void
   setIsPlayingAction: (isPlaying: boolean) => void
+  // Одна и та же subdivision для всех долей, такт сбрасывается на шаблон
   setSubdivisionAction: (subdivision: number) => void
+  setLayoutAction: (subdivisions: number[], bar: Bar) => void
   setTempoAction: (tempo: number) => void
   switchInstrumentAction: (noteIndex: number, instrument: Instrument | null) => void
+  resetAction: () => void
 }
 
 export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
   return {
-    beats: storage.beats,
     count: storage.count,
     isPlaying: false,
-    bar: storage.bar,
-    subdivision: storage.subdivision,
+    subdivisions: layout.subdivisions,
+    bar: layout.bar,
     tempo: storage.tempo,
 
     setBarAction: (bar) => {
       logger.info('setBarAction', bar)
       set((state) => {
         return produce(state, (draft) => {
-          if (bar.length === state.beats * state.subdivision) {
+          if (bar.length === totalNotes(state.subdivisions)) {
             draft.bar = bar
 
             settingsStorage.update({
@@ -75,22 +89,13 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
 
       set((state) => {
         return produce(state, (draft) => {
-          draft.beats = beats
+          const next = resizeBeats(state, beats)
 
-          if (state.beats > beats) {
-            draft.bar = state.bar.slice(0, beats * state.subdivision)
-          } else {
-            // скопируем все удары с последней доли и повторяем столько,
-            // сколько битов мы прибавили
-            const count = beats - state.beats
-            const part = state.bar.slice(-1 * state.subdivision)
-            const additions = Array.from({ length: count }, () => part).flat()
-
-            draft.bar = [...state.bar, ...additions]
-          }
+          draft.subdivisions = next.subdivisions
+          draft.bar = next.bar
 
           settingsStorage.update({
-            beats: draft.beats,
+            subdivisions: draft.subdivisions,
             bar: draft.bar,
           })
         })
@@ -124,30 +129,31 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
 
       set((state) => {
         return produce(state, (draft) => {
-          draft.subdivision = subdivision
-          draft.bar = Array(state.beats * subdivision)
-            .fill(null)
-            .map((_, idx) => {
-              const isBeat = idx % subdivision === 0
-              const isDownbeat = idx === 0
-
-              if (subdivision > 1) {
-                return {
-                  instrument: isDownbeat
-                    ? 'fxMetronome1'
-                    : isBeat
-                      ? 'fxMetronome2'
-                      : 'fxMetronome3',
-                }
-              }
-
-              return {
-                instrument: isDownbeat ? 'fxMetronome1' : 'fxMetronome3',
-              }
-            })
+          draft.subdivisions = uniformSubdivisions(state.subdivisions.length, subdivision)
+          draft.bar = defaultBar(draft.subdivisions)
 
           settingsStorage.update({
-            subdivision: draft.subdivision,
+            subdivisions: draft.subdivisions,
+            bar: draft.bar,
+          })
+        })
+      })
+    },
+
+    setLayoutAction: (subdivisions, bar) => {
+      if (!isValidSubdivisions(subdivisions) || bar.length !== totalNotes(subdivisions)) {
+        logger.warn('setLayoutAction: раскладка невалидна, пропускаем', { subdivisions, bar })
+        return
+      }
+
+      logger.info('setLayoutAction', { subdivisions, bar })
+      set((state) => {
+        return produce(state, (draft) => {
+          draft.subdivisions = subdivisions
+          draft.bar = bar
+
+          settingsStorage.update({
+            subdivisions: draft.subdivisions,
             bar: draft.bar,
           })
         })
@@ -181,14 +187,12 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
           const { tempo, beats, subdivision, bar } = DEFAULTS
 
           draft.tempo = tempo
-          draft.beats = beats
-          draft.subdivision = subdivision
+          draft.subdivisions = uniformSubdivisions(beats, subdivision)
           draft.bar = [...bar]
 
           settingsStorage.update({
             tempo: draft.tempo,
-            beats: draft.beats,
-            subdivision: draft.subdivision,
+            subdivisions: draft.subdivisions,
             bar: draft.bar,
           })
         })
