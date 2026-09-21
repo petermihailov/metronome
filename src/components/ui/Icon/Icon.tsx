@@ -22,6 +22,7 @@ const Icon = ({
     <svg
       aria-hidden="true"
       className={clsx(className, classes.icon)}
+      data-icon={name}
       fill="currentColor"
       viewBox={viewBox}
     >

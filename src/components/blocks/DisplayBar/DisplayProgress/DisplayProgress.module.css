@@ -1,17 +1,12 @@
 .progress {
-  --progress-bar-color: #0f0;
+  --progress-bar-color: #fff4;
 
   block-size: var(--size-00000);
-  border-radius: var(--radius-pill);
 }
 
 .fill {
   block-size: 100%;
-  border-radius: var(--radius-pill);
-  background-image: linear-gradient(90deg, #00ff0050 0%, var(--progress-bar-color) 100%);
-  filter: drop-shadow(0 0 0.15rem var(--progress-bar-color));
-
-  /* background-color: var(--progress-bar-color); */
+  background-color: var(--progress-bar-color);
   transition-property: inline-size;
   transition-timing-function: linear;
 }

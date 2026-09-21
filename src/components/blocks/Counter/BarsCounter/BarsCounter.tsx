@@ -5,14 +5,15 @@ import classes from './BarsCounter.module.css'
 
 export interface BarsCounterProps {
   className?: string
-  bar: number
+  // null — цифру не показываем (например, в тихом такте)
+  bar: number | null
   bars: number
 }
 
 const BarsCounter = ({ className, bar, bars }: BarsCounterProps) => {
   return (
     <div className={clsx(className, classes.barsCounter)}>
-      {bar === 0 ? '-' : bar}
+      {bar === null ? null : bar === 0 ? '-' : bar}
       <span className={classes.bars}>{bars}</span>
     </div>
   )

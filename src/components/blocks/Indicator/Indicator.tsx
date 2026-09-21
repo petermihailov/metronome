@@ -13,13 +13,14 @@ const Indicator = ({ className }: IndicatorProps) => {
   const indicatorRef = useRef<HTMLDivElement>(null)
   const animationRef = useRef<Animation | null>(null)
 
-  const beat = useTickStore(({ position }) => position.beat)
+  const { beat, muted } = useTickStore(({ position, muted }) => ({ beat: position.beat, muted }))
 
   useEffect(() => {
     // отменяем предыдущую анимацию, если есть
     animationRef.current?.cancel()
 
-    if (indicatorRef.current) {
+    // В тишине индикатор не мигает
+    if (indicatorRef.current && !muted) {
       const greenFrames = [
         { backgroundColor: '#0f0', boxShadow: '0 0 var(--size-2) #0f0a' },
         { backgroundColor: '#0f00', boxShadow: '0 0 var(--size-2) #0f00' },
@@ -35,7 +36,7 @@ const Indicator = ({ className }: IndicatorProps) => {
         fill: 'both',
       })
     }
-  }, [beat])
+  }, [beat, muted])
 
   return <div ref={indicatorRef} className={clsx(className, classes.indicator)} />
 }

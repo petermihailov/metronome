@@ -3,6 +3,7 @@ import { memo, useEffect, useRef, useState } from 'react'
 
 import { DisplayProgress } from './DisplayProgress'
 import { useTrainingTime } from '../../../hooks/useTrainingTime'
+import type { Screen as ScreenType } from '../../../screens'
 import { useMetronomeStore } from '../../../store/useMetronomeStore'
 import { usePlayingTimeStore } from '../../../store/usePlayingTimeStore'
 import { useScreenStore } from '../../../store/useScreenStore'
@@ -10,10 +11,19 @@ import { useTickStore } from '../../../store/useTickStore'
 import { timeFormat } from '../../../utils/format'
 import { ButtonCounting } from '../../ui/ButtonCounting'
 import { ButtonIcon } from '../../ui/ButtonIcon'
+import type { TabsOption } from '../../ui/Tabs'
+import { Tabs } from '../../ui/Tabs'
 
 import classes from './DisplayBar.module.css'
 
 const duration = 800
+
+type TrainingScreen = Extract<ScreenType, 'training' | 'silence'>
+
+const trainingTabs: TabsOption<TrainingScreen>[] = [
+  { value: 'training', label: 'tempo' },
+  { value: 'silence', label: 'mute' },
+]
 
 const DisplayBar = () => {
   const { dayTime } = usePlayingTimeStore(({ time }) => ({ dayTime: timeFormat(time.day) }))
@@ -33,6 +43,8 @@ const DisplayBar = () => {
   )
 
   const isTraining = screen === 'training'
+  const isSilence = screen === 'silence'
+  const isTrainingMode = isTraining || isSilence
   const time = isTraining ? trainingTime : dayTime
   const timeLabel = isTraining ? 'training time' : 'total today'
   const displayText = messageIsVisible ? 'copied' : time
@@ -93,6 +105,16 @@ const DisplayBar = () => {
           <span className={classes.time}>{displayText}</span>
         </div>
       </div>
+      <div className={classes.center}>
+        {isTrainingMode && (
+          <Tabs
+            disabled={isPlaying}
+            options={trainingTabs}
+            value={screen as TrainingScreen}
+            onChange={setScreenAction}
+          />
+        )}
+      </div>
       <div className={classes.right}>
         <ButtonCounting
           withoutDisabledOpacity
@@ -107,10 +129,10 @@ const DisplayBar = () => {
           withoutDisabledOpacity
           // withoutHighlight
           aria-label="toggle training"
-          className={clsx(classes.icon, { [classes.iconActive]: isTraining })}
+          className={clsx(classes.icon, { [classes.iconActive]: isTrainingMode })}
           disabled={isPlaying}
           icon="training"
-          onClick={() => setScreenAction(screen === 'training' ? 'main' : 'training')}
+          onClick={() => setScreenAction(isTrainingMode ? 'main' : 'training')}
         />
       </div>
     </div>

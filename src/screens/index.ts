@@ -4,6 +4,7 @@ export { Patterns } from './Patterns'
 export { Polyrhythms } from './Polyrhythms'
 export { Preferences } from './Preferences'
 export { Readme } from './Readme'
+export { Silence } from './Silence'
 export { Training } from './Training'
 
 export type { Screen } from './types'

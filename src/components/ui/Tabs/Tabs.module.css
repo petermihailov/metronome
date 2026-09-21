@@ -1,0 +1,27 @@
+.tabs {
+  display: flex;
+  color: var(--color-dimmed);
+  font-weight: 600;
+  font-size: var(--font-size-00);
+  font-family: var(--font-sans);
+  line-height: 1.8;
+}
+
+.tab {
+  padding: 0 var(--size-1);
+  color: inherit;
+  text-transform: uppercase;
+  border-radius: var(--radius-pill);
+  transition-property: color, background-color;
+  transition-timing-function: ease-out;
+  transition-duration: 150ms;
+}
+
+.tab.active {
+  color: var(--color-text);
+  background-color: var(--color-border-1);
+}
+
+.disabled {
+  opacity: var(--alpha-disabled);
+}

@@ -1,5 +1,4 @@
 export const lead0 = (n: number) => ('0' + n).slice(-2)
-const nnbsp = ' '
 
 export const timeFormat = (totalSeconds: number) => {
   const hours = Math.floor(totalSeconds / 3600)
@@ -9,9 +8,9 @@ export const timeFormat = (totalSeconds: number) => {
   const ss = lead0(seconds)
   const mm = lead0(minutes)
 
-  return hours
-    ? `${hours}${nnbsp}:${nnbsp}${mm}${nnbsp}:${nnbsp}${ss}`
-    : `${mm}${nnbsp}:${nnbsp}${ss}`
+  // Без пробелов вокруг двоеточия: в сегментном шрифте DSEG7 нет узкого неразрывного пробела (U+202F),
+  // и iOS подставляет для него системный шрифт с широким пробелом
+  return hours ? `${hours}:${mm}:${ss}` : `${mm}:${ss}`
 }
 
 export const dateFormat = (date = new Date()) => {

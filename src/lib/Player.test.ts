@@ -59,11 +59,15 @@ const run = async ({
   subdivisions,
   bar = defaultBar(subdivisions),
   ms,
+  count,
+  silence,
 }: {
   tempo: number
   subdivisions: number[]
   bar?: ReturnType<typeof defaultBar>
   ms: number
+  count?: number
+  silence?: { play: number; mute: number }
 }) => {
   const ticks: Tick[] = []
   const player = new Player()
@@ -72,6 +76,8 @@ const run = async ({
   player.setTempo(tempo)
   player.setLayout(subdivisions, bar)
   player.setOnTick((tick) => ticks.push(tick))
+  if (count) player.setCounting(count)
+  if (silence) player.setSilence(silence)
 
   await player.play()
   vi.advanceTimersByTime(ms)
@@ -154,5 +160,79 @@ describe('Player: разная subdivision по долям', () => {
     diffs([...mocks.starts])
       .slice(0, 8)
       .forEach((value) => expect(value).toBeCloseTo(60 / (120 * 4), 6))
+  })
+})
+
+describe('Player: режим тишины', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.stubGlobal('window', globalThis)
+    mocks.clock.base = Date.now()
+    mocks.starts.length = 0
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.unstubAllGlobals()
+  })
+
+  // 4 доли по 0.5 с (120 bpm) = 2 с на такт
+  const bar = 2
+
+  it('играет N тактов, молчит M и повторяет цикл: тики помечаются muted', async () => {
+    const { ticks } = await run({
+      tempo: 120,
+      subdivisions: [1, 1, 1, 1],
+      silence: { play: 2, mute: 1 },
+      ms: bar * 6 * 1000 - 100,
+    })
+
+    // Первая нота каждого такта
+    const downbeats = ticks.filter((tick) => tick.position.downbeat)
+    expect(downbeats.map((tick) => tick.muted)).toEqual([false, false, true, false, false, true])
+
+    // Тишина держится на всех четырёх нотах такта
+    const mutedBars = ticks.filter((tick) => tick.muted).map((tick) => tick.played.bars)
+    expect(new Set(mutedBars)).toEqual(new Set([2, 5]))
+  })
+
+  it('в тихих тактах звук не планируется', async () => {
+    const { starts } = await run({
+      tempo: 120,
+      subdivisions: [1, 1, 1, 1],
+      silence: { play: 1, mute: 1 },
+      // 3 такта: играет, молчит, играет
+      ms: bar * 3 * 1000 - 100,
+    })
+
+    // 4 доли + 4 доли, второй такт пропущен
+    expect(starts).toHaveLength(8)
+    expect(starts[4] - starts[3]).toBeCloseTo(0.5 + bar, 6)
+  })
+
+  it('отсчёт не глушится, тишина начинается с первого такта после него', async () => {
+    const { starts, ticks } = await run({
+      tempo: 120,
+      subdivisions: [1, 1, 1, 1],
+      count: 1,
+      silence: { play: 1, mute: 1 },
+      // отсчёт, играет, молчит
+      ms: bar * 3 * 1000 - 100,
+    })
+
+    // Первая нота четвёртого такта планируется заранее, поэтому считаем только звуки первых трёх
+    expect(starts.filter((time) => time < 0.05 + bar * 3)).toHaveLength(8)
+    expect(ticks.filter((tick) => tick.counting).every((tick) => !tick.muted)).toBe(true)
+    expect(ticks.filter((tick) => tick.muted).every((tick) => tick.played.bars === 1)).toBe(true)
+  })
+
+  it('без silence ничего не глушится', async () => {
+    const { ticks } = await run({
+      tempo: 120,
+      subdivisions: [1, 1, 1, 1],
+      ms: bar * 3 * 1000 - 100,
+    })
+
+    expect(ticks.some((tick) => tick.muted)).toBe(false)
   })
 })

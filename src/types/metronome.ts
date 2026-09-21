@@ -5,6 +5,7 @@ export type Instrument = 'fxMetronome1' | 'fxMetronome2' | 'fxMetronome3'
 export interface Tick {
   note: Note | null
   counting: boolean
+  muted: boolean // такт в режиме тишины: звука и индикации нет
   position: NotePosition
   played: Played
   time: number

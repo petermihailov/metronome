@@ -25,7 +25,6 @@
   display: flex;
   flex: 1;
   align-items: center;
-  cursor: pointer;
   transition-property: color, border-color;
   transition-duration: 200ms;
 }

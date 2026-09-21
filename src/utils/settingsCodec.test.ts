@@ -16,12 +16,12 @@ const settings: Settings = {
         note(([null, 'fxMetronome1', 'fxMetronome2', 'fxMetronome3'] as const)[Number(code)]),
       ),
   },
-  training: { every: 1, from: 96, to: 96, step: 1 },
+  training: { every: 1, to: 96, step: 1 },
 }
 
 describe('encodeSettings', () => {
   it('кодирует основные настройки и тренировку в компактный формат', () => {
-    expect(encodeSettings(settings)).toBe('m=96.4444&tr=1.96.96.1')
+    expect(encodeSettings(settings)).toBe('m=96.4444&tr=1.96.1.1')
   })
 
   it('не пишет tr, когда тренировки нет', () => {
@@ -140,7 +140,42 @@ describe('decodeSettings: новый формат', () => {
   })
 
   it('читает частичную тренировку', () => {
-    expect(decodeSettings({ m: '96.1.1', tr: '4.80' }).training).toEqual({ every: 4, from: 80 })
+    expect(decodeSettings({ m: '96.1.1', tr: '1.80' }).training).toEqual({ to: 80 })
+  })
+})
+
+describe('tr: режимы тренировки', () => {
+  it('порядок полей режима 1: to, every, step (from берётся из темпа m)', () => {
+    expect(decodeSettings({ m: '96.4444', tr: '1.120.4.5' })).toMatchObject({
+      tempo: 96,
+      training: { to: 120, every: 4, step: 5 },
+    })
+  })
+
+  it('tr без номера режима игнорируется', () => {
+    expect(decodeSettings({ m: '96.4444', tr: '2.96.100.5' }).training).toBeUndefined()
+    expect(decodeSettings({ m: '96.4444', tr: '3.1.1' })).not.toHaveProperty('training')
+  })
+
+  it('режим 2 включает тишину: play и mute', () => {
+    const decoded = decodeSettings({ m: '96.4444', tr: '2.4.2' })
+
+    expect(decoded.silence).toEqual({ play: 4, mute: 2 })
+    expect(decoded.training).toBeUndefined()
+  })
+
+  it('кодирует тишину и раунд-трипит', () => {
+    const encoded = encodeSettings({ ...settings, training: null, silence: { play: 3, mute: 2 } })
+
+    expect(encoded).toBe('m=96.4444&tr=2.3.2')
+    expect(decodeSettings(Object.fromEntries(new URLSearchParams(encoded))).silence).toEqual({
+      play: 3,
+      mute: 2,
+    })
+  })
+
+  it('зажимает play и mute в допустимый диапазон', () => {
+    expect(decodeSettings({ m: '96.4444', tr: '2.99.0' }).silence).toEqual({ play: 16, mute: 1 })
   })
 })
 
@@ -161,7 +196,7 @@ describe('decodeSettings: старый формат', () => {
     expect(decodeSettings(legacy)).toEqual({
       tempo: 96,
       layout: settings.layout,
-      training: { every: 1, from: 96, to: 96, step: 1 },
+      training: { every: 1, to: 96, step: 1 },
     })
   })
 

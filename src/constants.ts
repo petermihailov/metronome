@@ -10,6 +10,8 @@ export const MINMAX = (() => {
     every: { min: 1, max: 16 },
     step: { min: 1, max: 100 },
     subdivision: { min: 1, max: 16 },
+    silencePlay: { min: 1, max: 16 },
+    silenceMute: { min: 1, max: 16 },
   } as const
 
   return {
@@ -28,6 +30,8 @@ export const DEFAULTS = {
   every: 8,
   step: 1,
   count: 2,
+  silencePlay: 4,
+  silenceMute: 4,
   get bar(): Bar {
     return [
       { instrument: 'fxMetronome1' },

@@ -37,7 +37,7 @@ export const useHotkeys = () => {
         setIsPlayingAction(!isPlaying)
       }
 
-      if (!(screen === 'training' && isPlaying)) {
+      if (!((screen === 'training' || screen === 'silence') && isPlaying)) {
         const noModifiers = !event.shiftKey && !event.metaKey && !event.altKey && !event.ctrlKey
 
         if (event.code === 'KeyT') {

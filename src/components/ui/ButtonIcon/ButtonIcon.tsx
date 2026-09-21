@@ -65,7 +65,7 @@ const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
         {...restProps}
       >
         {icon ? <Icon name={icon} /> : null}
-        <span className={classes.buttonIconContent}>{children}</span>
+        {children ? <span className={classes.buttonIconContent}>{children}</span> : null}
       </button>
     )
   },

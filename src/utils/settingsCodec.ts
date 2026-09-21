@@ -5,32 +5,42 @@ import type { Bar, Instrument } from '../types/metronome'
 
 // Компактный формат:
 //   m=<tempo>.<subdivisions>[.<notes>]  — основные настройки
-//   tr=<every>.<from>.<to>.<step>       — тренировка, наличие параметра включает экран
+//   tr=1.<to>.<every>.<step>            — тренировка с ускорением темпа от темпа m до to
+//   tr=2.<play>.<mute>                  — тишина: play тактов играем, mute молчим
+//   Наличие tr включает соответствующий экран, первое поле — номер режима.
 //
 // subdivisions — по одному символу base36 на долю: число нот в доле как есть,
 // 1..9 → '1'..'9', 10..16 → 'a'..'g' (символ '4' — четыре ноты в доле),
 // notes — по одному символу на ноту (0 — пауза, 1..3 — инструмент).
 // Если такт совпадает с шаблоном по умолчанию (см. defaultBar), notes не пишутся,
 // а при чтении без notes шаблон восстанавливается.
-// Пример: m=96.3336&tr=1.96.96.1 и явный вариант m=96.4444.1333233323332333
+// Пример: m=96.3336&tr=1.96.96.1.1 и явный вариант m=96.4444.1333233323332333
 //
-// Старый формат (tempo=&beats=&subdivision=&bar=&training=&every=&from=&to=&step=)
-// только читается, чтобы уже расшаренные ссылки продолжали открываться.
+// Старые форматы только читаются, чтобы уже расшаренные ссылки продолжали открываться:
+//   tempo=&beats=&subdivision=&bar=&training=&every=&from=&to=&step=
+// Формат tr без номера режима (tr=<every>.<from>.<to>.<step>) не читается: он совпадает
+// с новым по числу полей, отличить их нельзя.
 // Определяется по наличию параметра `tempo`: в новом формате его нет.
 
 const NOTE_CODES: (Instrument | null)[] = [null, 'fxMetronome1', 'fxMetronome2', 'fxMetronome3']
 
 export interface TrainingSettings {
   every: number
-  from: number
   to: number
   step: number
 }
 
+export interface SilenceSettings {
+  play: number
+  mute: number
+}
+
+// training и silence взаимоисключающие: в ссылку попадает не больше одного режима
 export interface Settings {
   tempo: number
   layout: Layout
   training: TrainingSettings | null
+  silence?: SilenceSettings | null
 }
 
 // Что удалось прочитать из ссылки: каждое поле независимо, невалидное просто отсутствует.
@@ -39,6 +49,7 @@ export interface DecodedSettings {
   tempo?: number
   layout?: Layout
   training?: Partial<TrainingSettings>
+  silence?: Partial<SilenceSettings>
 }
 
 const parseInteger = (value: string | undefined) => {
@@ -85,15 +96,35 @@ const decodeMain = (value: string): Pick<DecodedSettings, 'tempo' | 'layout'> =>
   }
 }
 
-const decodeTraining = (value: string): Partial<TrainingSettings> => {
-  const [every, from, to, step] = value.split('.').map(parseInteger)
-
+const decodeTraining = ([to, every, step]: (
+  number | null | undefined
+)[]): Partial<TrainingSettings> => {
   return {
-    ...(every !== null && every !== undefined && { every: MINMAX.range('every', every) }),
-    ...(from !== null && from !== undefined && { from: MINMAX.range('tempo', from) }),
     ...(to !== null && to !== undefined && { to: MINMAX.range('tempo', to) }),
+    ...(every !== null && every !== undefined && { every: MINMAX.range('every', every) }),
     ...(step !== null && step !== undefined && { step: MINMAX.range('step', step) }),
   }
+}
+
+const decodeSilence = ([play, mute]: (number | null | undefined)[]): Partial<SilenceSettings> => ({
+  ...(play !== null && play !== undefined && { play: MINMAX.range('silencePlay', play) }),
+  ...(mute !== null && mute !== undefined && { mute: MINMAX.range('silenceMute', mute) }),
+})
+
+// Разбирает tr по номеру режима; неизвестный режим или битое число полей игнорируется
+const decodeTr = (value: string): Pick<DecodedSettings, 'training' | 'silence'> => {
+  const [mode, ...fields] = value.split('.')
+  const nums = fields.map(parseInteger)
+
+  if (mode === '1') {
+    return { training: decodeTraining(nums) }
+  }
+
+  if (mode === '2') {
+    return { silence: decodeSilence(nums) }
+  }
+
+  return {}
 }
 
 const decodeLegacy = (query: Record<string, string>): DecodedSettings => {
@@ -109,7 +140,7 @@ const decodeLegacy = (query: Record<string, string>): DecodedSettings => {
 
   if (query.training === '1') {
     decoded.training = decodeTraining(
-      [query.every, query.from, query.to, query.step].map((v) => v ?? '').join('.'),
+      [query.to, query.every, query.step].map((v) => (v === undefined ? null : parseInteger(v))),
     )
   }
 
@@ -123,12 +154,12 @@ export const decodeSettings = (query: Record<string, string>): DecodedSettings =
 
   return {
     ...(query.m !== undefined && decodeMain(query.m)),
-    ...(query.tr !== undefined && { training: decodeTraining(query.tr) }),
+    ...(query.tr !== undefined && decodeTr(query.tr)),
   }
 }
 
 // Возвращает query-строку без ведущего `?`
-export const encodeSettings = ({ tempo, layout, training }: Settings): string => {
+export const encodeSettings = ({ tempo, layout, training, silence }: Settings): string => {
   const subdivisions = layout.subdivisions.map((sub) => sub.toString(36)).join('')
   const notes = barToCodes(layout.bar)
   const isDefaultBar = notes === barToCodes(defaultBar(layout.subdivisions))
@@ -136,8 +167,10 @@ export const encodeSettings = ({ tempo, layout, training }: Settings): string =>
   const parts = [`m=${tempo}.${subdivisions}${isDefaultBar ? '' : `.${notes}`}`]
 
   if (training) {
-    const { every, from, to, step } = training
-    parts.push(`tr=${every}.${from}.${to}.${step}`)
+    const { to, every, step } = training
+    parts.push(`tr=1.${to}.${every}.${step}`)
+  } else if (silence) {
+    parts.push(`tr=2.${silence.play}.${silence.mute}`)
   }
 
   return parts.join('&')

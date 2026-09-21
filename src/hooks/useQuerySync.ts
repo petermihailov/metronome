@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { createLogger } from '../lib/Logger'
 import { useMetronomeStore } from '../store/useMetronomeStore'
 import { useScreenStore } from '../store/useScreenStore'
+import { useSilenceStore } from '../store/useSilenceStore'
 import { useTrainingStore } from '../store/useTrainingStore'
 import { decodeSettings, encodeSettings } from '../utils/settingsCodec'
 import { debounce } from '../utils/throttling'
@@ -28,33 +29,44 @@ export function useQuerySync() {
   )
 
   const trainingStore = useTrainingStore(
-    ({ every, from, to, step, setFromAction, setToAction, setEveryAction, setStepAction }) => ({
+    ({ every, to, step, setToAction, setEveryAction, setStepAction }) => ({
       every,
-      from,
       to,
       step,
-      setFromAction,
       setToAction,
       setEveryAction,
       setStepAction,
     }),
   )
 
+  const silenceStore = useSilenceStore(({ play, mute, setPlayAction, setMuteAction }) => ({
+    play,
+    mute,
+    setPlayAction,
+    setMuteAction,
+  }))
+
   // Set from query (понимает и новый формат, и старые ссылки)
   useEffect(() => {
-    const { tempo, layout, training } = decodeSettings(getQuery())
+    const { tempo, layout, training, silence } = decodeSettings(getQuery())
 
-    logger.info('setFromQuery', { tempo, layout, training })
+    logger.info('setFromQuery', { tempo, layout, training, silence })
 
-    screenStore.setScreenAction(training ? 'training' : 'main')
+    screenStore.setScreenAction(training ? 'training' : silence ? 'silence' : 'main')
+
+    if (silence) {
+      if (silence.play) {
+        silenceStore.setPlayAction(silence.play)
+      }
+
+      if (silence.mute) {
+        silenceStore.setMuteAction(silence.mute)
+      }
+    }
 
     if (training) {
       if (training.every) {
         trainingStore.setEveryAction(training.every)
-      }
-
-      if (training.from) {
-        trainingStore.setFromAction(training.from)
       }
 
       if (training.to) {
@@ -78,15 +90,17 @@ export function useQuerySync() {
 
   // Update query
   useEffect(() => {
-    const { every, from, to, step } = trainingStore
+    const { every, to, step } = trainingStore
     const { subdivisions, bar, tempo } = metronomeStore
+    const { play, mute } = silenceStore
 
     const query = encodeSettings({
       tempo,
       layout: { subdivisions, bar },
-      training: screenStore.screen === 'training' ? { every, from, to, step } : null,
+      training: screenStore.screen === 'training' ? { every, to, step } : null,
+      silence: screenStore.screen === 'silence' ? { play, mute } : null,
     })
 
     updateQueryDebounced(query)
-  }, [metronomeStore, screenStore, trainingStore])
+  }, [metronomeStore, screenStore, silenceStore, trainingStore])
 }

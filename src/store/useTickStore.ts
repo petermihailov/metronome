@@ -5,6 +5,7 @@ import type { Tick } from '../types/metronome'
 
 const zeroTick: Tick = {
   counting: true,
+  muted: false,
   note: null,
   time: 0,
   played: {
@@ -42,6 +43,12 @@ export const useTickStore = createWithEqualityFn<Store>((set) => {
     },
 
     onTickAction: (tick) => {
+      // В тишине индикация замирает: запоминаем только сам факт тишины, остальное остаётся как было
+      if (tick.muted) {
+        set((state) => ({ ...state, muted: true }))
+        return
+      }
+
       set((state) => ({ ...state, ...tick }))
     },
 

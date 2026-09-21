@@ -3,6 +3,8 @@ import { useEffect, useRef } from 'react'
 import { useSounds } from './useSounds'
 import { Player } from '../lib/Player'
 import { useMetronomeStore } from '../store/useMetronomeStore'
+import { useScreenStore } from '../store/useScreenStore'
+import { useSilenceStore } from '../store/useSilenceStore'
 import { useTickStore } from '../store/useTickStore'
 
 export function usePlayer() {
@@ -18,6 +20,9 @@ export function usePlayer() {
       tempo,
     }),
   )
+
+  const isSilenceScreen = useScreenStore(({ screen }) => screen === 'silence')
+  const { play, mute } = useSilenceStore(({ play, mute }) => ({ play, mute }))
 
   const { onBeforeScheduledAction, onTickAction, resetAction } = useTickStore(
     ({ onBeforeScheduledAction, onTickAction, resetAction }) => ({
@@ -69,4 +74,9 @@ export function usePlayer() {
   useEffect(() => {
     player.current.setCounting(count)
   }, [count])
+
+  /** Sync silence: глушим такты только на экране silence */
+  useEffect(() => {
+    player.current.setSilence(isSilenceScreen ? { play, mute } : null)
+  }, [isSilenceScreen, play, mute])
 }

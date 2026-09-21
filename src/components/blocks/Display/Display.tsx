@@ -24,8 +24,6 @@ const Display = () => {
     }),
   )
 
-  // Ноты по долям: у каждой доли одинаковая ширина, а ноты делят её поровну,
-  // так что доля из 6 нот не растягивается шире доли из 3
   const beats = useMemo(() => {
     let start = 0
 
@@ -65,7 +63,10 @@ const Display = () => {
     [bar, switchInstrumentAction],
   )
 
-  const { activeId } = useTickStore(({ position }) => ({ activeId: position.idx }))
+  // В тишине подсветки нет — иначе нота подсказывала бы момент вступления
+  const { activeId } = useTickStore(({ position, muted }) => ({
+    activeId: muted ? -1 : position.idx,
+  }))
 
   // Один зазор и между долями, и между нотами: для равномерной раскладки вид не меняется
   const gapStyle = { gap: `min(var(--size-1), calc(var(--size-1) / ${0.2 * bar.length}))` }

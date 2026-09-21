@@ -5,6 +5,7 @@ import type { Instrument, SoundMap, Tick, Bar } from '../types/metronome'
 import { getAudioContext } from '../utils/audio'
 import { getBarMap, noteDuration } from '../utils/barLayout'
 import type { BarMap } from '../utils/barLayout'
+import { isMutedBar } from '../utils/silence'
 
 const logger = createLogger('PLAYER', { color: '#2af' })
 
@@ -27,6 +28,8 @@ export class Player {
   private scheduledCount = { ...zeroScheduledCount }
   private bar: Bar = []
   private counting: number = 0
+  // N тактов играем, M молчим; null — режим тишины выключен
+  private silence: { play: number; mute: number } | null = null
   private nextBeatAt: number = 0
   private scheduledTick: Tick | null = null
   private scheduledBufferSource: AudioBufferSourceNode | null = null
@@ -71,7 +74,10 @@ export class Player {
       counting = false
     }
 
-    return { counting, note, played, position, time }
+    const muted =
+      !counting && !!this.silence && isMutedBar(played.bars, this.silence.play, this.silence.mute)
+
+    return { counting, muted, note, played, position, time }
   }
 
   private playNotesAtNextBeatTime(when: number, instrument: Instrument) {
@@ -102,7 +108,7 @@ export class Player {
     // Schedule next
     const nextNote = this.bar[nextIdx]
 
-    if (nextScheduledTick.counting || nextNote.instrument) {
+    if (nextScheduledTick.counting || (nextNote.instrument && !nextScheduledTick.muted)) {
       if (nextScheduledTick.counting) {
         if (!this.isSubdivisionNote(nextIdx)) {
           this.playNotesAtNextBeatTime(this.nextBeatAt, 'fxMetronome1')
@@ -178,6 +184,11 @@ export class Player {
     this.counting = count
   }
 
+  public setSilence(silence: { play: number; mute: number } | null) {
+    logger.info('setSilence', silence)
+    this.silence = silence
+  }
+
   public async play() {
     if (this.playing) {
       return
@@ -195,7 +206,7 @@ export class Player {
 
     if (this.bar[0]) {
       const instrument = tick.counting ? 'fxMetronome1' : this.bar[0].instrument
-      if (instrument) {
+      if (instrument && !tick.muted) {
         this.playNotesAtNextBeatTime(this.nextBeatAt, instrument)
       }
       this.onTick?.(tick)
