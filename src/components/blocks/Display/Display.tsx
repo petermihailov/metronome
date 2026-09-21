@@ -72,8 +72,6 @@ const Display = () => {
 
   return (
     <div className={classes.display}>
-      <TupletBrackets style={gapStyle} subdivisions={subdivisions} />
-
       <div className={classes.bar} style={gapStyle} onClick={clickHandler}>
         {beats.map((notes, beat) => (
           <div key={beat} className={classes.beat} style={gapStyle}>
@@ -89,6 +87,8 @@ const Display = () => {
           </div>
         ))}
       </div>
+
+      <TupletBrackets style={gapStyle} subdivisions={subdivisions} />
 
       <DisplayBar />
     </div>

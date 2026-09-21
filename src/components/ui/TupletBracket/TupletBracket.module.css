@@ -1,73 +1,69 @@
 .bracket {
+  --radius: 0;
+  --reserve: 0;
   --line: 1px solid var(--color-dimmed);
-
-  /* Сколько места слева/справа от цифры занимают знаки и зазор до линии */
-  --reserve: var(--size-1);
 
   display: flex;
   flex: 1;
-  align-items: stretch;
   block-size: var(--font-size-3);
   color: var(--color-dimmed);
+  font-weight: 400;
   font-size: var(--font-size-0);
   font-family: var(--font-sans);
-  user-select: none;
 }
 
 .count {
   display: flex;
   align-items: center;
   padding-inline: var(--size-00);
+  color: var(--color-text);
 }
 
-/* Линия проходит на уровне цифры, засечка идёт вниз от края доли */
+/* Линия проходит на уровне цифры, засечка идёт вверх от края доли, к нотам */
 .button {
   position: relative;
   display: flex;
   flex: 1;
   align-items: center;
-  padding: 0;
-  color: inherit;
-  font: inherit;
   cursor: pointer;
   transition-property: color, border-color;
-  transition-duration: 150ms;
+  transition-duration: 200ms;
 }
 
 .button::before {
   position: absolute;
-  inset-block: 50% 0;
+  inset-block: 0 50%;
   content: '';
-  border-block-start: var(--line);
+  border-block-end: var(--line);
 }
 
 .button:first-child {
   justify-content: flex-end;
-  padding-inline-end: var(--size-000);
 }
 
 .button:first-child::before {
   inset-inline: 0 var(--reserve);
   border-inline-start: var(--line);
+  border-end-start-radius: var(--radius);
 }
 
 .button:last-child {
   justify-content: flex-start;
-  padding-inline-start: var(--size-000);
 }
 
 .button:last-child::before {
   inset-inline: var(--reserve) 0;
   border-inline-end: var(--line);
+  border-end-end-radius: var(--radius);
 }
 
 .button:disabled {
   cursor: default;
-  opacity: 0.4;
 }
 
+.button:active:not(:disabled),
 .button:hover:not(:disabled) {
-  --line: 1px solid var(--color-accent-1);
+  --line: 1px solid #fff;
 
   color: var(--color-accent-1);
 }

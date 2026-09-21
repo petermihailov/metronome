@@ -4,6 +4,7 @@
   position: relative;
   display: grid;
   border-radius: var(--radius-2);
+  background-image: radial-gradient(ellipse 100% 60% at 50% 80%, #0004 25%, #0006 70%, #000a 100%);
   outline: var(--border);
   box-shadow:
     inset 0 0 var(--size-2) #000d,
@@ -16,7 +17,7 @@
   display: flex;
   align-items: flex-end;
   margin: min(5vw, var(--size-2));
-  margin-block: var(--size-000) var(--size-1);
+  margin-block: var(--size-1) var(--size-000);
 }
 
 .beat {

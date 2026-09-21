@@ -1,23 +1,19 @@
 .beats-counter {
-  --size-highlight: calc(var(--size-icon) * 1.25);
-
+  block-size: var(--size-highlight);
+  aspect-ratio: 1;
   font-weight: 500;
   font-size: var(--font-size-5);
   line-height: var(--font-lineheight-0);
-}
-
-.playing {
-  opacity: 1;
+  border-radius: var(--radius-round);
 }
 
 .value {
-  position: relative;
   opacity: var(--alpha-disabled);
   transition: opacity 100ms ease-out;
 }
 
 .playing .value,
-.value:hover {
+.beats-counter:hover .value {
   opacity: 1;
 }
 

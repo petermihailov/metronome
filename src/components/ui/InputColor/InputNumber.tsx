@@ -6,14 +6,12 @@ import type {
   MouseEventHandler,
   FocusEventHandler,
 } from 'react'
-import { useCallback, memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 
 import { inRange, minMax } from '../../../utils/math'
 import { ButtonIcon } from '../ButtonIcon'
 
 import classes from './InputNumber.module.css'
-
-const TIMEOUT = 3_500 // ms
 
 export interface InputNumberProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   value: number
@@ -41,14 +39,6 @@ const InputNumber = ({
   const inputRef = useRef<HTMLInputElement>(null)
   const increaseButtonRef = useRef<HTMLButtonElement>(null)
   const decreaseButtonRef = useRef<HTMLButtonElement>(null)
-  const timeoutRef = useRef<number | undefined>(undefined)
-
-  const resetTimer = useCallback(() => {
-    window.clearTimeout(timeoutRef.current)
-    timeoutRef.current = window.setTimeout(() => {
-      inputRef.current?.blur()
-    }, TIMEOUT)
-  }, [])
 
   const setValue = (value: number, force?: boolean) => {
     if (force) {
@@ -76,8 +66,6 @@ const InputNumber = ({
   }
 
   const onKeyDownHandler: KeyboardEventHandler<HTMLInputElement> = (e) => {
-    resetTimer()
-
     if (['ArrowUp', 'ArrowDown'].includes(e.code)) {
       e.stopPropagation()
     }
@@ -117,7 +105,6 @@ const InputNumber = ({
 
   const onFocusHandler: FocusEventHandler<HTMLInputElement> = (e) => {
     e.target.select()
-    resetTimer()
   }
 
   const onBlurHandler = () => {
@@ -152,23 +139,12 @@ const InputNumber = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [max, min, value])
 
-  useEffect(() => {
-    resetTimer()
-  }, [textValue, resetTimer])
-
-  useEffect(() => {
-    return () => {
-      window.clearTimeout(timeoutRef.current)
-    }
-  }, [])
-
   return (
     <div
       className={clsx(className, classes.inputNumber, {
         [classes.disabled]: disabled,
         [classes.active]: active,
       })}
-      onClick={resetTimer}
     >
       <label className={classes.label}>
         {title && <span className={classes.title}>{title}</span>}

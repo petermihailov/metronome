@@ -1,5 +1,5 @@
 .brackets {
   display: flex;
-  margin-block-start: var(--size-1);
+  margin-block-end: var(--size-0000);
   margin-inline: min(5vw, var(--size-2));
 }

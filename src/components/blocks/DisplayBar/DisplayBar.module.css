@@ -6,7 +6,7 @@
   gap: var(--size-1);
   justify-content: space-between;
   padding: var(--size-00) min(5vw, var(--size-2));
-  background-image: linear-gradient(45deg, #0003, #0008, #0003);
+  background-color: #000c;
 }
 
 .display-bar > div {

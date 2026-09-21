@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { memo, useEffect, useRef, useState } from 'react'
 
+import { ButtonIcon } from '../../../ui/ButtonIcon'
 import { Modal } from '../../../ui/Modal'
 
 import classes from './BeatsCounter.module.css'
@@ -64,13 +65,18 @@ const BeatsCounter = ({ className, playing, value, beats }: BeatsCounterProps) =
   }, [])
 
   return (
-    <div
-      className={clsx(className, classes.beatsCounter, { [classes.playing]: playing })}
-      onClick={clickHandler}
-    >
+    <>
+      <ButtonIcon
+        withoutHighlight
+        aria-label="fullscreen"
+        className={clsx(className, classes.beatsCounter, { [classes.playing]: playing })}
+        onClick={clickHandler}
+      >
+        <span className={classes.value}>{value}</span>
+      </ButtonIcon>
       {fullscreen ? (
         <Modal>
-          <div className={classes.beatValueFullscreen}>
+          <div className={classes.beatValueFullscreen} onClick={clickHandler}>
             {/* ToDo: вынеси в компонент сегментный шрифт и placeholder */}
             <div className={clsx(classes.segment, { [classes.lengthTwo]: beats > 9 })}>
               <span className={classes.segmentPlaceholder}>{beats > 9 ? '18' : 8}</span>
@@ -80,10 +86,8 @@ const BeatsCounter = ({ className, playing, value, beats }: BeatsCounterProps) =
             </div>
           </div>
         </Modal>
-      ) : (
-        <span className={classes.value}>{value}</span>
-      )}
-    </div>
+      ) : null}
+    </>
   )
 }
 

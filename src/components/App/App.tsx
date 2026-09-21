@@ -7,6 +7,7 @@ import {
   usePlayingTimeUpdate,
   useWakeLock,
 } from '../../hooks'
+import { useAutoBlur } from '../../hooks/useAutoBlur'
 import { useAutoHideCursor } from '../../hooks/useAutoHideCursor'
 import { useQuerySync } from '../../hooks/useQuerySync'
 import type { Screen as ScreenType } from '../../screens'
@@ -31,6 +32,7 @@ const App = () => {
   usePlayer()
   usePlayingTimeUpdate()
   useAutoHideCursor()
+  useAutoBlur()
   useHotkeys()
   useWakeLock()
   useButtonsPreventSpacePress()
