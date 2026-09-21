@@ -88,10 +88,6 @@ describe('defaultBar (замороженный шаблон)', () => {
   it('доля из одной ноты в середине такта получает 3, а не 2', () => {
     expect(codes([2, 1, 2])).toBe('13323')
   })
-
-  it('совпадает с DEFAULTS.bar приложения', () => {
-    expect(defaultBar([1, 1, 1, 1])).toEqual(DEFAULTS.bar)
-  })
 })
 
 describe('isValidSubdivisions', () => {
@@ -165,7 +161,7 @@ describe('restoreLayout', () => {
   it('без сохранённых данных возвращает раскладку по умолчанию', () => {
     expect(restoreLayout({})).toEqual({
       subdivisions: uniformSubdivisions(DEFAULTS.beats, DEFAULTS.subdivision),
-      bar: DEFAULTS.bar,
+      bar: defaultBar(uniformSubdivisions(DEFAULTS.beats, DEFAULTS.subdivision)),
     })
   })
 

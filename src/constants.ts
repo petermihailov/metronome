@@ -1,4 +1,4 @@
-import type { Instrument, Bar } from './types/metronome'
+import type { Instrument } from './types/metronome'
 import { minMax } from './utils/math'
 
 export const INSTRUMENTS: Instrument[] = ['fxMetronome1', 'fxMetronome2', 'fxMetronome3']
@@ -24,22 +24,14 @@ export const MINMAX = (() => {
 })()
 
 export const DEFAULTS = {
-  tempo: 60,
+  tempo: 90,
   beats: 4,
-  subdivision: 1,
+  subdivision: 4,
   every: 8,
   step: 1,
-  count: 2,
+  count: 0,
   silencePlay: 4,
   silenceMute: 4,
-  get bar(): Bar {
-    return [
-      { instrument: 'fxMetronome1' },
-      { instrument: 'fxMetronome3' },
-      { instrument: 'fxMetronome3' },
-      { instrument: 'fxMetronome3' },
-    ]
-  },
 } as const
 
 export const THEME_DEFAULTS = {

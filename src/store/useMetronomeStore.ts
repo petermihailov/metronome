@@ -29,7 +29,7 @@ const settingsStorage = new Storage<{
   subdivision: number
 }>('settings', {
   count: DEFAULTS.count,
-  bar: DEFAULTS.bar,
+  bar: defaultBar(uniformSubdivisions(DEFAULTS.beats, DEFAULTS.subdivision)),
   tempo: DEFAULTS.tempo,
   beats: DEFAULTS.beats,
   subdivision: DEFAULTS.subdivision,
@@ -206,11 +206,11 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
       logger.info('reset')
       set((state) => {
         return produce(state, (draft) => {
-          const { tempo, beats, subdivision, bar } = DEFAULTS
+          const { tempo, beats, subdivision } = DEFAULTS
 
           draft.tempo = tempo
           draft.subdivisions = uniformSubdivisions(beats, subdivision)
-          draft.bar = [...bar]
+          draft.bar = defaultBar(draft.subdivisions)
 
           settingsStorage.update({
             tempo: draft.tempo,

@@ -2,7 +2,7 @@
   "name": "metronome",
   "private": "true",
   "type": "module",
-  "version": "1.18.0",
+  "version": "1.18.1",
   "license": "UNLICENSED",
   "scripts": {
     "start": "vite --host",
