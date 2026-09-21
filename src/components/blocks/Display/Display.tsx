@@ -5,6 +5,7 @@ import { useTickStore } from '../../../store/useTickStore'
 import type { Instrument } from '../../../types/metronome'
 import { Note } from '../../ui/Note'
 import { DisplayBar } from '../DisplayBar'
+import { TupletBrackets } from '../TupletBrackets'
 
 import classes from './Display.module.css'
 
@@ -71,6 +72,8 @@ const Display = () => {
 
   return (
     <div className={classes.display}>
+      <TupletBrackets style={gapStyle} subdivisions={subdivisions} />
+
       <div className={classes.bar} style={gapStyle} onClick={clickHandler}>
         {beats.map((notes, beat) => (
           <div key={beat} className={classes.beat} style={gapStyle}>

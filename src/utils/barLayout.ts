@@ -45,6 +45,25 @@ export const isValidSubdivisions = (value: unknown): value is number[] => {
   )
 }
 
+// Доля — tuplet, если нот в ней больше одной и их число не степень двойки
+// (3 — триоль, 5 — квинтоль, 6 — секстоль, 7 — септоль и т.д.)
+export const isTuplet = (subdivision: number) => {
+  return subdivision > 1 && (subdivision & (subdivision - 1)) !== 0
+}
+
+const TUPLET_NAMES: Record<number, string> = {
+  3: 'triplet',
+  5: 'quintuplet',
+  6: 'sextuplet',
+  7: 'septuplet',
+  9: 'nonuplet',
+  10: 'decuplet',
+}
+
+export const tupletName = (subdivision: number) => {
+  return TUPLET_NAMES[subdivision] ?? `${subdivision}-tuplet`
+}
+
 export const uniformSubdivisions = (beats: number, subdivision: number) => {
   return Array<number>(beats).fill(subdivision)
 }

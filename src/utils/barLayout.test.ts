@@ -1,11 +1,13 @@
 import {
   defaultBar,
   getBarMap,
+  isTuplet,
   isValidSubdivisions,
   noteDuration,
   resizeBeats,
   restoreLayout,
   totalNotes,
+  tupletName,
   uniformSubdivisions,
 } from './barLayout'
 import { DEFAULTS } from '../constants'
@@ -186,5 +188,28 @@ describe('restoreLayout', () => {
     const result = restoreLayout({ subdivisions: [3, 6], beats: 4, subdivision: 1 })
 
     expect(result.subdivisions).toEqual([3, 6])
+  })
+})
+
+describe('isTuplet', () => {
+  it('степени двойки — не tuplet', () => {
+    ;[1, 2, 4, 8, 16].forEach((sub) => expect(isTuplet(sub)).toBe(false))
+  })
+
+  it('остальные — tuplet', () => {
+    ;[3, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15].forEach((sub) => expect(isTuplet(sub)).toBe(true))
+  })
+})
+
+describe('tupletName', () => {
+  it('знает имена основных tuplet', () => {
+    expect(tupletName(3)).toBe('triplet')
+    expect(tupletName(5)).toBe('quintuplet')
+    expect(tupletName(6)).toBe('sextuplet')
+    expect(tupletName(7)).toBe('septuplet')
+  })
+
+  it('для редких tuplet отдаёт запасное имя', () => {
+    expect(tupletName(11)).toBe('11-tuplet')
   })
 })

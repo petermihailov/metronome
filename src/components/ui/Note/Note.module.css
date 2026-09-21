@@ -1,7 +1,7 @@
 .note {
   --fill: 0%;
   --color: var(--color-accent-2);
-  --radius: var(--size-0);
+  --radius: 0; /* var(--size-1); */
 
   position: relative;
   block-size: var(--size-4);

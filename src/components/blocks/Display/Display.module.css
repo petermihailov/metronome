@@ -16,7 +16,7 @@
   display: flex;
   align-items: flex-end;
   margin: min(5vw, var(--size-2));
-  margin-block-end: var(--size-1);
+  margin-block: var(--size-000) var(--size-1);
 }
 
 .beat {
