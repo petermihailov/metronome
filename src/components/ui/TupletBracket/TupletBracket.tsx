@@ -1,21 +1,42 @@
 import { memo } from 'react'
 
+import { MINMAX } from '../../../constants'
 import { isTuplet, tupletName } from '../../../utils/barLayout'
 
 import classes from './TupletBracket.module.css'
 
 export interface TupletBracketProps {
-  // Сколько нот охватывает скобка
+  // Номер доли, над которой стоит скобка
+  beat: number
+  // Сколько нот в доле
   count: number
+  onChange: (beat: number, subdivision: number) => void
 }
 
-// Скобка tuplet: линия сверху с засечками вниз по краям и цифрой по центру
-const TupletBracket = ({ count }: TupletBracketProps) => {
+// Скобка над долей: линия с засечками по краям и цифрой по центру.
+// Левая половина уменьшает subdivision доли, правая — увеличивает.
+const TupletBracket = ({ beat, count, onChange }: TupletBracketProps) => {
   return (
     <div className={classes.bracket} title={isTuplet(count) ? tupletName(count) : undefined}>
-      <span className={classes.line} />
+      <button
+        aria-label="decrease subdivision"
+        className={classes.button}
+        disabled={count <= MINMAX.subdivision.min}
+        type="button"
+        onClick={() => onChange(beat, count - 1)}
+      >
+        −
+      </button>
       <span className={classes.count}>{count}</span>
-      <span className={classes.line} />
+      <button
+        aria-label="increase subdivision"
+        className={classes.button}
+        disabled={count >= MINMAX.subdivision.max}
+        type="button"
+        onClick={() => onChange(beat, count + 1)}
+      >
+        +
+      </button>
     </div>
   )
 }

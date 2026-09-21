@@ -6,6 +6,7 @@ import {
   noteDuration,
   resizeBeats,
   restoreLayout,
+  setBeatSubdivision,
   totalNotes,
   tupletName,
   uniformSubdivisions,
@@ -211,5 +212,50 @@ describe('tupletName', () => {
 
   it('для редких tuplet отдаёт запасное имя', () => {
     expect(tupletName(11)).toBe('11-tuplet')
+  })
+})
+
+describe('setBeatSubdivision', () => {
+  const layout = (subdivisions: number[]) => ({ subdivisions, bar: defaultBar(subdivisions) })
+
+  it('меняет subdivision только у одной доли', () => {
+    const result = setBeatSubdivision(layout([2, 2, 2]), 1, 3)
+
+    expect(result.subdivisions).toEqual([2, 3, 2])
+    expect(result.bar).toHaveLength(totalNotes(result.subdivisions))
+  })
+
+  it('ноты остальных долей остаются как были, в том числе правки пользователя', () => {
+    const source = layout([2, 2, 2])
+    source.bar[0] = { instrument: null }
+    source.bar[5] = { instrument: 'fxMetronome1' }
+
+    const result = setBeatSubdivision(source, 1, 4)
+
+    expect(result.bar[0]).toEqual({ instrument: null })
+    expect(result.bar[result.bar.length - 1]).toEqual({ instrument: 'fxMetronome1' })
+  })
+
+  it('ноты изменённой доли собираются по шаблону', () => {
+    const result = setBeatSubdivision(layout([1, 1]), 1, 3)
+
+    expect(result.bar.slice(1).map((note) => note.instrument)).toEqual([
+      'fxMetronome2',
+      'fxMetronome3',
+      'fxMetronome3',
+    ])
+  })
+
+  it('уменьшение отрезает ноты доли', () => {
+    const result = setBeatSubdivision(layout([3, 3]), 0, 1)
+
+    expect(result.subdivisions).toEqual([1, 3])
+    expect(result.bar).toHaveLength(4)
+  })
+
+  it('несуществующая доля — раскладка без изменений', () => {
+    const source = layout([2, 2])
+
+    expect(setBeatSubdivision(source, 5, 3)).toEqual(source)
   })
 })

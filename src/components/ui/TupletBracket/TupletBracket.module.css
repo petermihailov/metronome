@@ -1,37 +1,73 @@
 .bracket {
-  --line: var(--size-00000) solid var(--color-dimmed);
+  --line: 1px solid var(--color-dimmed);
 
-  position: relative;
+  /* Сколько места слева/справа от цифры занимают знаки и зазор до линии */
+  --reserve: var(--size-1);
+
   display: flex;
   flex: 1;
-  gap: 3ch;
-  block-size: var(--size-00);
+  align-items: stretch;
+  block-size: var(--font-size-3);
   color: var(--color-dimmed);
   font-size: var(--font-size-0);
   font-family: var(--font-sans);
-  line-height: var(--font-lineheight-0);
   user-select: none;
-  pointer-events: none;
-}
-
-.line {
-  flex: 1;
-  align-self: stretch;
-  border-block-start: var(--line);
-}
-
-.line:first-child {
-  border-inline-start: var(--line);
-}
-
-.line:last-child {
-  border-inline-end: var(--line);
 }
 
 .count {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--size-00);
+}
+
+/* Линия проходит на уровне цифры, засечка идёт вниз от края доли */
+.button {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition-property: color, border-color;
+  transition-duration: 150ms;
+}
+
+.button::before {
   position: absolute;
-  inset-block-start: 0;
-  inset-inline-start: 50%;
-  font-weight: 600;
-  transform: translate(-50%, -50%);
+  inset-block: 50% 0;
+  content: '';
+  border-block-start: var(--line);
+}
+
+.button:first-child {
+  justify-content: flex-end;
+  padding-inline-end: var(--size-000);
+}
+
+.button:first-child::before {
+  inset-inline: 0 var(--reserve);
+  border-inline-start: var(--line);
+}
+
+.button:last-child {
+  justify-content: flex-start;
+  padding-inline-start: var(--size-000);
+}
+
+.button:last-child::before {
+  inset-inline: var(--reserve) 0;
+  border-inline-end: var(--line);
+}
+
+.button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.button:hover:not(:disabled) {
+  --line: 1px solid var(--color-accent-1);
+
+  color: var(--color-accent-1);
 }

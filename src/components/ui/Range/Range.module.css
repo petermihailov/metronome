@@ -46,7 +46,7 @@
   border-color: #0004;
   border-radius: var(--radius-round);
   background-color: var(--color-accent-1);
-  box-shadow: 0 0 0 var(--thumb-highlight-size) #fff2;
+  box-shadow: 0 0 0 var(--thumb-highlight-size) #fff1;
   cursor: ew-resize;
   appearance: none;
   transition: box-shadow 100ms ease-out;
@@ -60,7 +60,7 @@
   border-color: #0004;
   border-radius: var(--radius-round);
   background-color: var(--color-accent-1);
-  box-shadow: 0 0 0 var(--thumb-highlight-size) #fff2;
+  box-shadow: 0 0 0 var(--thumb-highlight-size) #fff1;
   cursor: ew-resize;
   appearance: none;
   transition: box-shadow 100ms ease-out;

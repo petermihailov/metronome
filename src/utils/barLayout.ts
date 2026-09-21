@@ -116,6 +116,28 @@ export const resizeBeats = ({ subdivisions, bar }: Layout, beats: number): Layou
   }
 }
 
+// Меняет subdivision одной доли. Ноты остальных долей не трогаем, ноты этой доли
+// собираются заново по шаблону (см. defaultBar): их число изменилось, старые
+// не ложатся на новую сетку.
+export const setBeatSubdivision = (
+  { subdivisions, bar }: Layout,
+  beat: number,
+  subdivision: number,
+): Layout => {
+  if (!Number.isInteger(beat) || beat < 0 || beat >= subdivisions.length) {
+    return { subdivisions, bar }
+  }
+
+  const next = subdivisions.map((sub, idx) => (idx === beat ? subdivision : sub))
+  const start = totalNotes(subdivisions.slice(0, beat))
+  const notes = defaultBar(next).slice(start, start + subdivision)
+
+  return {
+    subdivisions: next,
+    bar: [...bar.slice(0, start), ...notes, ...bar.slice(start + subdivisions[beat])],
+  }
+}
+
 // Восстанавливает раскладку из сохранённых настроек. Понимает и новый формат
 // (subdivisions), и старый (beats + одна subdivision на весь такт).
 // Испорченные данные не роняют приложение: невалидный bar заменяется шаблоном,

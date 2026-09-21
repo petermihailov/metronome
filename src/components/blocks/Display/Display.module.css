@@ -8,7 +8,7 @@
   box-shadow:
     inset 0 0 var(--size-2) #000d,
     var(--shadow-distance) var(--shadow-distance) var(--size-1) #000a,
-    calc(-1 * var(--shadow-distance)) calc(-1 * var(--shadow-distance)) var(--size-0) #fff2;
+    calc(-1 * var(--shadow-distance)) calc(-1 * var(--shadow-distance)) var(--size-0) #fff1;
   overflow: hidden;
 }
 

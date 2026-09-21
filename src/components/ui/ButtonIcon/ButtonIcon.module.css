@@ -39,7 +39,7 @@
   inline-size: var(--size-highlight);
   block-size: var(--size-highlight);
   border-radius: var(--radius-round);
-  background-color: #fff2;
+  background-color: #fff1;
   transform: scale(0);
   transition: transform 100ms ease-out;
 }

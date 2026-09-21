@@ -11,6 +11,7 @@ import {
   isValidSubdivisions,
   resizeBeats,
   restoreLayout,
+  setBeatSubdivision,
   totalNotes,
   uniformSubdivisions,
 } from '../utils/barLayout'
@@ -51,6 +52,8 @@ interface Store {
   setBarAction: (bar: Bar) => void
   setBeatsAction: (beats: number) => void
   setCountAction: (count: number) => void
+  // subdivision одной доли, остальные доли и их ноты не меняются
+  setBeatSubdivisionAction: (beat: number, subdivision: number) => void
   setIsPlayingAction: (isPlaying: boolean) => void
   // Одна и та же subdivision для всех долей, такт сбрасывается на шаблон
   setSubdivisionAction: (subdivision: number) => void
@@ -90,6 +93,25 @@ export const useMetronomeStore = createWithEqualityFn<Store>((set) => {
       set((state) => {
         return produce(state, (draft) => {
           const next = resizeBeats(state, beats)
+
+          draft.subdivisions = next.subdivisions
+          draft.bar = next.bar
+
+          settingsStorage.update({
+            subdivisions: draft.subdivisions,
+            bar: draft.bar,
+          })
+        })
+      })
+    },
+
+    setBeatSubdivisionAction: (beat, subdivision) => {
+      subdivision = MINMAX.range('subdivision', subdivision)
+      logger.info('setBeatSubdivisionAction', { beat, subdivision })
+
+      set((state) => {
+        return produce(state, (draft) => {
+          const next = setBeatSubdivision(state, beat, subdivision)
 
           draft.subdivisions = next.subdivisions
           draft.bar = next.bar
