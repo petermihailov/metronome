@@ -1,4 +1,24 @@
+import { createLogger } from '../lib/Logger'
+
+const logger = createLogger('AUDIO', { color: '#2af' })
+
+// После перехода контекста в running устройство вывода (особенно Bluetooth) открывается
+// ещё 100–500 мс, и звук в это окно теряется. Столько мс после пробуждения считаем контекст «холодным»
+const warmupMs = 1000
+
 const audioCtx = new AudioContext({ latencyHint: 'interactive' })
+
+// Когда контекст в последний раз перешёл в running. При загрузке он обычно suspended,
+// но в Chrome со sticky activation может быть уже running — тогда отсчёт идёт с загрузки
+let runningSince = audioCtx.state === 'running' ? Date.now() : -Infinity
+
+audioCtx.addEventListener('statechange', () => {
+  logger.info('statechange', audioCtx.state)
+
+  if (audioCtx.state === 'running') {
+    runningSince = Date.now()
+  }
+})
 
 export function getAudioContext(): AudioContext {
   if (!audioCtx) {
@@ -6,6 +26,22 @@ export function getAudioContext(): AudioContext {
   }
 
   return audioCtx
+}
+
+// Будит контекст, если он не running: не только suspended, но и interrupted в Safari
+// после звонка или другого приложения
+export async function resumeAudioContext() {
+  if (audioCtx.state === 'running') return
+
+  await audioCtx.resume()
+  logger.info('resume')
+  // statechange приходит отдельной задачей уже после резолва промиса, поэтому отмечаем сами
+  runningSince = Date.now()
+}
+
+// Контекст проснулся меньше warmupMs назад — первой ноте нужен запас больше обычного
+export function isAudioWarmingUp(): boolean {
+  return Date.now() - runningSince < warmupMs
 }
 
 export async function fetchAndDecodeAudio(url: string) {

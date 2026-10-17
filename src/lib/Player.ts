@@ -2,7 +2,7 @@ import { createLogger } from './Logger'
 import { TimeoutManager } from './TimeoutManager'
 import { DEFAULTS, INSTRUMENTS } from '../constants'
 import type { Instrument, SoundMap, Tick, Bar } from '../types/metronome'
-import { getAudioContext } from '../utils/audio'
+import { getAudioContext, isAudioWarmingUp, resumeAudioContext } from '../utils/audio'
 import { getBarMap, noteDuration } from '../utils/barLayout'
 import type { BarMap } from '../utils/barLayout'
 import { isMutedBar } from '../utils/silence'
@@ -11,14 +11,11 @@ const logger = createLogger('PLAYER', { color: '#2af' })
 
 const frameMs = 1000 / 60
 
-// Запас между стартом и первой нотой: обычный и сразу после пробуждения контекста.
-// После resume() контекст уже running, но устройство вывода (особенно Bluetooth) ещё
-// открывается 100–500 мс, и звук, запланированный в это окно, теряется
+// Запас между стартом и первой нотой: обычный и пока контекст «холодный» после пробуждения.
+// Устройство вывода (особенно Bluetooth) открывается ещё 100–500 мс после перехода в running,
+// и звук, попавший в это окно, теряется
 const leadSec = 0.05
-const wakeLeadSec = 0.15
-// Сколько ждём, пока часы контекста реально пойдут после resume(), и какой сдвиг считаем «пошли»
-const clockWaitMaxMs = 1000
-const clockMinAdvanceSec = 0.02
+const wakeLeadSec = 0.2
 
 const zeroScheduledCount = {
   notes: 0,
@@ -96,23 +93,22 @@ export class Player {
     return INSTRUMENTS.every((instrument) => !!this.kit[instrument])
   }
 
-  // resume() резолвится по смене state, а currentTime начинает идти только когда устройство
-  // вывода реально отдаёт звук. Ждём этого момента, но не дольше clockWaitMaxMs
-  private waitForClock(): Promise<void> {
-    const startTime = this.audioCtx.currentTime
-    const deadline = Date.now() + clockWaitMaxMs
+  // outputLatency есть не везде (Safari только с 18.4), без него считаем задержку нулевой
+  private getOutputLatency(): number {
+    const { outputLatency } = this.audioCtx
+    return Number.isFinite(outputLatency) ? outputLatency : 0
+  }
 
-    return new Promise((resolve) => {
-      const check = () => {
-        if (this.audioCtx.currentTime - startTime > clockMinAdvanceSec || Date.now() > deadline) {
-          resolve()
-        } else {
-          window.setTimeout(check, frameMs)
-        }
-      }
+  // Визуальный тик отдаём в момент звука: если задержка вывода заметна (от пяти кадров),
+  // откладываем его на эту задержку
+  private emitTick(tick: Tick) {
+    const outputLatency = this.getOutputLatency() * 1000
 
-      check()
-    })
+    if (outputLatency < frameMs * 5) {
+      this.onTick?.(tick)
+    } else {
+      this.timeoutManager.set(() => this.onTick?.(tick), outputLatency)
+    }
   }
 
   private playNotesAtNextBeatTime(when: number, instrument: Instrument) {
@@ -172,14 +168,8 @@ export class Player {
 
     this.timeoutManager.set(
       () => {
-        const outputLatency = this.audioCtx.outputLatency * 1000
         this.schedule(nextIdx)
-
-        if (outputLatency < frameMs * 5) {
-          this.onTick?.(nextScheduledTick)
-        } else {
-          this.timeoutManager.set(() => this.onTick?.(nextScheduledTick), outputLatency)
-        }
+        this.emitTick(nextScheduledTick)
       },
       (this.nextBeatAt - this.audioCtx.currentTime) * 1000,
     )
@@ -243,15 +233,13 @@ export class Player {
     }
 
     const startId = ++this.startId
-    let lead = leadSec
 
-    // Не только suspended: в Safari после звонка или другого приложения контекст бывает interrupted
-    if (this.audioCtx.state !== 'running') {
-      await this.audioCtx.resume()
-      logger.info('audioCtx.resume()')
-      await this.waitForClock()
-      // Устройство вывода только что открылось — даём ему больше запаса, чем обычно
-      lead = Math.max(wakeLeadSec, this.audioCtx.outputLatency + leadSec)
+    try {
+      await resumeAudioContext()
+    } catch (e) {
+      // Старт уже отменили через stop() — ошибка никому не нужна
+      if (startId !== this.startId) return
+      throw e
     }
 
     // Пока ждали пробуждения контекста, нажали stop
@@ -260,7 +248,13 @@ export class Player {
       return
     }
 
-    logger.info('play')
+    // Контекст проснулся только что (этим play(), жестом из useAudioUnlock или предыдущим
+    // play→stop→play) — устройство вывода ещё открывается, даём первой ноте больше запаса
+    const lead = isAudioWarmingUp()
+      ? Math.max(wakeLeadSec, this.getOutputLatency() + leadSec)
+      : leadSec
+
+    logger.info('play', { lead })
     this.playing = true
     this.nextBeatAt = this.audioCtx.currentTime + lead
     const tick = this.getTick(0, this.nextBeatAt)
@@ -270,7 +264,8 @@ export class Player {
       if (instrument && !tick.muted) {
         this.playNotesAtNextBeatTime(this.nextBeatAt, instrument)
       }
-      this.onTick?.(tick)
+      // Тик — в момент звука, а не нажатия; stop() до него снимет таймер через clearAll
+      this.timeoutManager.set(() => this.emitTick(tick), lead * 1000)
     }
 
     this.schedule(0)

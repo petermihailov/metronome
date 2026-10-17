@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { createLogger } from '../lib/Logger'
-import { getAudioContext } from '../utils/audio'
+import { resumeAudioContext } from '../utils/audio'
 
 const logger = createLogger('AUDIO', { color: '#2af' })
 
@@ -11,16 +11,9 @@ const logger = createLogger('AUDIO', { color: '#2af' })
 // вывода не успевает открыться и первый сильный бит теряется
 export function useAudioUnlock() {
   useEffect(() => {
-    const audioCtx = getAudioContext()
-
     const resume = () => {
-      if (audioCtx.state === 'running') return
-
-      audioCtx
-        .resume()
-        .then(() => logger.info('resume', audioCtx.state))
-        // Вне жеста пользователя браузер может отказать — тогда разбудим при следующем жесте
-        .catch((e) => logger.warn('resume', e))
+      // Вне жеста пользователя браузер может отказать — тогда разбудим при следующем жесте
+      resumeAudioContext().catch((e) => logger.warn('resume', e))
     }
 
     const onVisibilityChange = () => {

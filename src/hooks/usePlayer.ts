@@ -1,23 +1,27 @@
 import { useEffect, useRef } from 'react'
 
 import { useSounds } from './useSounds'
+import { createLogger } from '../lib/Logger'
 import { Player } from '../lib/Player'
 import { useMetronomeStore } from '../store/useMetronomeStore'
 import { useScreenStore } from '../store/useScreenStore'
 import { useSilenceStore } from '../store/useSilenceStore'
 import { useTickStore } from '../store/useTickStore'
 
+const logger = createLogger('PLAYER', { color: '#2af' })
+
 export function usePlayer() {
-  const kit = useSounds()
+  const { sounds: kit, error: soundsError } = useSounds()
   const player = useRef(new Player())
 
-  const { isPlaying, subdivisions, bar, tempo, count } = useMetronomeStore(
-    ({ isPlaying, subdivisions, bar, tempo, count }) => ({
+  const { isPlaying, subdivisions, bar, tempo, count, setIsPlayingAction } = useMetronomeStore(
+    ({ isPlaying, subdivisions, bar, tempo, count, setIsPlayingAction }) => ({
       count,
       isPlaying,
       subdivisions,
       bar,
       tempo,
+      setIsPlayingAction,
     }),
   )
 
@@ -54,12 +58,22 @@ export function usePlayer() {
    * и его нужно позвать ещё раз, когда они придут */
   useEffect(() => {
     if (isPlaying) {
-      player.current.play()
+      // Звуки не загрузились — играть нечем, снимаем «играет», чтобы UI не завис
+      if (soundsError) {
+        setIsPlayingAction(false)
+        return
+      }
+
+      // Старт не удался (например, браузер отказал в resume()) — тоже снимаем «играет»
+      player.current.play().catch((e) => {
+        logger.error('play', e)
+        setIsPlayingAction(false)
+      })
     } else {
       resetAction()
       player.current.stop()
     }
-  }, [isPlaying, kit, resetAction])
+  }, [isPlaying, kit, soundsError, resetAction, setIsPlayingAction])
 
   /** Sync layout: раскладка и такт меняются в сторе одним действием, передаём их вместе */
   useEffect(() => {

@@ -5,18 +5,19 @@ import { defaultBar } from '../utils/barLayout'
 const mocks = vi.hoisted(() => {
   const starts: number[] = []
   const clock = { base: 0 }
+  // Подменяемые в тестах части utils/audio: пробуждение контекста и признак «только что проснулся»
+  const audio = {
+    warmingUp: false,
+    resume: async () => {},
+  }
 
   const audioCtx = {
     state: 'running',
-    outputLatency: 0,
+    outputLatency: 0 as number | undefined,
     destination: {},
-    // Время AudioContext идёт вместе с поддельными таймерами, а до clock.base стоит на нуле —
-    // так моделируем устройство вывода, которое после resume() открывается не сразу
+    // Время AudioContext идёт вместе с поддельными таймерами
     get currentTime() {
-      return Math.max(0, Date.now() - clock.base) / 1000
-    },
-    resume: async () => {
-      audioCtx.state = 'running'
+      return (Date.now() - clock.base) / 1000
     },
     createGain: () => ({ gain: { value: 1 }, connect: () => {}, disconnect: () => {} }),
     createBufferSource: () => ({
@@ -31,7 +32,7 @@ const mocks = vi.hoisted(() => {
     }),
   }
 
-  return { starts, clock, audioCtx }
+  return { starts, clock, audioCtx, audio }
 })
 
 vi.mock('./Logger', () => ({
@@ -47,6 +48,12 @@ vi.mock('./Logger', () => ({
 
 vi.mock('../utils/audio', () => ({
   getAudioContext: () => mocks.audioCtx,
+  // Как настоящая: на running контексте ничего не делает
+  resumeAudioContext: async () => {
+    if (mocks.audioCtx.state === 'running') return
+    await mocks.audio.resume()
+  },
+  isAudioWarmingUp: () => mocks.audio.warmingUp,
 }))
 
 const kit = {
@@ -248,6 +255,9 @@ describe('Player: старт после пробуждения контекст�
     mocks.clock.base = Date.now()
     mocks.starts.length = 0
     mocks.audioCtx.state = 'running'
+    mocks.audioCtx.outputLatency = 0
+    mocks.audio.warmingUp = false
+    mocks.audio.resume = async () => {}
   })
 
   afterEach(() => {
@@ -265,29 +275,14 @@ describe('Player: старт после пробуждения контекст�
     return player
   }
 
-  it('из suspended первая нота ждёт, пока пойдут часы, и берёт запас больше обычного', async () => {
-    const player = setup()
-    const deviceOpenMs = 300
+  // resume() занимает время, как в браузере, и после него контекст считается «холодным»
+  const slowResume = (ms: number) => async () => {
+    await new Promise((resolve) => setTimeout(resolve, ms))
+    mocks.audioCtx.state = 'running'
+    mocks.audio.warmingUp = true
+  }
 
-    mocks.audioCtx.state = 'suspended'
-    mocks.audioCtx.resume = async () => {
-      mocks.audioCtx.state = 'running'
-      // Контекст уже running, но устройство вывода откроется только через deviceOpenMs
-      mocks.clock.base = Date.now() + deviceOpenMs
-    }
-
-    const playing = player.play()
-    await vi.advanceTimersByTimeAsync(deviceOpenMs + 100)
-    await playing
-    player.stop()
-
-    // Обычный запас 0.05 попал бы в «мёртвую зону», пока часы стояли на нуле
-    expect(mocks.starts[0]).toBeGreaterThanOrEqual(0.15)
-    // Вторая нота планируется заранее и идёт ровно через долю
-    expect(mocks.starts[1] - mocks.starts[0]).toBeCloseTo(0.5, 6)
-  })
-
-  it('из running стартует как раньше: первая нота через 0.05', async () => {
+  it('из running и без прогрева стартует как раньше: первая нота через 0.05', async () => {
     const player = setup()
 
     await player.play()
@@ -296,14 +291,72 @@ describe('Player: старт после пробуждения контекст�
     expect(mocks.starts[0]).toBeCloseTo(0.05, 6)
   })
 
+  it('из suspended ждёт resume() и берёт запас 0.2 от момента, когда контекст проснулся', async () => {
+    const player = setup()
+    const resumeMs = 300
+
+    mocks.audioCtx.state = 'suspended'
+    mocks.audio.resume = slowResume(resumeMs)
+
+    const playing = player.play()
+    await vi.advanceTimersByTimeAsync(resumeMs + 10)
+    await playing
+    player.stop()
+
+    expect(mocks.starts[0]).toBeCloseTo(resumeMs / 1000 + 0.2, 2)
+  })
+
+  it('контекст уже running, но проснулся только что (жест или play→stop→play): запас 0.2', async () => {
+    const player = setup()
+
+    mocks.audioCtx.state = 'suspended'
+    mocks.audio.resume = slowResume(100)
+
+    const first = player.play()
+    await vi.advanceTimersByTimeAsync(110)
+    await first
+    player.stop()
+    mocks.starts.length = 0
+
+    // Второй старт: resume() не нужен, но устройство вывода ещё греется
+    await player.play()
+    player.stop()
+
+    expect(mocks.starts[0]).toBeCloseTo(0.11 + 0.2, 2)
+  })
+
+  it('после пробуждения запас учитывает outputLatency: 0.3 + 0.05', async () => {
+    const player = setup()
+
+    mocks.audio.warmingUp = true
+    mocks.audioCtx.outputLatency = 0.3
+
+    await player.play()
+    player.stop()
+
+    expect(mocks.starts[0]).toBeCloseTo(0.35, 6)
+  })
+
+  it('без outputLatency (Safari до 18.4) запас остаётся 0.2, а не NaN', async () => {
+    const player = setup()
+
+    mocks.audio.warmingUp = true
+    mocks.audioCtx.outputLatency = undefined
+
+    await player.play()
+    vi.advanceTimersByTime(1000)
+    player.stop()
+
+    expect(mocks.starts[0]).toBeCloseTo(0.2, 6)
+    mocks.starts.forEach((time) => expect(Number.isFinite(time)).toBe(true))
+    diffs(mocks.starts).forEach((value) => expect(value).toBeCloseTo(0.5, 6))
+  })
+
   it('stop() во время ожидания resume() отменяет старт', async () => {
     const player = setup()
 
     mocks.audioCtx.state = 'suspended'
-    mocks.audioCtx.resume = async () => {
-      mocks.audioCtx.state = 'running'
-      mocks.clock.base = Date.now() + 300
-    }
+    mocks.audio.resume = slowResume(300)
 
     const playing = player.play()
     await vi.advanceTimersByTimeAsync(50)
@@ -313,6 +366,51 @@ describe('Player: старт после пробуждения контекст�
 
     expect(mocks.starts).toHaveLength(0)
     expect(vi.getTimerCount()).toBe(0)
+  })
+
+  it('отказ в resume() пробрасывается наружу, чтобы снять «играет»', async () => {
+    const player = setup()
+
+    mocks.audioCtx.state = 'suspended'
+    mocks.audio.resume = async () => {
+      throw new Error('NotAllowedError')
+    }
+
+    await expect(player.play()).rejects.toThrow('NotAllowedError')
+    expect(mocks.starts).toHaveLength(0)
+  })
+
+  it('отказ в resume() после stop() глотается: старт и так отменён', async () => {
+    const player = setup()
+
+    mocks.audioCtx.state = 'suspended'
+    mocks.audio.resume = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 300))
+      throw new Error('NotAllowedError')
+    }
+
+    const playing = player.play()
+    await vi.advanceTimersByTimeAsync(50)
+    player.stop()
+    await vi.advanceTimersByTimeAsync(300)
+
+    await expect(playing).resolves.toBeUndefined()
+  })
+
+  it('первый тик приходит в момент первой ноты, а не в момент нажатия', async () => {
+    const ticks: Tick[] = []
+    const player = setup()
+
+    player.setOnTick((tick) => ticks.push(tick))
+
+    await player.play()
+    expect(ticks).toHaveLength(0)
+
+    vi.advanceTimersByTime(50)
+    expect(ticks).toHaveLength(1)
+    expect(ticks[0].position.downbeat).toBe(true)
+
+    player.stop()
   })
 
   it('без загруженного кита play() ничего не планирует, после setKit стартует', async () => {
