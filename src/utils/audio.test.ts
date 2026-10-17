@@ -14,6 +14,8 @@ type Listener = () => void
 // Минимальный AudioContext: состояние, resume() и statechange
 class FakeAudioContext {
   static initialState = 'suspended'
+  // Во что переходит контекст по resume(): Safari из interrupted может и не выйти в running
+  static resumesTo = 'running'
 
   state = FakeAudioContext.initialState
   private listeners: Listener[] = []
@@ -22,8 +24,10 @@ class FakeAudioContext {
     this.listeners.push(listener)
   }
 
+  // Как в браузере: состояние меняется до резолва промиса, а statechange приходит отдельной задачей
   async resume() {
-    this.setState('running')
+    this.state = FakeAudioContext.resumesTo
+    setTimeout(() => this.listeners.forEach((listener) => listener()))
   }
 
   setState(state: string) {
@@ -46,6 +50,7 @@ describe('audio: прогрев контекста', () => {
   beforeEach(() => {
     vi.useFakeTimers()
     FakeAudioContext.initialState = 'suspended'
+    FakeAudioContext.resumesTo = 'running'
   })
 
   afterEach(() => {
@@ -64,6 +69,7 @@ describe('audio: прогрев контекста', () => {
 
     await resumeAudioContext()
 
+    // Сразу после await, до statechange: отметку ставит сам resumeAudioContext()
     expect(audioCtx.state).toBe('running')
     expect(isAudioWarmingUp()).toBe(true)
 
@@ -95,6 +101,18 @@ describe('audio: прогрев контекста', () => {
 
     audioCtx.setState('running')
     expect(isAudioWarmingUp()).toBe(true)
+  })
+
+  it('resume() зарезолвился, но контекст не вышел в running — пробуждения нет', async () => {
+    FakeAudioContext.initialState = 'interrupted'
+    FakeAudioContext.resumesTo = 'interrupted'
+    const { resumeAudioContext, isAudioWarmingUp } = await load()
+
+    await resumeAudioContext()
+    expect(isAudioWarmingUp()).toBe(false)
+
+    vi.runAllTimers()
+    expect(isAudioWarmingUp()).toBe(false)
   })
 
   it('контекст running уже при загрузке: прогрев отсчитывается с загрузки', async () => {

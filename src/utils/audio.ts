@@ -12,10 +12,13 @@ const audioCtx = new AudioContext({ latencyHint: 'interactive' })
 // но в Chrome со sticky activation может быть уже running — тогда отсчёт идёт с загрузки
 let runningSince = audioCtx.state === 'running' ? Date.now() : -Infinity
 
+// Отдельной функцией: после await TS не видит, что state мог измениться, и сужает тип
+const isRunning = () => audioCtx.state === 'running'
+
 audioCtx.addEventListener('statechange', () => {
   logger.info('statechange', audioCtx.state)
 
-  if (audioCtx.state === 'running') {
+  if (isRunning()) {
     runningSince = Date.now()
   }
 })
@@ -31,12 +34,16 @@ export function getAudioContext(): AudioContext {
 // Будит контекст, если он не running: не только suspended, но и interrupted в Safari
 // после звонка или другого приложения
 export async function resumeAudioContext() {
-  if (audioCtx.state === 'running') return
+  if (isRunning()) return
 
   await audioCtx.resume()
-  logger.info('resume')
-  // statechange приходит отдельной задачей уже после резолва промиса, поэтому отмечаем сами
-  runningSince = Date.now()
+  logger.info('resume', audioCtx.state)
+
+  // statechange приходит отдельной задачей уже после резолва промиса, поэтому отмечаем сами.
+  // Но только если контекст действительно пошёл: в Safari из interrupted он может и не выйти
+  if (isRunning()) {
+    runningSince = Date.now()
+  }
 }
 
 // Контекст проснулся меньше warmupMs назад — первой ноте нужен запас больше обычного
