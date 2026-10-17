@@ -50,7 +50,8 @@ export function usePlayer() {
     player.current.setBeforeTickScheduled(onBeforeScheduledAction)
   }, [onBeforeScheduledAction])
 
-  /** Sync playing */
+  /** Sync playing: kit в зависимостях, потому что без загруженных звуков play() ничего не делает,
+   * и его нужно позвать ещё раз, когда они придут */
   useEffect(() => {
     if (isPlaying) {
       player.current.play()
@@ -58,7 +59,7 @@ export function usePlayer() {
       resetAction()
       player.current.stop()
     }
-  }, [isPlaying, resetAction])
+  }, [isPlaying, kit, resetAction])
 
   /** Sync layout: раскладка и такт меняются в сторе одним действием, передаём их вместе */
   useEffect(() => {

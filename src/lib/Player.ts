@@ -1,6 +1,6 @@
 import { createLogger } from './Logger'
 import { TimeoutManager } from './TimeoutManager'
-import { DEFAULTS } from '../constants'
+import { DEFAULTS, INSTRUMENTS } from '../constants'
 import type { Instrument, SoundMap, Tick, Bar } from '../types/metronome'
 import { getAudioContext } from '../utils/audio'
 import { getBarMap, noteDuration } from '../utils/barLayout'
@@ -10,6 +10,15 @@ import { isMutedBar } from '../utils/silence'
 const logger = createLogger('PLAYER', { color: '#2af' })
 
 const frameMs = 1000 / 60
+
+// Запас между стартом и первой нотой: обычный и сразу после пробуждения контекста.
+// После resume() контекст уже running, но устройство вывода (особенно Bluetooth) ещё
+// открывается 100–500 мс, и звук, запланированный в это окно, теряется
+const leadSec = 0.05
+const wakeLeadSec = 0.15
+// Сколько ждём, пока часы контекста реально пойдут после resume(), и какой сдвиг считаем «пошли»
+const clockWaitMaxMs = 1000
+const clockMinAdvanceSec = 0.02
 
 const zeroScheduledCount = {
   notes: 0,
@@ -21,6 +30,8 @@ export class Player {
   private readonly audioCtx: AudioContext = getAudioContext()
   private readonly timeoutManager = new TimeoutManager()
   private playing: boolean = false
+  // Растёт на каждый play() и stop(): так play() понимает, что пока он ждал resume(), нажали stop
+  private startId: number = 0
   private kit: SoundMap = {} as SoundMap
   private tempo: number = DEFAULTS.tempo
   private subdivisions: number[] = Array(DEFAULTS.beats).fill(DEFAULTS.subdivision)
@@ -80,13 +91,44 @@ export class Player {
     return { counting, muted, note, played, position, time }
   }
 
+  // Кит грузится целиком, поэтому проверяем все инструменты разом
+  private hasKit(): boolean {
+    return INSTRUMENTS.every((instrument) => !!this.kit[instrument])
+  }
+
+  // resume() резолвится по смене state, а currentTime начинает идти только когда устройство
+  // вывода реально отдаёт звук. Ждём этого момента, но не дольше clockWaitMaxMs
+  private waitForClock(): Promise<void> {
+    const startTime = this.audioCtx.currentTime
+    const deadline = Date.now() + clockWaitMaxMs
+
+    return new Promise((resolve) => {
+      const check = () => {
+        if (this.audioCtx.currentTime - startTime > clockMinAdvanceSec || Date.now() > deadline) {
+          resolve()
+        } else {
+          window.setTimeout(check, frameMs)
+        }
+      }
+
+      check()
+    })
+  }
+
   private playNotesAtNextBeatTime(when: number, instrument: Instrument) {
+    const buffer = this.kit[instrument]
+
+    if (!buffer) {
+      logger.warn('playNotesAtNextBeatTime: звук ещё не загружен, пропускаем', instrument)
+      return
+    }
+
     const gainNode = this.audioCtx.createGain()
     gainNode.gain.value = 1
     gainNode.connect(this.audioCtx.destination)
 
     const source = this.audioCtx.createBufferSource()
-    source.buffer = this.kit[instrument]
+    source.buffer = buffer
     source.connect(gainNode)
     source.start(when)
     this.scheduledBufferSource = source
@@ -194,14 +236,33 @@ export class Player {
       return
     }
 
-    if (this.audioCtx.state === 'suspended') {
+    // Без кита стартовать нечем: usePlayer позовёт play() ещё раз, когда звуки загрузятся
+    if (!this.hasKit()) {
+      logger.warn('play: звуки ещё не загружены, ждём setKit')
+      return
+    }
+
+    const startId = ++this.startId
+    let lead = leadSec
+
+    // Не только suspended: в Safari после звонка или другого приложения контекст бывает interrupted
+    if (this.audioCtx.state !== 'running') {
       await this.audioCtx.resume()
       logger.info('audioCtx.resume()')
+      await this.waitForClock()
+      // Устройство вывода только что открылось — даём ему больше запаса, чем обычно
+      lead = Math.max(wakeLeadSec, this.audioCtx.outputLatency + leadSec)
+    }
+
+    // Пока ждали пробуждения контекста, нажали stop
+    if (startId !== this.startId) {
+      logger.info('play: отменён во время resume()')
+      return
     }
 
     logger.info('play')
     this.playing = true
-    this.nextBeatAt = this.audioCtx.currentTime + 0.05
+    this.nextBeatAt = this.audioCtx.currentTime + lead
     const tick = this.getTick(0, this.nextBeatAt)
 
     if (this.bar[0]) {
@@ -217,6 +278,7 @@ export class Player {
 
   public stop() {
     logger.info('stop')
+    this.startId++
     this.playing = false
     this.timeoutManager.clearAll()
     this.scheduledTick = null

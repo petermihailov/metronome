@@ -1,3 +1,4 @@
+export * from './useAudioUnlock'
 export * from './useButtonsPreventSpacePress'
 export * from './useHotkeys'
 export * from './usePlayer'

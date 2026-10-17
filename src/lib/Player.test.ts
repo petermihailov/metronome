@@ -10,9 +10,13 @@ const mocks = vi.hoisted(() => {
     state: 'running',
     outputLatency: 0,
     destination: {},
-    // Время AudioContext идёт вместе с поддельными таймерами
+    // Время AudioContext идёт вместе с поддельными таймерами, а до clock.base стоит на нуле —
+    // так моделируем устройство вывода, которое после resume() открывается не сразу
     get currentTime() {
-      return (Date.now() - clock.base) / 1000
+      return Math.max(0, Date.now() - clock.base) / 1000
+    },
+    resume: async () => {
+      audioCtx.state = 'running'
     },
     createGain: () => ({ gain: { value: 1 }, connect: () => {}, disconnect: () => {} }),
     createBufferSource: () => ({
@@ -234,5 +238,99 @@ describe('Player: режим тишины', () => {
     })
 
     expect(ticks.some((tick) => tick.muted)).toBe(false)
+  })
+})
+
+describe('Player: старт после пробуждения контекста', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.stubGlobal('window', globalThis)
+    mocks.clock.base = Date.now()
+    mocks.starts.length = 0
+    mocks.audioCtx.state = 'running'
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.unstubAllGlobals()
+  })
+
+  const setup = () => {
+    const player = new Player()
+
+    player.setKit(kit)
+    player.setTempo(120)
+    player.setLayout([1, 1, 1, 1], defaultBar([1, 1, 1, 1]))
+
+    return player
+  }
+
+  it('из suspended первая нота ждёт, пока пойдут часы, и берёт запас больше обычного', async () => {
+    const player = setup()
+    const deviceOpenMs = 300
+
+    mocks.audioCtx.state = 'suspended'
+    mocks.audioCtx.resume = async () => {
+      mocks.audioCtx.state = 'running'
+      // Контекст уже running, но устройство вывода откроется только через deviceOpenMs
+      mocks.clock.base = Date.now() + deviceOpenMs
+    }
+
+    const playing = player.play()
+    await vi.advanceTimersByTimeAsync(deviceOpenMs + 100)
+    await playing
+    player.stop()
+
+    // Обычный запас 0.05 попал бы в «мёртвую зону», пока часы стояли на нуле
+    expect(mocks.starts[0]).toBeGreaterThanOrEqual(0.15)
+    // Вторая нота планируется заранее и идёт ровно через долю
+    expect(mocks.starts[1] - mocks.starts[0]).toBeCloseTo(0.5, 6)
+  })
+
+  it('из running стартует как раньше: первая нота через 0.05', async () => {
+    const player = setup()
+
+    await player.play()
+    player.stop()
+
+    expect(mocks.starts[0]).toBeCloseTo(0.05, 6)
+  })
+
+  it('stop() во время ожидания resume() отменяет старт', async () => {
+    const player = setup()
+
+    mocks.audioCtx.state = 'suspended'
+    mocks.audioCtx.resume = async () => {
+      mocks.audioCtx.state = 'running'
+      mocks.clock.base = Date.now() + 300
+    }
+
+    const playing = player.play()
+    await vi.advanceTimersByTimeAsync(50)
+    player.stop()
+    await vi.advanceTimersByTimeAsync(2000)
+    await playing
+
+    expect(mocks.starts).toHaveLength(0)
+    expect(vi.getTimerCount()).toBe(0)
+  })
+
+  it('без загруженного кита play() ничего не планирует, после setKit стартует', async () => {
+    const player = new Player()
+
+    player.setTempo(120)
+    player.setLayout([1, 1, 1, 1], defaultBar([1, 1, 1, 1]))
+
+    await player.play()
+    vi.advanceTimersByTime(1000)
+    expect(mocks.starts).toHaveLength(0)
+    expect(vi.getTimerCount()).toBe(0)
+
+    player.setKit(kit)
+    await player.play()
+    vi.advanceTimersByTime(1000)
+    player.stop()
+
+    expect(mocks.starts.length).toBeGreaterThan(0)
   })
 })
