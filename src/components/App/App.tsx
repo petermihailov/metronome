@@ -1,6 +1,7 @@
 import React, { memo } from 'react'
 
 import {
+  useAudioUnlock,
   useButtonsPreventSpacePress,
   useHotkeys,
   usePlayer,
@@ -41,6 +42,7 @@ const screenMap: Record<ScreenType, React.ComponentType> = {
 }
 
 const App = () => {
+  useAudioUnlock()
   usePlayer()
   usePlayingTimeUpdate()
   useAutoHideCursor()
